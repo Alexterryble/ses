@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora Retroactivo - Modalidad 40</title>
+
+  <!-- Fuentes y estilos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://hp-v1-production.up.railway.app/css/calculadora.css">
+</head>
+
+<body>
+  <div class="sheet">
+    <!-- Header con logos -->
+<div class="header">
+  <div class="logo">
+    <img src="/img/logo.png" alt="Logo CIP">
+  </div>
+
+  <div class="title">
+    <h1>MODALIDAD 40 RETROACTIVO</h1>
+  </div>
+</div>
+
+    <!-- Monto y fecha -->
+    <div class="monto">
+      <div></div>
+      <div class="amount" id="montoGrande">$0.00</div>
+      <div class="fecha" id="fechaHoy"></div>
+    </div>
+
+    <!-- Barra nombre completo -->
+    <div class="bar">Nombre Completo</div>
+
+    <!-- Nombres -->
+    <div class="nombres">
+      <div class="cell" id="nombre1" contenteditable="plaintext-only" data-placeholder="NOMBRE"></div>
+      <div class="cell" id="nombre2" contenteditable="plaintext-only" data-placeholder="APELLIDO PATERNO"></div>
+      <div class="cell" id="nombre3" contenteditable="plaintext-only" data-placeholder="APELLIDO MATERNO"></div>
+    </div>
+
+
+    <!-- Datos fijos -->
+    <div class="datos-head">
+      <div>NSS</div>
+      <div>Fecha de baja</div>
+      <div>UMA´s a cotizar</div>
+      <div>Salario</div>
+      <div>Periodos a Cotizar</div>
+      <div>Fecha de alta</div>
+    </div>
+    <div class="datos-row">
+      <!-- antes: <div>—</div> -->
+      <div><input id="nss" type="text" placeholder="NSS" inputmode="numeric" pattern="\d{11}" maxlength="11" autocomplete="off" /></div>
+      <div><input id="fBaja" type="date" style="max-width:140px"></div>
+      <div><input id="umasACot" type="number" min="1" value="1" style="max-width:80px"></div>
+      <div>$ <input id="salario" type="number" step="0.01" min="0" value="0" style="max-width:120px"></div>
+    <div><input id="periodos" type="number"
+       inputmode="numeric"
+       min="1" step="1"
+       placeholder="—"
+       style="width:100%;text-align:center;font-weight:700;border:1px solid #1976a3;border-radius:4px;padding:4px 6px;"></div>
+
+      <div><input id="fAlta" type="date" style="max-width:140px"></div>
+    </div>
+
+
+    <!-- Encabezado tabla mensual -->
+    <div class="table-wrap">
+      <table id="tabla">
+        <thead>
+          <tr>
+            <th>NO.</th>
+            <th>MES A PAGAR</th>
+            <th>TASA ANUAL</th>
+            <th>IMPORTE COTIZADO</th>
+            <th>RECARGO Y MULTAS</th>
+            <th>TOTAL A PAGAR</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+<div class="actions">
+  <button class="btn" id="btnCalcular">Calcular</button>
+  <button class="btn secondary" id="btnLimpiar">Limpiar</button>
+  <button class="btn no-print" id="btnImprimir">Imprimir</button>
+  <button class="btn no-print" id="btnVolver">Volver a calculo de pension</button>
+  <button class="btn no-print" id="btnAfore">Subir Afore</button>
+  <button class="btn no-print" id="btnMenu">Volver al menú</button>
+
+</div>
+  </div>
+<script>
+/* ============================================================
+   NORMALIZACIÓN DE NOMBRE COMPLETO
+   No afecta tus variables de sessionStorage.
+============================================================ */
+(function(){
+  const ids = ['nombre1','nombre2','nombre3'];
+
+  function normalize(el){
+    const txt = (el.textContent || '')
+      .replace(/\s*\n+\s*/g, ' ')
+      .replace(/\s{2,}/g, ' ')
+      .trim()
+      .toUpperCase();
+
+    el.textContent = txt;
+    localStorage.setItem('calc_' + el.id, txt);
+  }
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const saved = localStorage.getItem('calc_' + id);
+    if (saved) el.textContent = saved;
+
+    el.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        el.blur();
+      }
+    });
+
+    el.addEventListener('input', () => {
+      localStorage.setItem('calc_' + id, el.textContent);
+    });
+
+    el.addEventListener('blur', () => normalize(el));
+  });
+})();
+
+/* ============================================================
+   CONFIG DEBUG
+============================================================ */
+const DEBUG_RETRO = false;
+
+/* ============================================================
+   ÚTILES
+============================================================ */
+const $  = (s, sc = document) => sc.querySelector(s);
+const $$ = (s, sc = document) => Array.from(sc.querySelectorAll(s));
+
+const fmtMoney = n => new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN'
+}).format(Number(n) || 0);
+
+const setText = (sel, val) => {
+  const el = $(sel);
+  if (el) el.textContent = val;
+};
+
+function round2(n){
+  return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+}
+
+function round6(n){
+  return Math.round((Number(n) + Number.EPSILON) * 1000000) / 1000000;
+}
+
+function normalizePercent(p){
+  let v = Number(p);
+  if (!Number.isFinite(v)) return null;
+  if (v < 1) v = v * 100;
+  return v;
+}
+
+/* ============================================================
+   BASE & PARAMS
+============================================================ */
+function getPublicBase(){
+  const p = location.pathname.replace(/\/+$/, "/");
+  const i = p.toLowerCase().lastIndexOf("/public/");
+  return i >= 0 ? p.slice(0, i + 8) : "/";
+}
+
+const BASE_URL = getPublicBase();
+
+function getParam(name){
+  const u = new URL(location.href);
+  return u.searchParams.get(name);
+}
+
+/* ============================================================
+   PERIODOS
+============================================================ */
+function getPeriodosManual(){
+  const el = document.getElementById('periodos');
+  if (!el) return null;
+
+  const raw = String(el.value ?? '').trim();
+  if (!raw) return null;
+
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : null;
+}
+
+function setPeriodosAuto(n){
+  const el = document.getElementById('periodos');
+  if (!el) return;
+
+  if (el.dataset.manual === '1') return;
+
+  el.value = (n && n > 0) ? String(Math.floor(n)) : '';
+}
+
+function markPeriodosManual(){
+  const el = document.getElementById('periodos');
+  if (el) el.dataset.manual = '1';
+}
+
+function markPeriodosAuto(){
+  const el = document.getElementById('periodos');
+  if (el) el.dataset.manual = '0';
+}
+
+/* ============================================================
+   ESTADO
+============================================================ */
+let UMA  = 86.88;
+let TASA = 10.075;
+
+const TOPE = 25;
+
+let lastYearLoaded = null;
+let __calculandoRetro = false;
+
+const CACHE = {
+  years: {},
+  promises: {
+    years: {},
+    inpcRange: {},
+    recargosRange: {}
+  }
+};
+
+/* ============================================================
+   FECHAS
+============================================================ */
+function normalizeISO(s){
+  if (!s) return '';
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+  const m = String(s).match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+
+  if (m) {
+    const y  = Number(m[3]);
+    const mo = Number(m[2]);
+    const d  = Number(m[1]);
+
+    return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
+  return '';
+}
+
+function addDays(anyDateString, days = 1){
+  const iso = normalizeISO(anyDateString);
+  if (!iso) return '';
+
+  const [y, m, d] = iso.split('-').map(Number);
+  const dt = new Date(y, m - 1, d);
+
+  dt.setDate(dt.getDate() + days);
+
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+}
+
+function parseLocalDateAny(s){
+  if (!s) return null;
+
+  const m = String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (m) {
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  }
+
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+
+function ymFromDate(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+function getPrevYM(ym){
+  const [y, m] = String(ym).split('-').map(Number);
+  const d = new Date(y, m - 2, 1);
+
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function getNextYM(ym){
+  const [y, m] = String(ym).split('-').map(Number);
+  const d = new Date(y, m, 1);
+
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function setFechaEncabezadoFija(iso){
+  const el = document.getElementById('fechaHoy');
+  if (!el || !iso) return;
+
+  const d = parseLocalDateAny(iso);
+  if (!d) return;
+
+  window.__fechaCalculoDate = d;
+
+  let txt = d.toLocaleDateString('es-MX', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  txt = txt.charAt(0).toUpperCase() + txt.slice(1);
+  txt = txt.replace(/, /, ',\u00A0').replace(/ de /g, '\u00A0de\u00A0');
+
+  el.textContent = txt;
+  el.dataset.fija = '1';
+}
+
+window.setFechaEncabezadoFija = setFechaEncabezadoFija;
+
+/* ============================================================
+   UMA VIGENTE
+   Enero usa UMA del año anterior.
+   Febrero en adelante usa UMA del mismo año.
+============================================================ */
+function umaYearForDate(isoDate){
+  if (!isoDate) return null;
+
+  const m = String(isoDate).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+
+  const y  = Number(m[1]);
+  const mo = Number(m[2]);
+
+  return (mo >= 2) ? y : (y - 1);
+}
+
+/* ============================================================
+   LISTA DE MESES
+============================================================ */
+function monthListInclusive(fromISO, toDate = new Date()){
+  if (!fromISO) return [];
+
+  const iso = normalizeISO(fromISO);
+  if (!iso) return [];
+
+  const [y, m] = iso.split('-').map(Number);
+  const start = new Date(y, m - 1, 1);
+
+  const manualN = getPeriodosManual();
+
+  if (Number.isFinite(manualN) && manualN > 0) {
+    const out = [];
+
+    for (let i = 0; i < manualN; i++) {
+      out.push(new Date(start.getFullYear(), start.getMonth() + i, 1));
+    }
+
+    return out;
+  }
+
+  const end = new Date(toDate.getFullYear(), toDate.getMonth(), 1);
+
+  if (start > end) return [];
+
+  const out = [];
+  let a = new Date(start);
+
+  while (a <= end) {
+    out.push(new Date(a));
+    a = new Date(a.getFullYear(), a.getMonth() + 1, 1);
+  }
+
+  return out;
+}
+
+/* ============================================================
+   API
+============================================================ */
+const API_VALORES = `${BASE_URL}app/controllers/Calculadora/valores.php`;
+
+async function getJSON(url){
+  const r = await fetch(url, {
+    cache: 'no-store',
+    credentials: 'same-origin'
+  });
+
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+
+  return r.json();
+}
+
+/* ============================================================
+   CATÁLOGOS DESDE BD
+============================================================ */
+async function fetchYearCatalog(year){
+  year = Number(year);
+
+  if (!year) {
+    return {
+      uma: null,
+      topado: null,
+      tasa: null,
+      imssValores: null
+    };
+  }
+
+  if (CACHE.years[year]) return CACHE.years[year];
+
+  if (CACHE.promises.years[year]) {
+    return CACHE.promises.years[year];
+  }
+
+  CACHE.promises.years[year] = getJSON(`${API_VALORES}?action=catalogos&year=${year}`)
+    .then(j => {
+      if (!j.ok) {
+        throw new Error(j.msg || 'No se pudieron cargar catálogos');
+      }
+
+      const uma    = (j.data?.uma != null) ? Number(j.data.uma) : null;
+      const topado = (j.data?.topado != null) ? Number(j.data.topado) : null;
+      const imssValores = j.data?.imss_valores || null;
+
+      const tasa = imssValores?.total != null
+        ? normalizePercent(imssValores.total)
+        : ((j.data?.porcentaje != null) ? normalizePercent(j.data.porcentaje) : null);
+
+      CACHE.years[year] = {
+        uma,
+        topado,
+        tasa,
+        imssValores
+      };
+
+      if (DEBUG_RETRO) {
+        console.log('📌 CATÁLOGOS CARGADOS', {
+          year,
+          uma,
+          topado,
+          tasa,
+          source: j.data?.tasa_source,
+          imssValores
+        });
+      }
+
+      return CACHE.years[year];
+    })
+    .finally(() => {
+      delete CACHE.promises.years[year];
+    });
+
+  return CACHE.promises.years[year];
+}
+
+async function ensureCatalogosFromAlta(){
+  const fAlta = document.getElementById('fAlta');
+
+  if (!fAlta || !fAlta.value) {
+    if (DEBUG_RETRO) console.log('⚠️ No hay fecha de alta. No se cargan catálogos.');
+    return;
+  }
+
+  const year = umaYearForDate(fAlta.value);
+  if (!year) return;
+
+  if (year !== lastYearLoaded || !CACHE.years[year]) {
+    const cat = await fetchYearCatalog(year);
+
+    if (cat.uma != null)  UMA  = cat.uma;
+    if (cat.tasa != null) TASA = cat.tasa;
+
+    lastYearLoaded = year;
+  } else {
+    const cat = CACHE.years[year];
+
+    if (cat.uma != null)  UMA  = cat.uma;
+    if (cat.tasa != null) TASA = cat.tasa;
+  }
+
+  if (DEBUG_RETRO) {
+    console.log('✅ UMA/TASA por regla Feb-01', {
+      fAlta: fAlta.value,
+      year,
+      UMA,
+      TASA
+    });
+  }
+}
+
+/* ============================================================
+   INPC
+============================================================ */
+async function fetchINPC(ym){
+  const j = await getJSON(`${API_VALORES}?action=inpc&ym=${ym}`);
+
+  if (!j.ok) throw new Error(j.msg || 'INPC no encontrado');
+
+  return Number(j.data?.inpc || 0);
+}
+
+async function fetchINPCRange(fromYM, toYM){
+  const key = `${fromYM}|${toYM}`;
+
+  if (CACHE.promises.inpcRange[key]) {
+    return CACHE.promises.inpcRange[key];
+  }
+
+  const url = `${API_VALORES}?action=inpc_range&from=${fromYM}&to=${toYM}`;
+
+  CACHE.promises.inpcRange[key] = getJSON(url)
+    .then(j => {
+      if (!j.ok) throw new Error(j.msg || 'INPC rango no encontrado');
+
+      const map = {};
+
+      if (j.data?.map && typeof j.data.map === 'object') {
+        Object.entries(j.data.map).forEach(([ym, valor]) => {
+          const n = Number(valor || 0);
+          if (ym && Number.isFinite(n) && n > 0) map[ym] = n;
+        });
+      } else {
+        const items = j.data?.items || [];
+
+        for (const it of items) {
+          const ym = String(it.mes || '').slice(0, 7);
+          const valor = Number(it.inpc || 0);
+
+          if (ym && Number.isFinite(valor) && valor > 0) {
+            map[ym] = valor;
+          }
+        }
+      }
+
+      return map;
+    })
+    .finally(() => {
+      delete CACHE.promises.inpcRange[key];
+    });
+
+  return CACHE.promises.inpcRange[key];
+}
+
+function calcularFactorActualizacionINPC(ymBaseINPC, calcYM, inpcMap){
+  const keys = Object.keys(inpcMap || {})
+    .filter(k => /^\d{4}-\d{2}$/.test(k))
+    .filter(k => k <= calcYM)
+    .filter(k => Number(inpcMap[k]) > 0)
+    .sort();
+
+  if (!keys.length) {
+    return {
+      multiplicador: 1,
+      factor: 0,
+      inpcPeriodo: 0,
+      inpcActual: 0,
+      ultimoYM: null
+    };
+  }
+
+  const ultimoYM = keys[keys.length - 1];
+  const inpcActual = Number(inpcMap[ultimoYM] || 0);
+  const inpcPeriodo = Number(inpcMap[ymBaseINPC] || 0);
+
+  if (!inpcPeriodo || ymBaseINPC >= ultimoYM) {
+    return {
+      multiplicador: 1,
+      factor: 0,
+      inpcPeriodo,
+      inpcActual,
+      ultimoYM
+    };
+  }
+
+  const multiplicador = inpcActual / inpcPeriodo;
+  const factor = Math.max(0, multiplicador - 1);
+
+  return {
+    multiplicador,
+    factor,
+    inpcPeriodo,
+    inpcActual,
+    ultimoYM
+  };
+}
+
+/* ============================================================
+   RECARGOS DESDE BD OPTIMIZADOS
+============================================================ */
+async function fetchRecargosRange(fromYM, toYM){
+  const key = `${fromYM}|${toYM}`;
+
+  if (CACHE.promises.recargosRange[key]) {
+    return CACHE.promises.recargosRange[key];
+  }
+
+  const url = `${API_VALORES}?action=recargos_range&from=${fromYM}&to=${toYM}`;
+
+  CACHE.promises.recargosRange[key] = getJSON(url)
+    .then(j => {
+      if (!j.ok) {
+        throw new Error(j.msg || 'No se pudo cargar rango de recargos');
+      }
+
+      const map = {};
+
+      if (j.data?.map && typeof j.data.map === 'object') {
+        Object.entries(j.data.map).forEach(([ym, tasa]) => {
+          let v = Number(tasa || 0);
+
+          /*
+            Correcto:
+            2025 => 1.47
+            2026 => 2.07
+
+            Si por error llega 147 o 207, se corrige.
+          */
+          if (v > 20) v = v / 100;
+
+          map[ym] = v;
+        });
+      } else {
+        const items = j.data?.items || [];
+
+        for (const it of items) {
+          const ym = String(it.ym || it.fecha || '').slice(0, 7);
+          let v = Number(it.tasa_pct || 0);
+
+          if (v > 20) v = v / 100;
+
+          if (ym) map[ym] = v;
+        }
+      }
+
+      return map;
+    })
+    .catch(async e => {
+      console.warn('⚠️ Falló recargos_range. Fallback mes por mes:', e);
+
+      const map = {};
+      let cursor = fromYM;
+
+      while (cursor <= toYM) {
+        const fecha = `${cursor}-01`;
+        const urlMes = `${API_VALORES}?action=recargo&fecha=${fecha}`;
+
+        try {
+          const j = await getJSON(urlMes);
+
+          if (j.ok) {
+            let tasa = Number(j.data?.tasa_pct || 0);
+            if (tasa > 20) tasa = tasa / 100;
+            map[cursor] = tasa;
+          } else {
+            map[cursor] = 0;
+          }
+        } catch {
+          map[cursor] = 0;
+        }
+
+        cursor = getNextYM(cursor);
+      }
+
+      return map;
+    })
+    .finally(() => {
+      delete CACHE.promises.recargosRange[key];
+    });
+
+  return CACHE.promises.recargosRange[key];
+}
+
+/* ============================================================
+   REGLA DEL DÍA 17 PARA RECARGOS
+============================================================ */
+function ymFromDateObj(d){
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function getYMRecargoCorte(fechaCalculoDate){
+  const d = fechaCalculoDate instanceof Date
+    ? fechaCalculoDate
+    : new Date(fechaCalculoDate);
+
+  const y = d.getFullYear();
+  const m = d.getMonth();
+  const dia = d.getDate();
+
+  /*
+    Regla Excel:
+    =IF(DAY(C5)<17, mes anterior, mes actual)
+
+    Día 1 al 16: corta al mes anterior.
+    Día 17 en adelante: cuenta mes actual.
+  */
+  if (dia < 17) {
+    return ymFromDateObj(new Date(y, m - 1, 1));
+  }
+
+  return ymFromDateObj(new Date(y, m, 1));
+}
+
+function obtenerMesesRecargo(ymPeriodo, fechaCalculoDate){
+  const ymCorte = getYMRecargoCorte(fechaCalculoDate);
+
+  const meses = [];
+  let cursor = ymPeriodo;
+
+  while (cursor <= ymCorte) {
+    meses.push(cursor);
+    cursor = getNextYM(cursor);
+  }
+
+  return meses;
+}
+
+function sumarRecargosMensualesPct(ymPeriodo, fechaCalculoDate, recargosMap){
+  const meses = obtenerMesesRecargo(ymPeriodo, fechaCalculoDate);
+
+  let totalPct = 0;
+
+  meses.forEach(ym => {
+    totalPct += Number(recargosMap[ym] || 0);
+  });
+
+  return round6(totalPct);
+}
+
+/* ============================================================
+   FÓRMULAS EXCEL / IMSS_VALORES
+============================================================ */
+function getImssValoresYear(year){
+  const vals = CACHE.years[year]?.imssValores;
+
+  if (!vals) {
+    const tasa = normalizePercent(CACHE.years[year]?.tasa ?? TASA) || 0;
+
+    return {
+      year,
+      imss: 3.8,
+      retiro: 2.0,
+      cesantia: round6(Math.max(0, tasa - 3.8 - 2.0)),
+      rcv: round6(Math.max(0, tasa - 3.8)),
+      total: tasa
+    };
+  }
+
+  return {
+    year: Number(vals.year || year),
+    imss: normalizePercent(vals.imss) || 0,
+    retiro: normalizePercent(vals.retiro) || 0,
+    cesantia: normalizePercent(vals.cesantia) || 0,
+    rcv: normalizePercent(vals.rcv) || 0,
+    total: normalizePercent(vals.total) || 0
+  };
+}
+
+function calcularCuotasExcel(baseSBC, tasas){
+  const cuotaIMSS = round2(baseSBC * (Number(tasas.imss || 0) / 100));
+  const cuotaRetiro = round2(baseSBC * (Number(tasas.retiro || 0) / 100));
+  const cuotaCesantia = round2(baseSBC * (Number(tasas.cesantia || 0) / 100));
+
+  const cuotaRCV = round2(cuotaRetiro + cuotaCesantia);
+  const importeCotizado = round2(cuotaIMSS + cuotaRCV);
+
+  return {
+    cuotaIMSS,
+    cuotaRetiro,
+    cuotaCesantia,
+    cuotaRCV,
+    importeCotizado
+  };
+}
+
+function calcularFilaExcelRetroactivo({
+  baseSBC,
+  tasas,
+  multiplicadorINPC,
+  recargoPctAcumulado
+}){
+  const cuotas = calcularCuotasExcel(baseSBC, tasas);
+
+  const subtotalActualizado = round2(
+    cuotas.importeCotizado * Number(multiplicadorINPC || 1)
+  );
+
+  const actualizacion = round2(
+    subtotalActualizado - cuotas.importeCotizado
+  );
+
+  const recargoFrac = Number(recargoPctAcumulado || 0) / 100;
+
+  const recargo = round2(
+    subtotalActualizado * recargoFrac
+  );
+
+  const recargoYMultas = round2(actualizacion + recargo);
+  const totalFila = round2(subtotalActualizado + recargo);
+
+  return {
+    ...cuotas,
+    subtotalActualizado,
+    actualizacion,
+    recargoFrac,
+    recargo,
+    recargoYMultas,
+    totalFila
+  };
+}
+
+/* ============================================================
+   SALARIO AUTO
+============================================================ */
+function isAutoSalary(){
+  const el = $('#salario');
+
+  return el && (
+    el.dataset.autofill === '1' ||
+    el.value === '' ||
+    Number(el.value) === 0
+  );
+}
+
+function setAutoSalaryFlag(on = true){
+  const el = $('#salario');
+  if (el) el.dataset.autofill = on ? '1' : '0';
+}
+
+function setSalaryFromUMA(){
+  const umas = Number($('#umasACot')?.value || 1);
+  const el = $('#salario');
+
+  if (!el) return;
+
+  if (isAutoSalary()) {
+    el.value = (UMA * Math.max(1, umas)).toFixed(2);
+    setAutoSalaryFlag(true);
+  }
+}
+
+/* ============================================================
+   CONFIG
+============================================================ */
+const APPLY_INPC = true;
+
+/* ============================================================
+   CÁLCULO PRINCIPAL OPTIMIZADO
+============================================================ */
+async function calcular(){
+  if (__calculandoRetro) return;
+  __calculandoRetro = true;
+
+  const t0 = performance.now();
+
+  try {
+    await ensureCatalogosFromAlta();
+    setSalaryFromUMA();
+
+    const salario = Number($('#salario')?.value || 0) || 0;
+    const umasCot = Number($('#umasACot')?.value || 1) || 1;
+    const alta    = $('#fAlta')?.value || '';
+
+    const hoy = window.__fechaCalculoDate || new Date();
+    const calcYM = ymFromDate(hoy);
+
+    const mesesArr = monthListInclusive(alta, hoy);
+    setPeriodosAuto(mesesArr.length);
+
+    const tbody = $('#tabla tbody');
+    if (tbody) tbody.innerHTML = '';
+
+    if (!mesesArr.length || !alta || salario <= 0) {
+      setText('#montoGrande', fmtMoney(0));
+      return;
+    }
+
+    const yearsNeeded = new Set();
+
+    for (const d of mesesArr) {
+      const yyyy = d.getFullYear();
+      const mm = d.getMonth() + 1;
+
+      yearsNeeded.add(mm >= 2 ? yyyy : yyyy - 1);
+      yearsNeeded.add(yyyy);
+    }
+
+    /*
+      OPTIMIZADO:
+      antes se cargaban los años uno por uno.
+      ahora se cargan todos en paralelo.
+    */
+    await Promise.all(
+      Array.from(yearsNeeded).map(y => fetchYearCatalog(y))
+    );
+
+    const altaISO = normalizeISO(alta);
+    const altaDay = Number(altaISO.split('-')[2]) || 1;
+
+    const firstYM = `${mesesArr[0].getFullYear()}-${String(mesesArr[0].getMonth() + 1).padStart(2, '0')}`;
+    const firstINPCYM = getPrevYM(firstYM);
+
+    /*
+      OPTIMIZADO:
+      INPC y recargos se piden en paralelo.
+      Recargos ya usa action=recargos_range, una sola petición.
+    */
+    const [inpcMap, recargosMap] = await Promise.all([
+      APPLY_INPC
+        ? fetchINPCRange(firstINPCYM, calcYM).catch(e => {
+            console.warn('INPC no disponible; usando cálculo sin actualización', e);
+            return {};
+          })
+        : Promise.resolve({}),
+
+      fetchRecargosRange(firstYM, calcYM).catch(e => {
+        console.warn('Recargos no disponibles; usando 0', e);
+        return {};
+      })
+    ]);
+
+    let granTotal = 0;
+    let htmlRows = '';
+
+    for (let i = 0; i < mesesArr.length; i++) {
+      const d = mesesArr[i];
+
+      const day = (i === 0) ? altaDay : 1;
+
+      const dateRow = new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        day
+      );
+
+      const dd   = String(dateRow.getDate()).padStart(2, '0');
+      const mm   = String(dateRow.getMonth() + 1).padStart(2, '0');
+      const yyyy = dateRow.getFullYear();
+
+      const mesLabel = `${dd}/${mm}/${yyyy}`;
+      const ymPeriodo = `${yyyy}-${mm}`;
+
+      /*
+        INPC base:
+        periodo 2025-01 usa 2024-12.
+        periodo 2026-06 usa 2026-05.
+      */
+      const ymKey = getPrevYM(ymPeriodo);
+
+      /*
+        UMA:
+        enero usa UMA del año anterior.
+        febrero en adelante usa UMA del mismo año.
+      */
+      const umaYear = (Number(mm) >= 2) ? yyyy : yyyy - 1;
+      const umaRow = Number(CACHE.years[umaYear]?.uma ?? UMA);
+
+      /*
+        Tasas:
+        vienen de imss_valores.
+      */
+      const tasasYear = getImssValoresYear(yyyy);
+      const tasaPct = Number(tasasYear.total || 0);
+
+      const SBCd_topeado = Math.min(salario, umaRow * TOPE);
+
+      const daysInMonth = new Date(
+        yyyy,
+        dateRow.getMonth() + 1,
+        0
+      ).getDate();
+
+      const diasPeriodo = (i === 0)
+        ? Math.max(1, daysInMonth - altaDay + 1)
+        : daysInMonth;
+
+      const baseSBC = round2(SBCd_topeado * diasPeriodo);
+
+      const fxINPC = calcularFactorActualizacionINPC(
+        ymKey,
+        calcYM,
+        inpcMap
+      );
+
+      const multiplicadorINPC = Number(fxINPC.multiplicador || 1);
+
+      /*
+        Regla del día 17:
+        se manda fecha completa, no solo YYYY-MM.
+      */
+      const recargoPctAcumulado = sumarRecargosMensualesPct(
+        ymPeriodo,
+        hoy,
+        recargosMap
+      );
+
+      const filaExcel = calcularFilaExcelRetroactivo({
+        baseSBC,
+        tasas: tasasYear,
+        multiplicadorINPC,
+        recargoPctAcumulado
+      });
+
+      granTotal = round2(granTotal + filaExcel.totalFila);
+
+      if (DEBUG_RETRO) {
+        console.log('🔎 FILA RETROACTIVO:', {
+          fila: i + 1,
+          mesLabel,
+          ymPeriodo,
+          ymKey,
+          umaYear,
+          umaRow,
+          umasCot,
+          salario,
+          SBCd_topeado,
+          diasPeriodo,
+          baseSBC,
+          tasasYear,
+          tasaPct,
+          inpcBase: fxINPC.inpcPeriodo,
+          inpcActual: fxINPC.inpcActual,
+          inpcActualYM: fxINPC.ultimoYM,
+          multiplicadorINPC,
+          recargoPctAcumulado,
+          filaExcel
+        });
+      }
+
+      htmlRows += `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${mesLabel}</td>
+          <td style="text-align:center">${tasaPct.toFixed(3)}%</td>
+          <td>${fmtMoney(filaExcel.importeCotizado)}</td>
+          <td>${fmtMoney(filaExcel.recargoYMultas)}</td>
+          <td>${fmtMoney(filaExcel.totalFila)}</td>
+        </tr>
+      `;
+    }
+
+    if (tbody) {
+      tbody.innerHTML = htmlRows;
+    }
+
+    granTotal = round2(granTotal);
+
+    const montoGrandeTexto = fmtMoney(granTotal);
+
+    setText('#montoGrande', montoGrandeTexto);
+
+    try {
+      const data = JSON.parse(sessionStorage.getItem('CIP_DATOS_TABLA3') || '{}');
+
+      data.montoGrande = montoGrandeTexto;
+      data.montoGrandeNumero = granTotal;
+
+      sessionStorage.setItem('CIP_DATOS_TABLA3', JSON.stringify(data));
+
+      if (DEBUG_RETRO) {
+        console.log('✅ montoGrande guardado para otro archivo:', {
+          montoGrande: data.montoGrande,
+          montoGrandeNumero: data.montoGrandeNumero
+        });
+      }
+
+    } catch(e) {
+      console.error('Error guardando montoGrande:', e);
+    }
+
+    console.log('✅ Cálculo retroactivo listo:', {
+      total: fmtMoney(granTotal),
+      filas: mesesArr.length,
+      tiempoMs: Math.round(performance.now() - t0)
+    });
+
+  } finally {
+    __calculandoRetro = false;
+  }
+}
+
+/* ============================================================
+   LIMPIAR
+============================================================ */
+function limpiar(){
+  if ($('#salario'))  $('#salario').value = 0;
+  if ($('#umasACot')) $('#umasACot').value = 1;
+  if ($('#fBaja'))    $('#fBaja').value = '';
+  if ($('#fAlta'))    $('#fAlta').value = '';
+
+  const p = document.getElementById('periodos');
+
+  if (p) {
+    p.value = '';
+    p.dataset.manual = '0';
+  }
+
+  if ($('#tabla tbody')) $('#tabla tbody').innerHTML = '';
+
+  setText('#montoGrande', '$0.00');
+  setAutoSalaryFlag(true);
+
+  window.__fechaCalculoDate = new Date();
+}
+
+/* ============================================================
+   CARGAR DATOS
+============================================================ */
+async function cargarDatos(){
+  const id = getParam("solicitud_id") || getParam("id") || getParam("folio");
+  if (!id) return;
+
+  const url = `${BASE_URL}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(id)}`;
+
+  try {
+    const r = await fetch(url, {
+      credentials: "same-origin"
+    });
+
+    const j = await r.json();
+
+    if (!j || !j.ok) return;
+
+    const c = j.cliente || {};
+
+    window.__cliente_id = Number((c && (c.id || c.cliente_id)) || 0);
+
+    if (document.getElementById("nombre1")) {
+      document.getElementById("nombre1").textContent = c.nombres || "";
+    }
+
+    if (document.getElementById("nombre2")) {
+      document.getElementById("nombre2").textContent = c.apellido_paterno || "";
+    }
+
+    if (document.getElementById("nombre3")) {
+      document.getElementById("nombre3").textContent = c.apellido_materno || "";
+    }
+
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+/* ============================================================
+   GUARDAR / ACTUALIZAR
+============================================================ */
+async function guardarRetroactivo(){
+  const solicitud_id = Number(
+    getParam("solicitud_id") ||
+    getParam("id") ||
+    getParam("folio") ||
+    0
+  );
+
+  if (!solicitud_id) {
+    alert("Falta solicitud_id en la URL");
+    return;
+  }
+
+  const cliente_id = window.__cliente_id ? Number(window.__cliente_id) : 0;
+
+  const nss = document.getElementById("nss")?.value?.trim() || "";
+  const fecha_baja = document.getElementById("fBaja")?.value || "";
+  const fecha_alta = document.getElementById("fAlta")?.value || "";
+  const umas_cotizar = Number(document.getElementById("umasACot")?.value || 1);
+  const salario = Number(document.getElementById("salario")?.value || 0);
+
+  let periodos_cotizar = null;
+  const periodosTxt = String(document.getElementById("periodos")?.value ?? "").trim();
+
+  if (periodosTxt) {
+    periodos_cotizar = Number(periodosTxt);
+  }
+
+  if (!nss || !fecha_baja || !fecha_alta || !(salario > 0)) {
+    alert("Completa NSS, fechas y salario antes de guardar.");
+    return;
+  }
+
+  const payload = {
+    solicitud_id,
+    cliente_id,
+    nss,
+    fecha_baja,
+    fecha_alta,
+    umas_cotizar,
+    salario,
+    periodos_cotizar
+  };
+
+  const url = `${BASE_URL}app/controllers/Calculadora/guardar.php`;
+
+  try {
+    const r = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify(payload),
+      credentials: "same-origin"
+    });
+
+    const j = await r.json();
+
+    if (!j.ok) {
+      throw new Error(j.msg || "No se pudo guardar");
+    }
+
+    alert("¡Guardado correctamente! (ID: " + j.id + ")");
+
+  } catch(e) {
+    console.error(e);
+    alert("Error al guardar: " + e.message);
+  }
+}
+
+/* ============================================================
+   CARGAR RETROACTIVO
+============================================================ */
+async function cargarRetroactivoSiExiste(){
+  const sid = getParam('solicitud_id') || getParam('id') || getParam('folio');
+  if (!sid) return;
+
+  const url = `${BASE_URL}app/controllers/Calculadora/obtener.php?solicitud_id=${encodeURIComponent(sid)}`;
+  const $id = id => document.getElementById(id);
+
+  try {
+    const r = await fetch(url, {
+      credentials:'same-origin'
+    });
+
+    if (!r.ok) return;
+
+    const j = await r.json();
+
+    if (!j.ok) return;
+
+    const retro = j.retroactivo;
+    const cli = j.cliente;
+
+    if (cli && cli.id) {
+      window.__cliente_id = Number(cli.id);
+    }
+
+    if (retro) {
+      if ($id('nss'))      $id('nss').value      = retro.nss || '';
+      if ($id('fBaja'))    $id('fBaja').value    = retro.fecha_baja || '';
+      if ($id('fAlta'))    $id('fAlta').value    = retro.fecha_alta || '';
+      if ($id('umasACot')) $id('umasACot').value = retro.umas_cotizar ?? 1;
+
+      if ($id('salario')) {
+        $id('salario').value = retro.salario ?? 0;
+        setAutoSalaryFlag(false);
+      }
+
+      const p = $id('periodos');
+
+      if (p) {
+        p.value = retro.periodos_cotizar ? String(retro.periodos_cotizar) : '';
+        p.dataset.manual = retro.periodos_cotizar ? '1' : '0';
+      }
+
+      const fechaFija =
+        retro.fecha_calculo_ts ||
+        retro.fecha_calculo_date ||
+        retro.created_at;
+
+      if (fechaFija) {
+        setFechaEncabezadoFija(fechaFija);
+      }
+    }
+
+    requestAnimationFrame(() => calcular());
+
+  } catch(e) {
+    console.error('Error cargando retroactivo:', e);
+  }
+}
+
+/* ============================================================
+   LISTENERS
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  window.__fechaCalculoDate = new Date();
+
+  const elFechaHoy = $('#fechaHoy');
+
+  if (elFechaHoy && !elFechaHoy.dataset.fija) {
+    const hoy = new Date();
+
+    let txt = hoy.toLocaleDateString('es-MX', {
+      weekday:'long',
+      day:'2-digit',
+      month:'long',
+      year:'numeric'
+    });
+
+    txt = txt.charAt(0).toUpperCase() + txt.slice(1);
+    txt = txt.replace(/, /, ',\u00A0').replace(/ de /g, '\u00A0de\u00A0');
+
+    elFechaHoy.textContent = txt;
+  }
+
+  const nss = document.getElementById('nss');
+
+  nss?.addEventListener('input', () => {
+    nss.value = nss.value.replace(/\D+/g, '').slice(0, 11);
+  });
+
+  const periodosEl = document.getElementById('periodos');
+
+  if (periodosEl) {
+    periodosEl.dataset.manual = periodosEl.dataset.manual || '0';
+
+    periodosEl.addEventListener('input', () => {
+      periodosEl.value = periodosEl.value.replace(/\D+/g,'');
+      markPeriodosManual();
+    });
+  }
+
+  $('#btnCalcular')?.addEventListener('click', async () => {
+    await calcular();
+  });
+
+  $('#btnLimpiar')?.addEventListener('click', limpiar);
+
+  $('#btnImprimir')?.addEventListener('click', () => {
+    window.print();
+  });
+
+  $('#btnGuardar')?.addEventListener('click', guardarRetroactivo);
+
+  const fAlta = $('#fAlta');
+  const fBaja = $('#fBaja');
+  const umasEl = $('#umasACot');
+  const salarioEl = $('#salario');
+
+  salarioEl?.addEventListener('input', () => {
+    if (Number(salarioEl.value) > 0) {
+      setAutoSalaryFlag(false);
+    }
+  });
+
+  umasEl?.addEventListener('input', setSalaryFromUMA);
+
+  fAlta?.addEventListener('change', async () => {
+    markPeriodosAuto();
+
+    try {
+      await ensureCatalogosFromAlta();
+    } catch(e) {
+      console.error(e);
+    }
+
+    setSalaryFromUMA();
+
+    const meses = monthListInclusive(
+      fAlta.value,
+      window.__fechaCalculoDate || new Date()
+    );
+
+    setPeriodosAuto(meses.length);
+  });
+
+  fBaja?.addEventListener('change', async () => {
+    markPeriodosAuto();
+
+    const altaCalc = addDays(fBaja.value, 1);
+
+    if (fAlta && altaCalc) {
+      fAlta.value = altaCalc;
+      fAlta.min = altaCalc;
+    }
+
+    try {
+      await ensureCatalogosFromAlta();
+    } catch(e) {
+      console.error(e);
+    }
+
+    setSalaryFromUMA();
+
+    const meses = monthListInclusive(
+      fAlta.value,
+      window.__fechaCalculoDate || new Date()
+    );
+
+    setPeriodosAuto(meses.length);
+  });
+
+  cargarDatos()
+    .then(() => cargarRetroactivoSiExiste())
+    .catch(console.error);
+
+  if (fAlta?.value) {
+    ensureCatalogosFromAlta()
+      .then(setSalaryFromUMA)
+      .catch(console.error);
+  } else {
+    setAutoSalaryFlag(true);
+  }
+
+  console.log('✅ JS retroactivo optimizado cargado.');
+});
+
+/* ============================================================
+   BOTONES NAVEGACIÓN
+============================================================ */
+const btnVolver = document.getElementById('btnVolver');
+
+btnVolver?.addEventListener('click', e => {
+  e.preventDefault();
+  window.location.href = '/analisis/sp/sp.html';
+});
+
+const btnMenu = document.getElementById('btnMenu');
+
+btnMenu?.addEventListener('click', e => {
+  e.preventDefault();
+  window.location.href = '/index.php';
+});
+
+/* ============================================================
+   EXPONER FUNCIONES
+============================================================ */
+window.calcular = calcular;
+window.limpiar = limpiar;
+window.guardarRetroactivo = guardarRetroactivo;
+
+window.fetchYearCatalog = fetchYearCatalog;
+window.fetchINPC = fetchINPC;
+window.fetchINPCRange = fetchINPCRange;
+window.fetchRecargosRange = fetchRecargosRange;
+
+window.getImssValoresYear = getImssValoresYear;
+window.calcularCuotasExcel = calcularCuotasExcel;
+window.calcularFactorActualizacionINPC = calcularFactorActualizacionINPC;
+window.calcularFilaExcelRetroactivo = calcularFilaExcelRetroactivo;
+
+window.getYMRecargoCorte = getYMRecargoCorte;
+window.sumarRecargosMensualesPct = sumarRecargosMensualesPct;
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const raw = sessionStorage.getItem('CIP_DATOS_TABLA3');
+
+  if (!raw) {
+    console.warn('No hay datos en sessionStorage con la clave CIP_DATOS_TABLA3');
+    return;
+  }
+
+  try {
+    const data = JSON.parse(raw);
+
+    const nombre1 = document.getElementById('nombre1');
+    const nombre2 = document.getElementById('nombre2');
+    const nombre3 = document.getElementById('nombre3');
+    const nss = document.getElementById('nss');
+
+    // Valor que viene de bar-pmg-val
+    const pensionPMG = document.getElementById('pensionPMG');
+
+    // Semanas Mod 40 agregadas
+    const incrementoSemanas = document.getElementById('incrementoSemanas');
+
+    const nombreCompleto = String(data.nombre || '').trim().replace(/\s+/g, ' ');
+    const partes = nombreCompleto ? nombreCompleto.split(' ') : [];
+
+    let nombres = '';
+    let paterno = '';
+    let materno = '';
+
+    if (partes.length === 1) {
+      nombres = partes[0];
+    } else if (partes.length === 2) {
+      nombres = partes[0];
+      paterno = partes[1];
+    } else if (partes.length >= 3) {
+      materno = partes.pop() || '';
+      paterno = partes.pop() || '';
+      nombres = partes.join(' ');
+    }
+
+    if (nombre1) nombre1.textContent = nombres;
+    if (nombre2) nombre2.textContent = paterno;
+    if (nombre3) nombre3.textContent = materno;
+    if (nss) nss.value = data.nss || '';
+
+    if (pensionPMG) {
+      pensionPMG.textContent = data.pensionPMG || '$0.00';
+    }
+
+    if (incrementoSemanas) {
+      incrementoSemanas.textContent = data.incrementoSemanas || data.semanasMod40 || '0';
+    }
+
+    // ================================
+    // ✅ VARIABLES SEPARADAS
+    // ================================
+
+    // Final / inversión
+    const semanasActuales =
+      data.semanasTotalesFinales ||
+      data.semanas ||
+      '0';
+
+    const salarioInversion =
+      data.diario1750 ||
+      data.calculoFinal?.diarioFinal ||
+      data.diario ||
+      '0.00';
+
+    const pensionFinal =
+      data.pensionFinal ||
+      data.calculoFinal?.pensionFinal ||
+      data.pensionEstimada ||
+      '$0.00';
+
+    // Original
+    const semanasOriginales =
+      data.semanasOriginales ||
+      '0';
+
+    const semanasDescontadas =
+      data.semanasDescontadasDesempleo ||
+      data.semanasDescontadas ||
+      '0';
+
+    const salarioOriginal =
+      data.diarioOriginal1750 ||
+      data.calculoOriginal?.diarioOriginal ||
+      data.salarioPromedioOriginal ||
+      '0.00';
+
+    const pensionOriginal =
+      data.pensionOriginal ||
+      data.calculoOriginal?.pensionOriginal ||
+      '$0.00';
+
+    console.log('Datos cargados en retroactivo:');
+    console.table({
+      nombreCompleto: data.nombre || '',
+      nombres,
+      apellidoPaterno: paterno,
+      apellidoMaterno: materno,
+      nss: data.nss || '',
+
+      pensionPMG: data.pensionPMG || '$0.00',
+      incrementoSemanas: data.incrementoSemanas || data.semanasMod40 || '0',
+
+      // Final / inversión
+      semanasActuales,
+      salarioInversion,
+      pensionFinal,
+
+      // Original
+      semanasOriginales,
+      semanasDescontadas,
+      salarioOriginal,
+      pensionOriginal
+    });
+
+  } catch (e) {
+    console.error('Error leyendo CIP_DATOS_TABLA3:', e);
+  }
+});
+</script>
+
+<script>
+const btnAfore = document.getElementById('btnAfore');
+
+btnAfore?.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.href = '/analisis/afore/';
+});
+</script>
+</body>
+</html>

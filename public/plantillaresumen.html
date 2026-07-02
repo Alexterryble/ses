@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Informe Final de Pensión</title>
+
+<style>
+:root{
+  --navy:#102f4a;
+  --blue:#17699a;
+  --blue2:#0d4d78;
+  --sky:#eef7fc;
+  --gold:#c9a24a;
+  --gold2:#f6df9f;
+  --green:#11884a;
+  --orange:#d98b1c;
+  --paper:#ffffff;
+  --bg:#edf2f6;
+  --text:#1d2f42;
+  --muted:#687789;
+  --line:#d7e1ea;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:18px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ===== Botones flotantes del informe final ===== */
+.no-print.toolbar-actions{
+  position:fixed;
+  right:22px;
+  top:84%;
+  transform:translateY(-50%);
+  z-index:9999;
+
+  width:245px;
+  max-width:none;
+  margin:0;
+  padding:0;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:stretch;
+  gap:10px;
+
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
+/* Base de botones flotantes */
+.no-print.toolbar-actions button{
+  width:100%;
+  min-height:44px;
+
+  border:none;
+  border-radius:999px;
+  padding:0 18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  font-size:15px;
+  font-weight:800;
+  font-family:Arial, Helvetica, sans-serif;
+
+  color:#fff;
+  cursor:pointer;
+
+  box-shadow:
+    0 6px 15px rgba(0,0,0,.14),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease;
+}
+
+.no-print.toolbar-actions button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.05);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.24);
+}
+
+/* Imprimir informe */
+.no-print.toolbar-actions #btnImprimirReporte{
+  background:linear-gradient(135deg, rgba(16,47,74,.95), rgba(23,105,154,.95));
+}
+
+/* Editar AFORE */
+.no-print.toolbar-actions #btnEditarAfore{
+  background:linear-gradient(135deg, rgba(17,136,74,.94), rgba(11,111,61,.94));
+}
+
+/* Editar retroactivo */
+.no-print.toolbar-actions #btnEditarRetroactivo{
+  background:linear-gradient(135deg, rgba(201,162,74,.96), rgba(166,124,31,.96));
+}
+
+/* Regresar */
+.no-print.toolbar-actions #btnRegresarReporte{
+  background:linear-gradient(135deg, rgba(98,81,181,.94), rgba(43,44,117,.94));
+}
+
+/* Volver al menú */
+.no-print.toolbar-actions #btnVolverMenu{
+  background:linear-gradient(135deg, rgba(217,139,28,.94), rgba(190,95,18,.94));
+}
+
+.report{
+  width:1080px;
+  max-width:100%;
+  margin:0 auto;
+  background:var(--paper);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(16,47,74,.16);
+}
+
+.cover{
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:18px;
+  padding:24px 28px;
+  background:
+    radial-gradient(circle at top left, rgba(201,162,74,.26), transparent 30%),
+    linear-gradient(135deg,var(--navy),var(--blue2));
+  color:#fff;
+}
+
+.cover-left{
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+
+.cover-logo{
+  width:150px;
+  height:95px;
+  object-fit:cover;
+  object-position:center;
+  background:#fff;
+  border-radius:20px;
+  padding:4px;
+}
+
+.cover h1{
+  margin:0;
+  font-size:34px;
+  line-height:1;
+  text-transform:uppercase;
+}
+
+.cover h1 span{
+  color:var(--gold2);
+}
+
+.cover p{
+  margin:8px 0 0;
+  color:#dcecf7;
+  font-size:14px;
+  font-weight:700;
+}
+
+.cover-kpi{
+  border:1px solid rgba(246,223,159,.8);
+  border-radius:22px;
+  background:rgba(255,255,255,.1);
+  padding:18px;
+  text-align:center;
+  align-self:center;
+}
+
+.cover-kpi span{
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.cover-kpi strong{
+  display:block;
+  margin:9px 0 5px;
+  color:var(--gold2);
+  font-size:40px;
+  line-height:1;
+}
+
+.cover-kpi small{
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.client-card{
+  margin:18px 24px 12px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fbfdff;
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  gap:16px;
+}
+
+.client-card h2{
+  margin:0 0 9px;
+  color:var(--navy);
+  font-size:24px;
+  text-transform:uppercase;
+}
+
+.client-card p{
+  margin:5px 0;
+  font-size:14px;
+  font-weight:700;
+}
+
+.client-dates{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.client-dates div{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background:#fff;
+}
+
+.client-dates span{
+  display:block;
+  font-size:10px;
+  color:var(--muted);
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.client-dates b{
+  display:block;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.executive-grid.layout-2x2{
+  margin:0 24px 14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-items:stretch;
+}
+
+.exec-card-block{
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+
+.exec-main-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px;
+  color:#fff;
+  min-height:105px;
+}
+
+.exec-main-card span{
+  display:block;
+  font-size:12px;
+  text-transform:uppercase;
+  font-weight:900;
+  color:#e7f4ff;
+  margin-bottom:8px;
+}
+
+.exec-main-card strong{
+  display:block;
+  font-size:31px;
+  line-height:1;
+  color:var(--gold2);
+}
+
+.exec-icon{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  background:rgba(255,255,255,.12);
+  flex-shrink:0;
+}
+
+.icon-blue{
+  background:linear-gradient(135deg,#07345b,#0f70a8);
+}
+
+.icon-gold{
+  background:linear-gradient(135deg,#a67c1f,#c9a24a);
+}
+
+.icon-teal{
+  background:linear-gradient(135deg,#0b5960,#159184);
+}
+
+.icon-purple{
+  background:linear-gradient(135deg,#2b2c75,#6251b5);
+}
+
+.exec-detail-card{
+  flex:1;
+  background:#fbfdff;
+  padding:14px;
+}
+
+.exec-detail-card h4{
+  margin:0 0 10px;
+  font-size:13px;
+  color:var(--navy);
+  text-transform:uppercase;
+}
+
+.exec-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+}
+
+.exec-row:last-child{
+  border-bottom:none;
+}
+
+.exec-row span{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.exec-row b{
+  color:var(--navy);
+  font-weight:900;
+  text-align:right;
+}
+
+.exec-investment-inline{
+  margin:0 14px 14px;
+  padding:16px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#a67c1f,var(--gold));
+  color:#fff;
+}
+
+.exec-investment-inline span{
+  display:block;
+  font-size:12px;
+  text-transform:uppercase;
+  font-weight:900;
+  color:#fff8dc;
+  margin-bottom:8px;
+}
+
+.exec-investment-inline strong{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  color:#fff7d7;
+}
+
+.exec-total-row{
+  margin-top:10px;
+  padding:12px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#0b5960,#159184);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.exec-total-row span{
+  color:#e7f4ff;
+  font-weight:900;
+  text-transform:uppercase;
+  font-size:12px;
+}
+
+.exec-total-row b{
+  color:var(--gold2);
+  font-size:20px;
+  font-weight:900;
+}
+
+.pension-invest-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.exec-select.mini{
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:900;
+  border:1px solid var(--line);
+  color:var(--navy);
+  background:#fff;
+}
+
+.exec-input.mini{
+  width:90px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:5px 8px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--navy);
+  text-align:center;
+  outline:none;
+}
+
+.result-box{
+  margin:0 24px 14px;
+  border:2px solid var(--orange);
+  background:#fff3e7;
+  border-radius:18px;
+  padding:14px 16px;
+}
+
+.result-box h3{
+  margin:0 0 6px;
+  color:var(--navy);
+  font-size:16px;
+}
+
+.result-box p{
+  margin:0;
+  color:#6b6f74;
+  font-size:13px;
+  font-weight:700;
+}
+
+footer{
+  padding:10px 16px;
+  background:linear-gradient(90deg,var(--navy),var(--blue) 82%,var(--gold) 82%);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:12px;
+  font-weight:800;
+}
+
+footer span{
+  color:#fff3c6;
+}
+
+/* ===== Responsive botones flotantes ===== */
+@media (max-width:900px){
+  .no-print.toolbar-actions{
+    left:12px;
+    right:12px;
+    bottom:12px;
+    top:auto;
+    transform:none;
+
+    width:auto;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .no-print.toolbar-actions button{
+    width:auto;
+    min-width:145px;
+    flex:1 1 145px;
+  }
+}
+
+/* ===== Impresión ===== */
+@media print{
+  @page{
+    size: Letter portrait;
+    margin:4mm;
+  }
+
+  html, body{
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .no-print,
+  .no-print.toolbar-actions{
+    display:none !important;
+  }
+
+  .report{
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    min-height:auto !important;
+    max-height:none !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+
+  .cover{
+    padding:13px 16px !important;
+    grid-template-columns:1fr 210px !important;
+    gap:12px !important;
+  }
+
+  .cover-left{
+    display:grid !important;
+    grid-template-columns:105px 1fr !important;
+    align-items:center !important;
+    gap:14px !important;
+    width:100% !important;
+  }
+
+  .cover-left > div{
+    text-align:center !important;
+    justify-self:center !important;
+    width:100% !important;
+    transform:none !important;
+  }
+
+  .cover-logo{
+    width:135px !important;
+    height:82px !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    background:#fff !important;
+    border-radius:16px !important;
+    padding:4px !important;
+  }
+
+  .cover h1{
+    font-size:25px !important;
+    line-height:1.05 !important;
+    text-align:center !important;
+  }
+
+  .cover p{
+    font-size:10px !important;
+    margin-top:5px !important;
+    text-align:center !important;
+  }
+
+  .cover-kpi{
+    padding:14px !important;
+    border-radius:16px !important;
+  }
+
+  .cover-kpi span,
+  .cover-kpi small{
+    font-size:8.5px !important;
+  }
+
+  .cover-kpi strong{
+    font-size:31px !important;
+    margin:5px 0 !important;
+  }
+
+  .client-card{
+    margin:8px 13px !important;
+    padding:10px !important;
+    border-radius:14px !important;
+    grid-template-columns:1.1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .client-card h2{
+    font-size:19px !important;
+    margin-bottom:5px !important;
+  }
+
+  .client-card p{
+    font-size:10px !important;
+    margin:3px 0 !important;
+  }
+
+  .client-dates{
+    gap:6px !important;
+  }
+
+  .client-dates div{
+    padding:7px 8px !important;
+    border-radius:9px !important;
+  }
+
+  .client-dates span{
+    font-size:7.5px !important;
+  }
+
+  .client-dates b{
+    font-size:10.5px !important;
+    margin-top:3px !important;
+  }
+
+  .executive-grid.layout-2x2{
+    margin:0 13px 9px !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .exec-card-block{
+    border-radius:18px !important;
+    overflow:hidden !important;
+  }
+
+  .exec-main-card{
+    min-height:70px !important;
+    padding:11px !important;
+    gap:10px !important;
+  }
+
+  .exec-icon{
+    width:38px !important;
+    height:38px !important;
+    border-radius:11px !important;
+    font-size:19px !important;
+  }
+
+  .exec-main-card span{
+    font-size:8.5px !important;
+    margin-bottom:4px !important;
+  }
+
+  .exec-main-card strong{
+    font-size:22px !important;
+  }
+
+  .exec-detail-card{
+    padding:10px !important;
+  }
+
+  .exec-detail-card h4{
+    font-size:9px !important;
+    margin-bottom:6px !important;
+  }
+
+  .exec-row{
+    padding:5px 0 !important;
+    font-size:8.6px !important;
+  }
+
+  .exec-row span{
+    font-size:8.6px !important;
+  }
+
+  .exec-row b{
+    font-size:8.8px !important;
+  }
+
+  .exec-investment-inline{
+    margin:0 10px 10px !important;
+    padding:10px !important;
+    border-radius:10px !important;
+  }
+
+  .exec-investment-inline span{
+    font-size:8px !important;
+    margin-bottom:4px !important;
+  }
+
+  .exec-investment-inline strong{
+    font-size:18px !important;
+  }
+
+  .exec-total-row{
+    margin-top:7px !important;
+    padding:8px !important;
+    border-radius:9px !important;
+  }
+
+  .exec-total-row span{
+    font-size:8px !important;
+  }
+
+  .exec-total-row b{
+    font-size:15px !important;
+  }
+
+  .exec-select.mini,
+  .exec-input.mini{
+    font-size:8px !important;
+    padding:4px 6px !important;
+    border-radius:6px !important;
+  }
+
+  .exec-input.mini{
+    width:70px !important;
+  }
+
+  .result-box{
+    margin:0 13px 9px !important;
+    padding:9px 11px !important;
+    border-radius:10px !important;
+  }
+
+  .result-box h3{
+    font-size:10px !important;
+    margin-bottom:3px !important;
+  }
+
+  .result-box p{
+    font-size:8px !important;
+  }
+
+  footer{
+    padding:6px 10px !important;
+    font-size:7px !important;
+  }
+}
+
+@media print{
+  @page{
+    size: Letter portrait;
+    margin:4mm;
+  }
+
+  html, body{
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .no-print{
+    display:none !important;
+  }
+
+  .report{
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    min-height:auto !important;
+    max-height:none !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+
+  .cover{
+    padding:13px 16px !important;
+    grid-template-columns:1fr 210px !important;
+    gap:12px !important;
+  }
+
+  .cover-left{
+    display:grid !important;
+    grid-template-columns:105px 1fr !important;
+    align-items:center !important;
+    gap:14px !important;
+    width:100% !important;
+  }
+
+  .cover-left > div{
+    text-align:center !important;
+    justify-self:center !important;
+    width:100% !important;
+    transform:none !important;
+  }
+
+  .cover-logo{
+    width:135px !important;
+    height:82px !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    background:#fff !important;
+    border-radius:16px !important;
+    padding:4px !important;
+  }
+
+  .cover h1{
+    font-size:25px !important;
+    line-height:1.05 !important;
+    text-align:center !important;
+  }
+
+  .cover p{
+    font-size:10px !important;
+    margin-top:5px !important;
+    text-align:center !important;
+  }
+
+  .cover-kpi{
+    padding:14px !important;
+    border-radius:16px !important;
+  }
+
+  .cover-kpi span,
+  .cover-kpi small{
+    font-size:8.5px !important;
+  }
+
+  .cover-kpi strong{
+    font-size:31px !important;
+    margin:5px 0 !important;
+  }
+
+  .client-card{
+    margin:8px 13px !important;
+    padding:10px !important;
+    border-radius:14px !important;
+    grid-template-columns:1.1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .client-card h2{
+    font-size:19px !important;
+    margin-bottom:5px !important;
+  }
+
+  .client-card p{
+    font-size:10px !important;
+    margin:3px 0 !important;
+  }
+
+  .client-dates{
+    gap:6px !important;
+  }
+
+  .client-dates div{
+    padding:7px 8px !important;
+    border-radius:9px !important;
+  }
+
+  .client-dates span{
+    font-size:7.5px !important;
+  }
+
+  .client-dates b{
+    font-size:10.5px !important;
+    margin-top:3px !important;
+  }
+
+  .executive-grid.layout-2x2{
+    margin:0 13px 9px !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .exec-card-block{
+    border-radius:18px !important;
+    overflow:hidden !important;
+  }
+
+  .exec-main-card{
+    min-height:70px !important;
+    padding:11px !important;
+    gap:10px !important;
+  }
+
+  .exec-icon{
+    width:38px !important;
+    height:38px !important;
+    border-radius:11px !important;
+    font-size:19px !important;
+  }
+
+  .exec-main-card span{
+    font-size:8.5px !important;
+    margin-bottom:4px !important;
+  }
+
+  .exec-main-card strong{
+    font-size:22px !important;
+  }
+
+  .exec-detail-card{
+    padding:10px !important;
+  }
+
+  .exec-detail-card h4{
+    font-size:9px !important;
+    margin-bottom:6px !important;
+  }
+
+  .exec-row{
+    padding:5px 0 !important;
+    font-size:8.6px !important;
+  }
+
+  .exec-row span{
+    font-size:8.6px !important;
+  }
+
+  .exec-row b{
+    font-size:8.8px !important;
+  }
+
+  .exec-investment-inline{
+    margin:0 10px 10px !important;
+    padding:10px !important;
+    border-radius:10px !important;
+  }
+
+  .exec-investment-inline span{
+    font-size:8px !important;
+    margin-bottom:4px !important;
+  }
+
+  .exec-investment-inline strong{
+    font-size:18px !important;
+  }
+
+  .exec-total-row{
+    margin-top:7px !important;
+    padding:8px !important;
+    border-radius:9px !important;
+  }
+
+  .exec-total-row span{
+    font-size:8px !important;
+  }
+
+  .exec-total-row b{
+    font-size:15px !important;
+  }
+
+  .exec-select.mini,
+  .exec-input.mini{
+    font-size:8px !important;
+    padding:4px 6px !important;
+    border-radius:6px !important;
+  }
+
+  .exec-input.mini{
+    width:70px !important;
+  }
+
+  .result-box{
+    margin:0 13px 9px !important;
+    padding:9px 11px !important;
+    border-radius:10px !important;
+  }
+
+  .result-box h3{
+    font-size:10px !important;
+    margin-bottom:3px !important;
+  }
+
+  .result-box p{
+    font-size:8px !important;
+  }
+
+  footer{
+    padding:6px 10px !important;
+    font-size:7px !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+
+<div class="no-print toolbar-actions">
+  <button type="button" id="btnImprimirReporte">🖨️ Imprimir informe</button>
+  <button type="button" id="btnEditarAfore">📂 Editar AFORE</button>
+  <button type="button" id="btnEditarRetroactivo">📄 Editar retroactivo</button>
+  <button type="button" id="btnRegresarReporte">⬅️ Regresar</button>
+  <button type="button" id="btnVolverMenu">🏠 Volver al menú</button>
+</div>
+
+
+<div class="report">
+
+  <section class="cover">
+    <div class="cover-left">
+      <img src="img/logo.png" class="cover-logo" alt="CIP Financial Group">
+      <div>
+        <h1>Informe Final<br><span>de Pensión</span></h1>
+        <p>Régimen Ley 73 · Proyección ejecutiva de pensión y liquidación</p>
+      </div>
+    </div>
+
+    <div class="cover-kpi">
+      <span>Monto mensual estimado</span>
+      <strong id="montoMensualResumen">$0.00</strong>
+      <small>Proyección final</small>
+    </div>
+  </section>
+
+  <section class="client-card">
+    <div>
+      <h2 id="nombreCliente">NOMBRE DEL CLIENTE</h2>
+      <p>NSS: <b id="nssCliente">--</b></p>
+      <p>CURP: <b id="curpCliente">--</b></p>
+    </div>
+
+    <div class="client-dates">
+      <div><span>Edad actual</span><b id="edadActualCliente">--</b></div>
+      <div><span>Baja IMSS</span><b id="fechaBaja">--/--/----</b></div>
+      <div><span>Edad retiro</span><b id="fechaRetiro">--</b></div>
+      <div><span>Cálculo</span><b id="fechaCalculo">--/--/----</b></div>
+    </div>
+  </section>
+
+  <section class="executive-grid layout-2x2">
+
+    <div class="exec-card-block">
+      <div class="exec-main-card icon-blue">
+        <div class="exec-icon">🤲</div>
+        <div>
+          <span>Pensión de baja</span>
+          <strong id="pensionBaja">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="exec-detail-card">
+        <h4>Datos actuales</h4>
+
+        <div class="exec-row">
+          <span>Fecha de baja</span>
+          <b id="fechaBajaActual">--/--/----</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Semanas actuales</span>
+          <b id="semanasActuales">0</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Semanas descontadas</span>
+          <b id="semanasDescontadas">0</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Salario promedio</span>
+          <b id="salarioPromedioActual">$0.00</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="exec-card-block">
+      <div class="exec-main-card icon-gold">
+        <div class="exec-icon">🛡️</div>
+        <div>
+          <span>Pensión mínima garantizada</span>
+          <strong id="pensionMinimaGarantizada">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="exec-detail-card">
+        <h4>Recursos disponibles</h4>
+
+        <div class="exec-row">
+          <span>SAR 92</span>
+          <b id="sar92">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Infonavit 92</span>
+          <b id="infonavit92">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>IMSS 97</span>
+          <b id="imss97">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Infonavit 97</span>
+          <b id="infonavit97">$0.00</b>
+        </div>
+      </div>
+
+      <div class="exec-investment-inline">
+        <span>Inversión requerida</span>
+        <strong id="inversionRequerida">$0.00</strong>
+      </div>
+    </div>
+
+
+        <div class="exec-card-block">
+      <div class="exec-main-card icon-purple">
+        <div class="exec-icon">📈</div>
+        <div>
+          <span>Pensión / Inversión</span>
+          <strong id="pensionInversion">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="exec-detail-card">
+        <h4>Proyecto con inversión</h4>
+
+        <div class="exec-row">
+          <span>Fecha de baja</span>
+          <b id="fechaBajaInversion">--/--/----</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Semanas cotizadas</span>
+          <b id="semanasCotizadasInversion">0</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Salario promedio</span>
+          <b id="salarioPromedioInversion">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Edad de retiro</span>
+          <b id="edadRetiroInversion">--</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Incremento de semanas</span>
+          <b id="incrementoSemanas">0</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Préstamo IMSS</span>
+          <b id="prestamoImss">$0.00</b>
+        </div>
+      </div>
+    </div>
+    
+    <div class="exec-card-block">
+      <div class="exec-main-card icon-teal">
+        <div class="exec-icon">🧮</div>
+        <div>
+          <span>Total de capacidad</span>
+          <strong id="totalLiquidacionEstimadaTop">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="exec-detail-card">
+        <h4>Total de capacidad</h4>
+
+        <div class="exec-row">
+          <span>Suma recursos disponibles</span>
+          <b id="sumaRecursosDisponibles">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Pensión / inversión</span>
+
+          <div class="pension-invest-wrap">
+            <b id="pensionInversionBase">$0.00</b>
+
+            <select id="multiplicadorPensionInversion" class="exec-select mini">
+              <option value="4">x4</option>
+              <option value="6" selected>x6</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="exec-row">
+          <span>Préstamo IMSS</span>
+          <b id="prestamoImssColumna1">$0.00</b>
+        </div>
+
+        <div class="exec-row">
+          <span>Plazo</span>
+          <input id="plazoCapacidad" class="exec-input mini" type="number" min="0" step="1" placeholder="Ej. 60">
+        </div>
+
+        <div class="exec-total-row">
+          <span>Total estimado</span>
+          <b id="totalLiquidacionEstimada">$0.00</b>
+        </div>
+      </div>
+    </div>
+
+
+
+  </section>
+
+  <section class="result-box">
+    <h3 id="resultadoRiesgoTitulo">Resultado: Pendiente</h3>
+    <p id="resultadoRiesgoTexto">
+      Aún no se capturó el Pago a CIP México. La capacidad de liquidación se muestra solo como referencia.
+    </p>
+  </section>
+
+  <footer>
+    <div>CIP Financial Group · Isabel la Católica 201S, Toluca, Méx · contacto@cipmexico.com.mx</div>
+    <div>Válido al <span id="fechaValidezFooter">--/--/----</span></div>
+  </footer>
+
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const raw = sessionStorage.getItem('CIP_DATOS_TABLA3');
+
+  if (!raw) {
+    console.warn('No hay datos en sessionStorage con la clave CIP_DATOS_TABLA3');
+    return;
+  }
+
+  try {
+    const data = JSON.parse(raw);
+
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? '';
+    };
+
+    const setValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value ?? '';
+    };
+
+    const toNumber = value => {
+      if (value === null || value === undefined) return 0;
+
+      let s = String(value)
+        .replace(/\u00A0/g, '')
+        .replace(/[$\s]/g, '')
+        .replace(/[^\d.,-]/g, '')
+        .trim();
+
+      if (!s) return 0;
+
+      const lastDot = s.lastIndexOf('.');
+      const lastComma = s.lastIndexOf(',');
+
+      let decimalSeparator = null;
+
+      if (lastDot !== -1 && lastComma !== -1) {
+        decimalSeparator = lastDot > lastComma ? '.' : ',';
+      } else if (lastDot !== -1) {
+        decimalSeparator = s.length - lastDot - 1 <= 2 ? '.' : null;
+      } else if (lastComma !== -1) {
+        decimalSeparator = s.length - lastComma - 1 <= 2 ? ',' : null;
+      }
+
+      if (decimalSeparator) {
+        const thousandSeparator = decimalSeparator === '.' ? ',' : '.';
+        s = s.replace(new RegExp('\\' + thousandSeparator, 'g'), '');
+
+        if (decimalSeparator === ',') {
+          s = s.replace(',', '.');
+        }
+
+        const parts = s.split('.');
+        if (parts.length > 2) {
+          const decimals = parts.pop();
+          s = parts.join('') + '.' + decimals;
+        }
+      } else {
+        s = s.replace(/[.,]/g, '');
+      }
+
+      const n = Number(s);
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    /*
+      ✅ Conversión segura para montos.
+      Evita que textos con $ y comas se conviertan mal.
+    */
+    const toMoneyNumber = value => {
+      if (value === null || value === undefined) return 0;
+
+      if (typeof value === 'number') {
+        return Number.isFinite(value) ? value : 0;
+      }
+
+      let s = String(value)
+        .replace(/\u00A0/g, '')
+        .replace(/[$\s]/g, '')
+        .replace(/[^\d.,-]/g, '')
+        .trim();
+
+      if (!s) return 0;
+
+      // Formato MX/US: 202,807.40
+      if (/^-?\d{1,3}(,\d{3})+(\.\d{1,2})?$/.test(s)) {
+        return Number(s.replace(/,/g, '')) || 0;
+      }
+
+      // Formato europeo: 202.807,40
+      if (/^-?\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(s)) {
+        return Number(s.replace(/\./g, '').replace(',', '.')) || 0;
+      }
+
+      // Formato simple decimal: 202807.40
+      if (/^-?\d+(\.\d{1,2})?$/.test(s)) {
+        return Number(s) || 0;
+      }
+
+      // Formato simple con coma decimal: 202807,40
+      if (/^-?\d+(,\d{1,2})$/.test(s)) {
+        return Number(s.replace(',', '.')) || 0;
+      }
+
+      const n = Number(s.replace(/,/g, ''));
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    /*
+      ✅ Normaliza montos contaminados.
+      Ejemplo:
+      4553355040000000 -> 455335.504 -> $455,335.50
+    */
+    const normalizarMontoContaminado = (valor, limite = 1000000) => {
+      let n = toMoneyNumber(valor);
+
+      if (!Number.isFinite(n) || n <= 0) return 0;
+
+      while (n > limite) {
+        n = n / 10;
+      }
+
+      return n;
+    };
+
+    const money = n => new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(Number(n) || 0);
+
+    const today = () => {
+      const d = new Date();
+      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    };
+
+    const getPlazoCaratula = () => {
+      return (
+        String(data.plazoCredito || '').replace(/[^\d]/g, '') ||
+        String(data.plazoCreditoTexto || '').replace(/[^\d]/g, '') ||
+        ''
+      );
+    };
+
+    /*
+      ✅ Monto seguro:
+      Si viene gigante, lo corrige dividiendo entre 10.
+      Si después sigue fuera de rango, toma el siguiente respaldo.
+    */
+    const getMontoSeguro = (...valores) => {
+      for (const valor of valores) {
+        const n = normalizarMontoContaminado(valor, 1000000);
+
+        if (n > 0 && n <= 1000000) {
+          return n;
+        }
+      }
+
+      return 0;
+    };
+
+    /*
+      ✅ Total estimado de carátula.
+      Aquí mantenemos total a pagar como prioridad para comparar capacidad.
+    */
+    const getMontoLineaCreditoCaratula = () => {
+      return getMontoSeguro(
+        data.montoTotalPagarNumero,
+        data.montoTotalPagar,
+
+        data.montoSolicitadoNumero,
+        data.montoSolicitado,
+
+        data.montoGrandeNumero,
+        data.montoGrande,
+
+        data.montoRetroactivoNumero,
+        data.montoRetroactivo,
+
+        data.montoLineaCreditoNumero,
+        data.montoLineaCredito
+      );
+    };
+
+    /*
+      ✅ Inversión requerida:
+      Aquí sí priorizamos montoLineaCreditoNumero.
+      Si viene contaminado, se normaliza.
+    */
+    const getInversionRequerida = () => {
+      return getMontoSeguro(
+        data.montoLineaCreditoNumero,
+        data.montoLineaCredito,
+
+        data.inversionRequerida,
+
+        data.montoSolicitadoNumero,
+        data.montoSolicitado,
+
+        data.montoGrandeNumero,
+        data.montoGrande,
+
+        data.montoRetroactivoNumero,
+        data.montoRetroactivo
+      );
+    };
+
+    const render = () => {
+      const fechaHoy = today();
+
+      /*
+        ================================
+        DATOS FINALES / INVERSIÓN
+        ================================
+      */
+
+      const pensionFinal =
+        toNumber(data.pensionFinal) ||
+        toNumber(data.calculoFinal?.pensionFinal) ||
+        toNumber(data.pensionEstimada) ||
+        0;
+
+      const semanasFinales =
+        data.semanasTotalesFinales ||
+        data.calculoFinal?.semanasFinales ||
+        data.semanas ||
+        '0';
+
+      const salarioFinal =
+        toNumber(data.diario1750) ||
+        toNumber(data.calculoFinal?.diarioFinal) ||
+        toNumber(data.diario) ||
+        0;
+
+      const cuantiaBasicaFinal =
+        data.calculoFinal?.cuantiaBasicaFinal ||
+        data.cuantiaBasicaTotal ||
+        '$0.00';
+
+      const incrementosFinal =
+        data.calculoFinal?.incrementosFinal ||
+        data.incrementosCuantiaTotal ||
+        '$0.00';
+
+      const semanasExcedentesFinal =
+        data.calculoFinal?.semanasExcedentesFinal ||
+        data.semanasExcedentes ||
+        '0';
+
+      /*
+        ================================
+        DATOS ORIGINALES
+        ================================
+      */
+
+      const semanasOriginales =
+        data.semanasOriginales ||
+        data.semanasTotalesTabla3 ||
+        data.calculoOriginal?.semanasOriginales ||
+        '0';
+
+      const semanasDescontadas =
+        data.semanasDescontadasDesempleo ||
+        data.semanasDescontadas ||
+        '0';
+
+      const salarioOriginal =
+        toNumber(data.diarioOriginal1750) ||
+        toNumber(data.diarioOriginalTabla3) ||
+        toNumber(data.calculoOriginal?.diarioOriginal) ||
+        0;
+
+      const pensionOriginal =
+        toNumber(data.pensionOriginal) ||
+        toNumber(data.calculoOriginal?.pensionOriginal) ||
+        0;
+
+      /*
+        ================================
+        RECURSOS AFORE
+        ================================
+      */
+
+      const imss1997 = toNumber(data.imss1997);
+      const sarImss1992 = toNumber(data.sarImss1992);
+      const sarInfonavit1992 = toNumber(data.sarInfonavit1992);
+      const infonavit1997 = toNumber(data.infonavit1997);
+
+      const sumaSubcuentas =
+        sarImss1992 +
+        sarInfonavit1992 +
+        imss1997 +
+        infonavit1997;
+
+      const recursosDisponibles = sumaSubcuentas > 0
+        ? sumaSubcuentas
+        : toNumber(data.resultadoTotalAfore);
+
+      /*
+        ================================
+        CÁLCULOS DE CAPACIDAD
+        ================================
+      */
+
+      const multiplicadorSelect = document.getElementById('multiplicadorPensionInversion');
+      const multiplicadorPension = Number(multiplicadorSelect?.value || 6);
+
+      const pensionInversionBase = pensionFinal * multiplicadorPension;
+
+      /*
+        Préstamo IMSS:
+        Pensión final × 30% × 60 ÷ 1.95
+      */
+      const capacidadPago = pensionFinal * 0.30;
+      const prestamoFinanciera = (capacidadPago * 60) / 1.95;
+
+      const totalCapacidad =
+        recursosDisponibles + pensionInversionBase + prestamoFinanciera;
+
+      const totalEstimadoCaratula = getMontoLineaCreditoCaratula() || totalCapacidad;
+
+      const diferencia = totalCapacidad - totalEstimadoCaratula;
+
+      const porcentajeCobertura = totalEstimadoCaratula > 0
+        ? (totalCapacidad / totalEstimadoCaratula) * 100
+        : 0;
+
+      const plazoCaratula = getPlazoCaratula();
+
+      const inversionRequerida = getInversionRequerida();
+
+      /*
+        ================================
+        PINTAR DATOS GENERALES
+        ================================
+      */
+
+      setText('nombreCliente', data.nombre || 'SIN NOMBRE');
+      setText('nssCliente', data.nss || '--');
+      setText('curpCliente', data.curp || '--');
+      setText('edadActualCliente', data.edadActual || '--');
+
+      setText('fechaBaja', data.fecha_actualxd || '--/--/----');
+      setText('fechaRetiro', data.edadRetiro ? `${data.edadRetiro} años` : '--');
+      setText('fechaCalculo', fechaHoy);
+      setText('fechaValidezFooter', fechaHoy);
+
+      setText('montoMensualResumen', money(pensionFinal));
+
+      /*
+        ================================
+        BLOQUE: PENSIÓN DE BAJA
+        ================================
+      */
+
+      setText('pensionBaja', money(pensionOriginal));
+      setText('fechaBajaActual', data.fecha_actualxd || '--/--/----');
+      setText('semanasActuales', semanasOriginales);
+      setText('semanasDescontadas', semanasDescontadas);
+      setText('salarioPromedioActual', money(salarioOriginal));
+
+      /*
+        ================================
+        BLOQUE: PMG / RECURSOS
+        ================================
+      */
+
+      setText('pensionMinimaGarantizada', data.pensionPMG || data.calculoFinal?.pensionPMGFinal || '$0.00');
+
+      setText('sar92', money(sarImss1992));
+      setText('infonavit92', money(sarInfonavit1992));
+      setText('imss97', money(imss1997));
+      setText('infonavit97', money(infonavit1997));
+      setText('inversionRequerida', money(inversionRequerida));
+
+      /*
+        ================================
+        BLOQUE: PENSIÓN / INVERSIÓN
+        ================================
+      */
+
+      setText('pensionInversion', money(pensionFinal));
+      setText('fechaBajaInversion', data.fecha_actualxd || '--/--/----');
+      setText('semanasCotizadasInversion', semanasFinales);
+      setText('salarioPromedioInversion', money(salarioFinal));
+      setText('edadRetiroInversion', data.edadRetiro ? `${data.edadRetiro} años` : '--');
+      setText('incrementoSemanas', data.incrementoSemanas || data.semanasMod40 || '0');
+      setText('prestamoImss', money(prestamoFinanciera));
+
+      /*
+        ================================
+        BLOQUE: TOTAL DE CAPACIDAD
+        ================================
+      */
+
+      setText('sumaRecursosDisponibles', money(recursosDisponibles));
+      setText('pensionInversionBase', money(pensionInversionBase));
+      setText('prestamoImssColumna1', money(prestamoFinanciera));
+
+      setText('totalLiquidacionEstimadaTop', money(totalCapacidad));
+      setText('totalLiquidacionEstimada', money(totalEstimadoCaratula));
+
+      setValue('plazoCapacidad', plazoCaratula);
+
+      /*
+        ================================
+        RESULTADO
+        ================================
+      */
+
+      if (totalEstimadoCaratula <= 0) {
+        setText('resultadoRiesgoTitulo', 'Resultado: Pendiente');
+        setText(
+          'resultadoRiesgoTexto',
+          'Aún no se cuenta con un total estimado de carátula para comparar la capacidad del cliente.'
+        );
+      } else if (diferencia >= 0) {
+        setText('resultadoRiesgoTitulo', 'Resultado: Viable');
+        setText(
+          'resultadoRiesgoTexto',
+          `El cliente cuenta con capacidad suficiente para cubrir el total estimado. Diferencia disponible: ${money(diferencia)}.`
+        );
+      } else if (porcentajeCobertura >= 70) {
+        setText('resultadoRiesgoTitulo', 'Resultado: Condicionado');
+        setText(
+          'resultadoRiesgoTexto',
+          `El cliente cubre aproximadamente el ${porcentajeCobertura.toFixed(1)}% del total estimado. Faltante estimado: ${money(Math.abs(diferencia))}.`
+        );
+      } else {
+        setText('resultadoRiesgoTitulo', 'Resultado: No viable');
+        setText(
+          'resultadoRiesgoTexto',
+          `El cliente no cuenta con capacidad suficiente para cubrir el total estimado. Faltante estimado: ${money(Math.abs(diferencia))}.`
+        );
+      }
+
+      console.log('📋 Datos de capacidad y carátula usados en resumen:');
+      console.table({
+        pensionFinal: money(pensionFinal),
+        semanasFinales,
+        salarioPromedioFinal: money(salarioFinal),
+        cuantiaBasicaFinal,
+        incrementosFinal,
+        semanasExcedentesFinal,
+
+        pensionOriginal: money(pensionOriginal),
+        semanasOriginales,
+        salarioPromedioOriginal: money(salarioOriginal),
+
+        sarImss1992: money(sarImss1992),
+        sarInfonavit1992: money(sarInfonavit1992),
+        imss1997: money(imss1997),
+        infonavit1997: money(infonavit1997),
+        sumaSubcuentas: money(sumaSubcuentas),
+        recursosDisponibles: money(recursosDisponibles),
+
+        inversionRequerida: money(inversionRequerida),
+        montoLineaCredito: data.montoLineaCredito || '',
+        montoLineaCreditoNumero: data.montoLineaCreditoNumero || '',
+        montoSolicitado: data.montoSolicitado || '',
+        montoSolicitadoNumero: data.montoSolicitadoNumero || '',
+        montoGrande: data.montoGrande || '',
+        montoGrandeNumero: data.montoGrandeNumero || '',
+
+        multiplicadorPension,
+        pensionInversionBase: money(pensionInversionBase),
+        prestamoImss: money(prestamoFinanciera),
+        totalCapacidad: money(totalCapacidad),
+
+        totalEstimadoCaratula: money(totalEstimadoCaratula),
+        diferenciaCapacidadVsEstimado: money(diferencia),
+        porcentajeCobertura: `${porcentajeCobertura.toFixed(1)}%`,
+
+        montoTotalPagar: data.montoTotalPagar || '',
+        montoTotalPagarNumero: data.montoTotalPagarNumero || '',
+
+        plazoCredito: data.plazoCredito || '',
+        plazoCreditoTexto: data.plazoCreditoTexto || '',
+        plazoMostrado: plazoCaratula
+      });
+    };
+
+    render();
+
+    document
+      .getElementById('multiplicadorPensionInversion')
+      ?.addEventListener('change', render);
+
+  } catch (e) {
+    console.error('Error calculando resumen:', e);
+  }
+});
+
+/*
+  ================================
+  BOTONES DE ACCIÓN
+  ================================
+*/
+const qs = window.location.search || '';
+
+document.getElementById('btnImprimirReporte')?.addEventListener('click', () => {
+  window.print();
+});
+
+document.getElementById('btnEditarAfore')?.addEventListener('click', () => {
+  window.location.href = '/analisis/afore/' + qs;
+});
+
+document.getElementById('btnEditarRetroactivo')?.addEventListener('click', () => {
+  window.location.href = '/analisis/retroactivo/retroactivo.html' + qs;
+});
+
+/*
+  ✅ Botón Atrás / Regresar
+  Regresa a carátula.
+*/
+document.getElementById('btnRegresarReporte')?.addEventListener('click', () => {
+  window.location.href = '/analisis/caratulas/caratula.html' + qs;
+});
+
+document.getElementById('btnVolverMenu')?.addEventListener('click', () => {
+  window.location.href = '/index.php';
+});
+</script>
+</body>
+</html>

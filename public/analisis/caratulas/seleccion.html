@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Seleccionar Carátula</title>
+
+  <style>
+    :root{
+      --azul:#0a567d;
+      --azul2:#0e6a98;
+      --azul3:#eaf5fb;
+      --azul4:#083e5b;
+      --dorado:#b8a06a;
+      --dorado2:#f8f4ea;
+      --verde:#11884a;
+      --rojo:#b42318;
+      --gris:#5f6b7a;
+      --blanco:#ffffff;
+      --line:#d8e3ec;
+      --shadow:0 22px 55px rgba(10,86,125,.18);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      color:#1f2937;
+      background:
+        radial-gradient(circle at top left, rgba(184,160,106,.24), transparent 34%),
+        linear-gradient(180deg,#eef2f6 0%, #e8edf3 100%);
+    }
+
+    .selector{
+      width:min(960px, 100%);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(216,227,236,.95);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+
+    .selector-head{
+      display:grid;
+      grid-template-columns:150px 1fr;
+      gap:22px;
+      align-items:center;
+      padding:28px 32px;
+      background:linear-gradient(135deg,var(--azul4),var(--azul),var(--azul2));
+      color:#fff;
+    }
+
+    .logo-box{
+      height:86px;
+      border-radius:22px;
+      background:#fff;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px;
+    }
+
+    .logo-box img{
+      width:180px;
+      height:105px;
+      object-fit:contain;
+    }
+
+    .selector-head h1{
+      font-size:34px;
+      line-height:1.05;
+      text-transform:uppercase;
+      margin-bottom:8px;
+      letter-spacing:.4px;
+    }
+
+    .selector-head p{
+      color:#d9ecf7;
+      font-size:15px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .selector-body{
+      padding:34px;
+    }
+
+    .notice{
+      background:#f8fcff;
+      border:1px solid #d7e8f4;
+      border-radius:20px;
+      padding:15px 18px;
+      margin-bottom:24px;
+      color:#36546c;
+      font-size:15px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    .card-option{
+      position:relative;
+      border:none;
+      cursor:pointer;
+      text-align:left;
+      min-height:235px;
+      padding:26px;
+      border-radius:26px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 12px 30px rgba(15,23,42,.08);
+      overflow:hidden;
+      transition:.2s ease;
+    }
+
+    .card-option:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 42px rgba(15,23,42,.16);
+    }
+
+    .card-option::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.13;
+      pointer-events:none;
+    }
+
+    .card-option.retro::before{
+      background:radial-gradient(circle at top right, var(--azul2), transparent 48%);
+    }
+
+    .card-option.ordinaria::before{
+      background:radial-gradient(circle at top right, var(--verde), transparent 48%);
+    }
+
+    .icon{
+      position:relative;
+      width:60px;
+      height:60px;
+      border-radius:19px;
+      color:#fff;
+      font-size:30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:18px;
+    }
+
+    .retro .icon{
+      background:linear-gradient(135deg,#083e5b,#0e6a98);
+    }
+
+    .ordinaria .icon{
+      background:linear-gradient(135deg,#0f766e,#16a34a);
+    }
+
+    .card-option h2{
+      position:relative;
+      font-size:26px;
+      color:#0f172a;
+      margin-bottom:10px;
+    }
+
+    .card-option p{
+      position:relative;
+      font-size:15px;
+      line-height:1.5;
+      color:#64748b;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+
+    .tag{
+      position:relative;
+      display:inline-flex;
+      padding:9px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .retro .tag{
+      background:#eaf5fb;
+      color:#083e5b;
+    }
+
+    .ordinaria .tag{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .actions{
+      margin-top:28px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      min-height:46px;
+      padding:0 22px;
+      font-size:15px;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .btn-back{
+      background:linear-gradient(135deg,#f8f4ea,#e6dcc4);
+      color:#6d5517;
+      border:1px solid #cdbb93;
+    }
+
+    .btn-menu{
+      background:linear-gradient(135deg,#fff1f1,#ffdada);
+      color:var(--rojo);
+      border:1px solid #f1bebe;
+    }
+
+    .status{
+      margin-top:18px;
+      text-align:center;
+      color:#64748b;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    @media(max-width:760px){
+      .selector-head{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .logo-box{
+        width:150px;
+        margin:0 auto;
+      }
+
+      .cards{
+        grid-template-columns:1fr;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      .btn{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="selector">
+    <section class="selector-head">
+      <div class="logo-box">
+        <img src="/img/logo.png" alt="CIP Financial Group">
+      </div>
+
+      <div>
+        <h1>Seleccionar carátula</h1>
+        <p>Elige el formato de carátula que deseas generar con las variables ya calculadas.</p>
+      </div>
+    </section>
+
+    <section class="selector-body">
+      <div class="notice">
+        Las variables de pensión, AFORE, retroactivo, monto solicitado, nombre, NSS y CURP se conservan automáticamente.
+      </div>
+
+      <div class="cards">
+        <button type="button" class="card-option retro" id="btnCaratulaRetro">
+          <div class="icon">📄</div>
+          <h2>Carátula retroactivo</h2>
+          <p>
+            Usa este formato cuando el cálculo venga del flujo retroactivo o del crédito con retroactivo.
+          </p>
+          <span class="tag">Abrir carátula retroactivo</span>
+        </button>
+
+        <button type="button" class="card-option ordinaria" id="btnCaratulaOrdinaria">
+          <div class="icon">📊</div>
+          <h2>Carátula ordinaria</h2>
+          <p>
+            Usa este formato cuando el cálculo sea ordinario y no quieras manejarlo como retroactivo.
+          </p>
+          <span class="tag">Abrir carátula ordinaria</span>
+        </button>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-back" id="btnRegresar">
+          ⬅️ Regresar
+        </button>
+
+        <button type="button" class="btn btn-menu" id="btnMenu">
+          🏠 Salir al menú
+        </button>
+      </div>
+
+      <div class="status" id="estadoVariables">Verificando variables...</div>
+    </section>
+  </main>
+
+  <script>
+    const KEY_TABLA3 = 'CIP_DATOS_TABLA3';
+    const KEY_CARATULA = 'CIP_DATOS_CARATULA';
+
+    function getQS(){
+      return window.location.search || '';
+    }
+
+    function leerStorage(key){
+      try {
+        return JSON.parse(sessionStorage.getItem(key) || '{}');
+      } catch (e) {
+        console.error('Error leyendo storage:', key, e);
+        return {};
+      }
+    }
+
+    function guardarSeleccionCaratula(tipo, ruta){
+      const tabla3 = leerStorage(KEY_TABLA3);
+      const caratula = leerStorage(KEY_CARATULA);
+
+      const payload = {
+        ...caratula,
+        ...tabla3,
+
+        tipoCaratula: tipo,
+        origenSeleccionCaratula: '/analisis/caratulas/seleccion.html',
+        origenCaratula: ruta,
+
+        updatedAt: Date.now()
+      };
+
+      sessionStorage.setItem(KEY_TABLA3, JSON.stringify(payload));
+      sessionStorage.setItem(KEY_CARATULA, JSON.stringify(payload));
+
+      console.log('✅ Variables guardadas para carátula:', payload);
+    }
+
+    function irACaratula(tipo, ruta){
+      guardarSeleccionCaratula(tipo, ruta);
+
+      const qs = getQS();
+      window.location.href = ruta + qs;
+    }
+
+    document.getElementById('btnCaratulaRetro')?.addEventListener('click', () => {
+      irACaratula('retroactivo', '/analisis/caratulas/caratula.html');
+    });
+
+    document.getElementById('btnCaratulaOrdinaria')?.addEventListener('click', () => {
+      irACaratula('ordinaria', '/analisis/caratulas/caratula1.html');
+    });
+
+    document.getElementById('btnRegresar')?.addEventListener('click', () => {
+      if (history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = '/analisis/afore/';
+      }
+    });
+
+    document.getElementById('btnMenu')?.addEventListener('click', () => {
+      window.location.href = '/index.php';
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const estado = document.getElementById('estadoVariables');
+      const data = leerStorage(KEY_TABLA3);
+
+      if (Object.keys(data).length > 0) {
+        estado.textContent = '✅ Variables detectadas y listas para enviarse.';
+      } else {
+        estado.textContent = '⚠️ No se detectaron variables en sesión, pero puedes continuar.';
+      }
+    });
+  </script>
+
+</body>
+</html>

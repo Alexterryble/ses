@@ -1,0 +1,2374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Carátula de Crédito</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+  --azul:#0d6e9b;
+  --dorado:#c69300;
+  --borde:#c69300;
+  --gris:#222;
+}
+
+/* ===== Reset base ===== */
+*{ box-sizing:border-box; }
+html, body{
+  margin:0;
+  background:#fff;
+  color:var(--gris);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== Contenedor hoja (pantalla) ===== */
+.caratula{
+  width: 7.7in;
+  max-width: calc(100vw - 24mm);
+  margin: 18px auto;
+  background:#fff;
+  border: 1px solid var(--borde);
+}
+
+/* ===== Encabezado ===== */
+.header-logos{
+  display:grid;
+  grid-template-columns: 1.5in 1fr 1.5in;
+  align-items:center;
+  gap:10px;
+  padding:12px 18px 6px;
+}
+.header-logos .logo{ display:flex; align-items:center; justify-content:center; }
+.header-logos .logo img{ max-height: 0.8in; }
+.monto-wrap{ text-align:center; }
+.monto-wrap .monto-titulo{ font-size:11px; letter-spacing:.4px; font-weight:700; }
+.monto-wrap .monto-valor{ font-size:24px; font-weight:800; color:#0c4f6b; margin-top:2px; }
+
+/* Raya dorada bajo el header */
+.rule{ height:3px; background:var(--dorado); margin:8px 18px; }
+
+/* Subcabecera y título */
+.subhead{
+  display:grid; grid-template-columns:1fr 1fr; align-items:end;
+  padding:0 18px 6px; font-size:11px;
+}
+.folio{ color:#c31111; }
+.anexo{ justify-self:end; }
+.titulo{ padding:0 18px 6px; text-align:center; font-size:12.5px; font-weight:700; text-decoration:underline; }
+
+/* ===== Tablas (pantalla) ===== */
+.tab{
+  width: calc(100% - 24px);
+  margin:8px 12px;
+  border-collapse:collapse;
+  table-layout: fixed;
+}
+.tab th, .tab td{
+  border:1px solid var(--borde);
+  padding:6px 8px;
+  font-size:11px;
+  vertical-align:middle;
+}
+.tab th{ background:#f4f5f7; font-weight:700; }
+.tab .small{ font-size:10px; }
+.tab .center{ text-align:center; }
+.tab .right{ text-align:right; }
+.tab .big{ font-weight:800; font-size:13px; }
+.tab .nowrap{ white-space:nowrap; }
+
+/* Bandas doradas de sección (pantalla) */
+.band{
+  background:var(--dorado); color:#fff; font-weight:700; font-size:12px;
+  text-align:center; padding:4px 6px;
+  border:1px solid var(--borde); border-bottom:0;
+  margin:8px 12px 0;
+}
+
+/* Advertencias / firmas / pie */
+.advert{ margin:6px 12px; font-size:10px; text-align:center; }
+.firma{ margin:16px 12px 8px; text-align:center; }
+.firma .nombre{ font-weight:800; color:#0c4f6b; font-size:12.5px; }
+.firma .linea{ margin:6px auto 4px; width:70%; height:1px; background:#333; }
+.firma .nota{ font-size:10px; }
+.pie{ margin:6px 12px 14px; text-align:center; color:#c53d23; font-weight:800; font-size:10.5px; }
+
+/* ===== Responsive mínimo (pantalla) ===== */
+@media (max-width: 1024px){
+  .caratula{ width:auto; margin:12px; }
+  .header-logos{ grid-template-columns: 1.2in 1fr 1.2in; }
+  .header-logos .logo img{ max-height:0.75in; }
+}
+
+/* =========================================================
+   IMPRESIÓN (Carta) – corrige “borde gordo” y costuras
+   ========================================================= */
+@media print{
+  @page{ size: Letter portrait; margin: 8mm; }
+  html, body{
+    -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+    margin:0 !important;
+  }
+
+  /* Hoja: mismo marco PERO con padding */
+  .caratula{
+    width: calc(8.5in - 16mm) !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding: 6pt !important;                /* ← separa tablas del borde */
+    border: 1pt solid var(--borde) !important;
+    box-shadow: none !important;
+    background:#fff !important;
+  }
+
+  /* Tablas: 100% reales, sin márgenes laterales */
+  .tab{
+    width:100% !important;
+    margin-left:0 !important; margin-right:0 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+  }
+  .tab th, .tab td{
+    border: 1pt solid var(--borde) !important;
+    padding:5px 7px !important;
+    background-clip: padding-box !important;
+  }
+
+  /* Entre tablas seguidas, un pequeño respiro */
+  .tab + .tab{ margin-top: 6px !important; }
+
+  /* Bandas: pegadas a la tabla de abajo */
+  .band{
+    margin-left:0 !important; margin-right:0 !important;
+    margin-top:8px !important;
+    margin-bottom:-1pt !important;          /* solapa 1pt */
+    border:1pt solid var(--borde) !important;
+    border-bottom-width:0 !important;
+    background: var(--dorado) !important;
+    color:#fff !important;
+  }
+  .band + .tab{ margin-top:0 !important; }
+
+  /* Encabezado compacto en print */
+  .header-logos{ grid-template-columns: 1.5in 1fr 1.5in; padding:10px 0 6px !important; }
+  .header-logos .logo img{ max-height:0.8in !important; }
+  .monto-wrap .monto-titulo{ font-size:11px !important; }
+  .monto-wrap .monto-valor{  font-size:20px !important; }
+
+  /* Regla y bloques a todo lo ancho */
+  .rule{ margin:8px 0 !important; }
+  .subhead, .titulo{ padding-left:0 !important; padding-right:0 !important; }
+
+  /* Ocultar UI innecesaria en impresión */
+  .no-print, .actions{ display:none !important; }
+}
+
+
+
+.monto-valor-editable{
+  display:inline-block;
+  font-weight:700;             /* mismo peso */
+  font-size: 28px;             /* igual que tu diseño */
+  line-height: 1.2;
+  color:#0A66C2;               /* azul de tu encabezado */
+  text-align:center;
+  min-width: 10ch;
+  padding: 2px 6px;
+  border-radius: 4px;
+  outline: none;
+}
+.monto-valor-editable:focus{
+  /* sin parpadeo de borde; opcional un subrayado sutil */
+  box-shadow: 0 0 0 2px rgba(10,102,194,.12) inset;
+}
+@media print{
+  .monto-valor-editable{
+    box-shadow:none;
+  }
+}
+
+
+
+
+.firma { text-align:center; }
+.firma .nombre{
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .5px;
+  margin-bottom: 6px;
+}
+.linea{
+  width: 100%;
+  max-width: 520px;
+  height: 1px;
+  background: #b58a00;
+  margin: 8px auto 6px;
+}
+.nota{ font-size: 12px; color:#555; }
+
+.sigpad{ margin: 6px auto 8px; max-width: 520px; }
+#sigCanvas{
+  width: 100%;          /* tamaño visual */
+  height: 180px;
+  background: #fffdf6;
+  border: 2px dashed #b58a00;
+  border-radius: 8px;
+  touch-action: none;   /* evita scroll al dibujar */
+  display: block;
+}
+.sig-actions{
+  display:flex; gap:8px; justify-content:center; margin-top:6px; flex-wrap:wrap;
+}
+.sig-actions button{
+  padding:6px 10px; border-radius:8px; border:1px solid #d7b554; background:#f6e7b7; cursor:pointer;
+}
+.sig-actions button:hover{ filter:brightness(0.98); }
+
+
+
+
+/* --- Pantalla (sin cambios) --- */
+.sigpad { margin: 6px auto 8px; max-width: 520px; }
+#sigCanvas{
+  width: 100%;
+  height: 180px;
+  background: #fffdf6;
+  border: 2px dashed #b58a00;
+  border-radius: 8px;
+  touch-action: none;
+  display: block;
+}
+.sig-actions{ display:flex; gap:8px; justify-content:center; margin-top:6px; flex-wrap:wrap; }
+
+/* --- Impresión --- */
+@media print {
+  .sig-actions { display: none !important; }           /* oculta botones */
+  #sigCanvas    { display: none !important; }          /* oculta canvas y su marco */
+  .sigpad       { margin: 8px auto 0 !important; }     /* acomoda */
+  .sig-print {
+    display: block !important;                         /* muestra imagen de la firma */
+    width: 100% !important;
+    max-width: 520px !important;
+    height: 120px !important;                          /* alto de firma impresa */
+    object-fit: contain;                               /* ajusta sin deformar */
+    filter: none !important;                           /* sin bordes/fondo */
+    page-break-inside: avoid;                          /* evita partirla */
+    margin: 0 auto 6px !important;
+  }
+}
+
+
+
+/* ===== Toolbar ===== */
+.caratula-toolbar{
+  display:flex;
+  align-items:flex-end;
+  gap:14px;
+  padding:10px 12px;
+  margin:8px 0 14px;
+  background:#fff;
+  border:1px solid #e7e5dc;
+  border-radius:12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+
+.caratula-toolbar .field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width: 220px;
+}
+
+.caratula-toolbar label{
+  font-size:12px;
+  font-weight:700;
+  color:#6e5c2e; /* dorado oscuro suave */
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.caratula-toolbar select,
+.caratula-toolbar input[type="date"]{
+  padding:10px 12px;
+  border:1px solid #d8d3c2;
+  border-radius:10px;
+  background:#fffef9;
+  outline:none;
+  font-size:14px;
+  min-height:40px;
+  transition: box-shadow .15s, border-color .15s, background .15s;
+}
+
+.caratula-toolbar select:focus,
+.caratula-toolbar input[type="date"]:focus{
+  border-color:#caa748;
+  box-shadow:0 0 0 3px rgba(202,167,72,.2);
+  background:#fffdfa;
+}
+
+.caratula-toolbar .spacer{
+  flex:1;
+}
+
+.btn{
+  appearance:none;
+  border:1px solid transparent;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+  transition: transform .05s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.btn:active{ transform: translateY(1px); }
+
+.btn-print{
+  background:#f3e3a6;
+  border-color:#d7b554;
+  color:#5b4a16;
+}
+.btn-print:hover{ background:#f0d889; box-shadow:0 2px 8px rgba(215,181,84,.25); }
+
+/* Responsive */
+@media (max-width: 720px){
+  .caratula-toolbar{ flex-wrap:wrap; }
+  .caratula-toolbar .field{ min-width: min(320px, 100%); flex:1 1 100%; }
+  .caratula-toolbar .spacer{ display:none; }
+  .btn-print{ width:100%; }
+}
+
+/* Al imprimir: ocultar toolbar */
+@media print{
+  .caratula-toolbar{ display:none !important; }
+}
+
+
+</style>
+
+<style>
+.btn-regresar{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.5rem .9rem; border:1px solid #e0e0e0; border-radius:.6rem;
+  background:#fff; cursor:pointer; font-weight:600;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.btn-regresar:hover{ background:#f6f7f9; }
+.btn-regresar:active{ transform: translateY(1px); }
+
+
+
+
+#sigPrintImage {
+  display: block;
+  max-width: 100%;
+}
+
+
+
+
+</style>
+<style>
+  .caratula-wrap{
+    display:flex;
+    gap: 14px;
+    align-items:flex-start;
+  }
+
+  /* tu carátula normal */
+  .caratula{
+    flex: 0 0 auto;
+  }
+
+  /* panel derecho */
+  .caratula-right{
+    width: 270px;           /* ajusta a tu gusto */
+    border: 2px solid #b8860b;
+    padding: 10px;
+    background: #fff;
+      margin-right: 24px; 
+  }
+
+  .right-title{
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    background: #b8860b;
+    color: #fff;
+    letter-spacing: .5px;
+  }
+
+  .plazos-panel{
+    display:flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .plazo-row{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    border: 1px solid #b8860b;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .plazo-row b{
+    font-weight: 700;
+  }
+
+  .plazo-val{
+    min-width: 120px;
+    text-align: right;
+    padding-left: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Impresión: que salga al lado (si cabe) */
+  @media print{
+    .caratula-wrap{ gap: 10px; }
+    .caratula-right{ width: 240px; }
+  }
+
+
+  .plazo-input{
+  display:inline-block;
+  min-width: 120px;
+  text-align: right;
+  padding: 2px 6px;
+  border: 1px dashed rgba(184,134,11,.8);
+  border-radius: 3px;
+  background: #fffdf6;
+  outline: none;
+}
+.plazo-input:focus{
+  border-style: solid;
+}
+
+
+.plazo-total{
+  background: #fff8e6;
+  border-width: 2px;
+}
+.total-val{
+  font-weight: 700;
+}
+
+
+
+.plazo-box{
+  display:flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  width: 100%;
+}
+
+.plazo-sub{
+  font-size: 11px;
+  opacity: .85;
+  padding: 2px 6px;
+  border-left: 3px solid #b8860b;
+  background: #fff8e6;
+  width: 100%;
+  text-align: right;
+  box-sizing: border-box;
+}
+</style>
+
+
+</head>
+<body>
+<!-- Toolbar de la carátula -->
+<div class="caratula-toolbar">
+  <div class="field">
+    <label for="zonaSelect">Zona (investigación)</label>
+    <select id="zonaSelect">
+      <option value="">Cargando zonas…</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="fechaBase">Fecha base</label>
+    <input type="date" id="fechaBase" />
+  </div>
+
+  <div class="spacer"></div>
+<button type="button" id="btnGuardar" class="btn">💾 Guardar</button>
+
+  <button type="button" id="btnImprimir" class="btn btn-print" title="Imprimir carátula">
+    🖨️ Imprimir
+  </button>
+
+  <button type="button" id="btn-regresar" class="btn-regresar" title="regresar">
+    🔙 Regresar
+  </button>
+</div>
+<div class="caratula-wrap">
+<div class="caratula">
+
+  <!-- ===== Encabezado ===== -->
+  <div class="header-logos">
+    <div class="logo left">
+      <img src="/img/Imagen1.png" alt="CIP Izquierdo">
+    </div>
+    <div class="monto-wrap">
+      <div class="monto-titulo">MONTO SOLICITADO</div>
+      <span id="montoSolicitado"
+      class="monto-valor-editable"
+      contenteditable="true"
+      role="textbox"
+      aria-label="Monto solicitado"></span>
+    </div>
+    <div class="logo right">
+      <img src="/img/Cip flecha.png" alt="CIP Derecho">
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="subhead">
+    <div class="folio">Folio: <span id="folio">—</span></div>
+    <div class="anexo">
+  <span id="fechaLarga">sábado, 27 de septiembre de 2025</span>
+  &nbsp;&nbsp;&nbsp;
+  <a href="#" style="color:#0d6e9b; text-decoration:underline;">Anexo A</a>
+</div>
+  </div>
+
+  <div class="titulo">CARÁTULA DE CRÉDITO</div>
+
+  <!-- ===== Bloque superior ===== -->
+  <table class="tab">
+    <tr>
+      <th style="width:35%">Nombre comercial del producto:</th>
+      <td id="nombreProducto">—</td>
+      <th style="width:14%">CURP:</th>
+      <td class="right nowrap"><span id="ctlCURP">—</span></td>
+    </tr>
+    <tr>
+      <th>Tipo de Crédito:</th>
+      <td>Simple</td>
+      <th>RFC:</th>
+      <td class="right nowrap"><span id="ctlRFC">—</span></td>
+    </tr>
+  </table>
+
+  <!-- ===== CAT / Tasas / Monto / Total ===== -->
+  <table class="tab">
+    <tr>
+      <th class="center">CAT<br><span class="small">COSTO ANUAL TOTAL</span></th>
+      <th class="center">TASA DE INTERÉS SEMESTRAL<br><span class="small">ORDINARIA Y MORATORIA</span></th>
+      <th class="center">MONTO O<br><span class="small">LÍNEA DE CRÉDITO</span></th>
+      <th class="center">MONTO TOTAL A PAGAR<br><span class="small">O MÍNIMO A PAGAR</span></th>
+    </tr>
+    <tr>
+      <td class="small">103.62% SIN IVA para fines informativos y de comparación.</td>
+      <td class="small">
+        Tasa ordinaria <strong>9.74%</strong> SIN IVA<br>
+        Tasa moratoria <strong>2.58%</strong> SIN IVA
+      </td>
+      <!-- Antes: id="montoTotalPagar" (duplicado) -->
+      <td id="montoTotalPagar" class="center big" data-base-source="montoMasComisiones"></td>
+      <td id="montoLineaCredito" class="center big"></td>
+    </tr>
+  </table>
+
+  <!-- ===== Plazo / Fechas ===== -->
+  <table class="tab">
+    <tr>
+      <th style="width:40%">PLAZO DEL CRÉDITO:</th>
+      <td class="center big" style="width:20%">
+  <span id="plazo" class="editable-num" contenteditable="true" role="spinbutton" aria-label="Plazo en meses" aria-valuemin="1" aria-valuemax="120" aria-valuenow="10">10</span>
+</td>
+
+      <td class="center" style="width:10%">MESES</td>
+      <th style="width:17%">FECHA LÍMITE DE PAGO:</th>
+      <td class="right" style="width:33%" id="fechaMasUnAnio">—</td>
+    </tr>
+    <tr>
+      <th>FECHA DE CORTE:</th>
+      <td colspan="4" class="right small" id="fechaMenosOcho">—</td>
+    </tr>
+  </table>
+
+  <!-- ===== Comisiones ===== -->
+  <div class="band">COMISIONES RELEVANTES</div>
+  <table class="tab">
+    <tr>
+      <th style="width:40%">Apertura de Crédito:</th>
+      <td style="width:10%" class="center">6.5%</td>
+      <td style="width:20%" class="right" id="costo65">$975.00</td>
+      <th style="width:15%">Seguro</th>
+      <td class="right" id="costoSeguro" style="width:15%"></td>
+
+
+
+    </tr>
+    <tr>
+      <th>Investigación (Dependiendo la zona geográfica):</th>
+      <td class="right" id="costoInvestigacion" colspan="4">$1,500.00</td>
+    </tr>
+    <tr>
+      <th>ADVERTENCIAS:</th>
+      <td colspan="4" class="small">
+        “Incumplir tus obligaciones te puede generar comisiones e intereses moratorios”.<br>
+        “Contratar créditos por arriba de tu capacidad de pago puede afectar tu historial crediticio”.
+      </td>
+    </tr>
+  </table>
+
+  <!-- ===== Seguros ===== -->
+  <div class="band">SEGUROS</div>
+  <table class="tab">
+    <tr>
+      <th style="width:20%">Seguro:</th>
+      <td class="center" style="width:17%">VIDA TEMPORAL<br>1 AÑO</td>
+      <th style="width:26%">Nombre de la Aseguradora:</th>
+      <td class="center" style="width:21%">INSIGNIA LIFE</td>
+      <th style="width:16%">Cláusula:</th>
+      <td class="center" style="width:20%">DÉCIMA OCTAVA<br>DEL CONTRATO</td>
+    </tr>
+  </table>
+
+  <!-- ===== Estado de cuenta ===== -->
+  <div class="band">ESTADO DE CUENTA</div>
+  <table class="tab">
+    <tr>
+      <th style="width:20%">Enviar a:</th>
+      <td class="center" style="width:26%">Domicilio</td>
+      <td class="center" style="width:26%">Vía Internet</td>
+      <td class="center" style="width:28%">Correo Electrónico</td>
+    </tr>
+  </table>
+
+  <!-- ===== Aclaraciones ===== -->
+  <div class="band">ACLARACIONES Y RECLAMACIONES</div>
+  <table class="tab">
+    <tr>
+      <th class="center" style="width:25%">Unidad Especializada de Atención a Usuarios:</th>
+      <td>
+        <strong>Domicilio</strong><br>
+        José Ma. Pino Suárez 119 Pte. Col. Santa Ana Tlapaltitlán, C.P. 50160, Toluca, Estado de México.<br><br>
+        <div style="display:flex; gap:24px">
+          <div><strong>Teléfono</strong><br>(722) 181 45 43</div>
+          <div><strong>Correo Electrónico</strong><br>contacto@cipmexico.com.mx</div>
+        </div>
+        <br><strong>Página de Internet</strong><br>www.cipmexico.com.mx
+      </td>
+    </tr>
+    <tr>
+      <th class="center">CONDUSEF:</th>
+      <td>Teléfonos 55-53-40-09-99. Página de Internet: <u>www.condusef.gob.mx</u></td>
+    </tr>
+  </table>
+
+  <!-- ===== Firma ===== -->
+<div class="firma">
+  <!-- Nombre autollenado por tu JS existente -->
+  <div class="nombre" id="ctlNombre">—</div>
+
+  <!-- Canvas de firma -->
+  <div class="sigpad">
+    <canvas id="sigCanvas" aria-label="Firma del cliente"></canvas>
+    <div class="sig-actions">
+      <button type="button" id="sigUndo">Deshacer</button>
+      <button type="button" id="sigClear">Limpiar</button>
+      <button type="button" id="sigSave">Guardar</button>
+    </div>
+    <!-- Aquí guardamos la firma como dataURL (para enviar a PHP si quieres) -->
+    <input type="hidden" id="firmaDataURL" name="firma_png">
+  </div>
+<img id="sigPrintImage" class="sig-print" alt="Firma para impresión" aria-hidden="true">
+  <!-- Línea y nota como ya tenías -->
+  <div class="linea"></div>
+  <div class="nota">NOMBRE Y FIRMA DEL CLIENTE</div>
+</div>
+
+
+  <!-- ===== Pie ===== -->
+  <div class="pie">CONSULTORÍA INTEGRAL DE PENSIONES MÉXICO. CIP FINANCIAL MÉXICO</div>
+</div>
+
+  <aside class="caratula-right">
+    <div class="right-title">PLAZOS</div>
+    <div id="plazosPanel" class="plazos-panel"></div>
+  </aside>
+
+
+
+</div>
+
+<!-- (Opcional) Auto-fecha larga de hoy -->
+<script>
+/* ============================================================
+   CARÁTULA — JS UNIFICADO (SIN console.*)
+   - Mantiene tus IDs y tu lógica
+   - Quita logs de consola
+   - Evita duplicados (fechas, parseos, observers)
+   - Expone las mismas APIs globales que ya usabas:
+     recalcularCosto65, recalcularInvestigacionZona, actualizarSeguro,
+     actualizarTotal1, actualizarTotalCaratula, recalcularInteresDesdeTotalPagar,
+     guardarMetaCaratula, actualizarFechasDesde, recalcularCaratulaLigero
+   ============================================================ */
+(() => {
+  /* ================= Helpers base ================= */
+  const $ = s => document.querySelector(s);
+
+  const fmtMXN = v =>
+    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' })
+      .format(Number(v ?? 0));
+
+  // Parse robusto: soporta $ 15,000.25 | 15.000,25 | "MXN 15000" | etc.
+  function parseNumber(str){
+    if (str == null) return 0;
+
+    let s = String(str)
+      .replace(/\u00A0/g,'')
+      .replace(/\s+/g,'')
+      .replace(/[^\d.,-]/g,'');
+
+    if (!s) return 0;
+
+    const lastDot   = s.lastIndexOf('.');
+    const lastComma = s.lastIndexOf(',');
+
+    let dec = null;
+    if (lastDot !== -1 && lastComma !== -1) {
+      dec = lastDot > lastComma ? '.' : ',';
+    } else if (lastDot !== -1) {
+      dec = (s.length - lastDot - 1 <= 2) ? '.' : null;
+    } else if (lastComma !== -1) {
+      dec = (s.length - lastComma - 1 <= 2) ? ',' : null;
+    }
+
+    if (dec) {
+      const thou = dec === '.' ? ',' : '.';
+      s = s.replace(new RegExp('\\' + thou, 'g'), '');
+      if (dec === ',') s = s.replace(',', '.');
+
+      const parts = s.split('.');
+      if (parts.length > 2) {
+        const d = parts.pop();
+        s = parts.join('') + '.' + d;
+      }
+    } else {
+      s = s.replace(/[.,]/g, '');
+    }
+
+    const n = Number(s);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  const toNum = s => parseNumber(s);
+
+  function getPublicBase(){
+    const p = location.pathname.replace(/\/+$/,'/');
+    const i = p.toLowerCase().lastIndexOf('/public/');
+    return i >= 0 ? p.slice(0, i + 8) : '/';
+  }
+  const BASE_URL = getPublicBase();
+
+  function qp(name){
+    const m = new RegExp('[?&]'+name+'=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : null;
+  }
+
+  async function safeJSON(res){
+    const t = await res.text();
+    try { return JSON.parse(t); }
+    catch { throw new Error('Respuesta no válida del servidor'); }
+  }
+
+  function observarTexto(el, cb){
+    if (!el) return;
+    new MutationObserver(() => cb()).observe(el, { childList:true, characterData:true, subtree:true });
+  }
+
+  function setText(id, val){
+    const el = document.getElementById(id);
+    if (el) el.textContent = (val ?? '').toString();
+  }
+
+  /* ================= Lecturas de monto ================= */
+  function leerMontoSolicitado(){
+    const inp  = $('#montoSolicitadoInput');
+    const span = $('#montoSolicitado');
+
+    if (inp)  return toNum(inp.dataset?.raw ?? inp.value);
+    if (span) return toNum(span.dataset?.raw ?? span.textContent);
+    return 0;
+  }
+
+  // Para el 6.5% script original
+  function getMontoCosto65(){
+    const inp = $('#montoSolicitadoInput');
+    if (inp) return toNum(inp.value);
+
+    const span = $('#montoSolicitado');
+    if (span) return toNum(span.textContent);
+    return 0;
+  }
+
+  /* ================= 1) Costo 6.5% ================= */
+  function actualizarCosto65(){
+    const monto = getMontoCosto65();
+    const costo = Math.max(0, Math.round(monto * 0.065 * 100) / 100);
+    const td = $('#costo65');
+    if (td) td.textContent = fmtMXN(costo);
+  }
+  window.recalcularCosto65 = actualizarCosto65;
+
+  /* ================= 2) Investigación por zona ================= */
+  function pctToFactor(pct){
+    const n = Number(pct || 0);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return n >= 1 ? (n / 100) : n;
+  }
+
+  function calcExtraDesdeOption(opt, monto){
+    if (!opt) return { extra:0, total:monto };
+
+    const fijo = Number(opt.dataset.cuota) || 0;
+    const pctFactor  = pctToFactor(opt.dataset.pct);
+    const min  = opt.dataset.min != null ? Number(opt.dataset.min) : null;
+    const max  = opt.dataset.max != null ? Number(opt.dataset.max) : null;
+
+    let extra = fijo + (monto * pctFactor);
+    if (min != null) extra = Math.max(extra, min);
+    if (max != null) extra = Math.min(extra, max);
+
+    extra = Math.round(extra * 100) / 100;
+    const total = Math.round((monto + extra) * 100) / 100;
+    return { extra, total };
+  }
+
+  function pintarInvestigacion(extra, total, etiqueta){
+    $('#lblInvestigacionTarifa')   && ($('#lblInvestigacionTarifa').textContent   = etiqueta || '—');
+    $('#lblInvestigacionImporte')  && ($('#lblInvestigacionImporte').textContent  = fmtMXN(extra));
+    $('#lblTotalConInvestigacion') && ($('#lblTotalConInvestigacion').textContent = fmtMXN(total));
+
+    const celda = document.getElementById('costoInvestigacion');
+    if (celda){
+      celda.textContent = fmtMXN(extra);
+      celda.dataset.raw = String(extra);
+    }
+  }
+
+function pintarInvestigacionPanelLinea(extra){
+  const c = document.getElementById('opMes1c');
+  if (!c) return;
+  c.textContent = `Investigación = ${fmtMXN(extra)}`;
+}
+
+const MENSUAL_113 = 0.113; // 11.3%
+
+
+
+function pintarSumaMes1Total(){
+  const elTotal = document.getElementById('opMes1d'); // TOTAL MES 1
+  const elMens  = document.getElementById('opMes1e'); // MENSUALIDAD
+  const elFinal = document.getElementById('opMes1f'); // ✅ TOTAL FINAL
+  if (!elTotal) return;
+
+  // Mes 1 (lo que escribe el usuario)
+  const mes1El = document.querySelector('#plazosPanel .plazo-input[data-mes="1"]');
+  const mes1 = mes1El ? toNum(mes1El.dataset?.raw ?? mes1El.textContent) : 0;
+
+  // Cargos (6.5 + seguro + investigación)
+  const apertura = toNum(document.getElementById('costo65')?.dataset?.raw ?? document.getElementById('costo65')?.textContent);
+  const seguro   = toNum(document.getElementById('costoSeguro')?.dataset?.raw ?? document.getElementById('costoSeguro')?.textContent);
+  const invest   = toNum(document.getElementById('costoInvestigacion')?.dataset?.raw ?? document.getElementById('costoInvestigacion')?.textContent);
+
+  const totalMes1 = (mes1 || 0) + (apertura || 0) + (seguro || 0) + (invest || 0);
+  elTotal.textContent = `TOTAL MES 1 = ${fmtMXN(totalMes1)}`;
+
+  // meses desde #plazo
+  const plazoEl = document.getElementById('plazo');
+  const meses = Math.max(0, parseInt((plazoEl?.textContent || '').replace(/[^\d]/g,''), 10) || 0);
+
+  // mensualidad
+  const mensualidad = totalMes1 * (MENSUAL_113 * meses);
+  if (elMens){
+    elMens.textContent = `MENSUALIDAD (11.3% × meses) = ${fmtMXN(mensualidad)}`;
+  }
+
+  // ✅ total final = mes1 + mensualidad
+  const totalFinal = totalMes1 + mensualidad;
+  if (elFinal){
+    elFinal.textContent = `TOTAL (MES 1 + MENSUALIDAD) = ${fmtMXN(totalFinal)}`;
+  }
+}
+
+
+  async function cargarZonas(){
+    const sel = $('#zonaSelect');
+    if (!sel) return;
+
+    try {
+      const r = await fetch(`${BASE_URL}app/controllers/concredito/listar.php`, {
+        cache:'no-store',
+        credentials:'same-origin'
+      });
+      const j = await safeJSON(r);
+      if (!j?.ok) throw new Error(j?.msg || 'Error al cargar zonas');
+
+      sel.innerHTML = '<option value="">Selecciona zona…</option>';
+      (j.items || []).forEach(z => {
+        const op = document.createElement('option');
+        op.value = z.id;
+        op.textContent = z.etiqueta;
+        op.dataset.cuota = z.cuota_fija ?? 0;
+        op.dataset.pct   = z.pct_monto  ?? 0;
+        if (z.minimo != null) op.dataset.min = z.minimo;
+        if (z.maximo != null) op.dataset.max = z.maximo;
+        sel.appendChild(op);
+      });
+
+      if (!sel.value && sel.options.length > 1) sel.selectedIndex = 1;
+      recalcularInvestigacion();
+    } catch {
+      sel.innerHTML = '<option value="">(sin zonas)</option>';
+      pintarInvestigacion(0, leerMontoSolicitado(), null);
+    }
+  }
+
+function recalcularInvestigacion(){
+  const monto = leerMontoSolicitado();
+  const sel   = $('#zonaSelect');
+  const opt   = sel ? sel.selectedOptions[0] : null;
+
+  if (!opt || !opt.value){
+    pintarInvestigacion(0, monto, null);
+    pintarInvestigacionPanelLinea(0);
+    return;
+  }
+
+  const { extra, total } = calcExtraDesdeOption(opt, monto);
+  pintarInvestigacion(extra, total, opt.textContent || '');
+  pintarInvestigacionPanelLinea(extra);
+}
+  window.recalcularInvestigacionZona = recalcularInvestigacion;
+
+  /* ================= 3) Seguro (tramos) ================= */
+  const TARIFAS_SEGURO = [
+    { base: 250000, pct: 0.0185 },
+    { base: 350000, pct: 0.0180 },
+    { base: 450000, pct: 0.0175 },
+    { base: 550000, pct: 0.0170 },
+    { base: 650000, pct: 0.0165 },
+    { base: 750000, pct: 0.0160 },
+    { base: 850000, pct: 0.0155 },
+    { base: 950000, pct: 0.0150 },
+  ];
+
+  function tramoSeguro(monto){
+    for (const t of TARIFAS_SEGURO){
+      if (monto <= t.base) return t;
+    }
+    return TARIFAS_SEGURO[TARIFAS_SEGURO.length - 1];
+  }
+
+  function actualizarSeguro(){
+    const monto = leerMontoSolicitado();
+    const t = tramoSeguro(monto);
+    const costo = Math.round(t.base * (t.pct ?? 0) * 100) / 100;
+
+    const celda = $('#costoSeguro');
+    if (celda){
+      celda.textContent = fmtMXN(costo);
+      celda.title = `Tramo ${t.base.toLocaleString('es-MX')} | ${(t.pct*100).toFixed(2)}%`;
+    }
+  }
+  window.actualizarSeguro = actualizarSeguro;
+
+  /* ================= 4) Total1 (apertura+invest+seguro) ================= */
+  function leerCeldaNum(sel){
+    const el = $(sel);
+    return el ? toNum(el.textContent) : 0;
+  }
+
+  function actualizarTotal1(opts = { silentIfZero:true }){
+    const apertura      = leerCeldaNum('#costo65');
+    const investigacion = leerCeldaNum('#costoInvestigacion');
+    const seguro        = leerCeldaNum('#costoSeguro');
+    const total1        = apertura + investigacion + seguro;
+    window.total1 = total1;
+
+    // SIN console.log (pediste limpiar consola)
+    return total1;
+  }
+  window.actualizarTotal1 = actualizarTotal1;
+
+  /* ================= 5) Total final (monto + total1) ================= */
+  function getMontoSolicitadoSpan(){
+    const el = $('#montoSolicitado');
+    return el ? toNum(el.textContent) : 0;
+  }
+
+  function pintarMontoTotalPagar(totalFinal){
+    const celda = $('#montoTotalPagar');
+    if (celda) celda.textContent = fmtMXN(totalFinal);
+    window.monto_con_total1 = totalFinal;
+  }
+
+  function actualizarTotalCaratula(){
+    const monto = getMontoSolicitadoSpan();
+    const total1 = actualizarTotal1({ silentIfZero:true });
+    pintarMontoTotalPagar(monto + total1);
+  }
+  window.actualizarTotalCaratula = actualizarTotalCaratula;
+
+  /* ================= 6) Interés desde #montoTotalPagar ================= */
+  const TASA_MENSUAL = 0.105;
+
+  function parseMoneyText(s){
+    if (s == null) return 0;
+    const clean = String(s)
+      .replace(/\u00A0/g,'')
+      .replace(/\s+/g,'')
+      .replace(/\$/g,'')
+      .replace(/,/g,'')
+      .trim();
+    const n = Number(clean);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function leerBaseDesdeTotalPagar(){
+    const td = document.getElementById('montoTotalPagar');
+    if (!td) return 0;
+    return parseMoneyText(td.textContent);
+  }
+
+  function leerMesesPlazo(){
+    const plazoEl = document.getElementById('plazo');
+    const meses = Math.max(0, parseInt((plazoEl?.textContent || '').replace(/[^\d]/g,''), 10) || 0);
+    return meses;
+  }
+
+  function recalcularInteresDesdeTotalPagar(){
+    const base  = leerBaseDesdeTotalPagar();
+    const meses = leerMesesPlazo();
+
+    const interes = base * TASA_MENSUAL * meses;
+    const total   = base + interes;
+
+    const destino = document.getElementById('montoTotalPagarConInteres');
+    if (destino) destino.textContent = fmtMXN(total);
+
+    const linea = document.getElementById('montoLineaCredito');
+    if (linea) linea.textContent = fmtMXN(total);
+  }
+  window.recalcularInteresDesdeTotalPagar = recalcularInteresDesdeTotalPagar;
+
+  /* ================= 7) Nombre/RFC/CURP + monto/plazo/producto ================= */
+  async function getJSON(url){
+    const r = await fetch(url, { credentials:'same-origin' });
+    return safeJSON(r);
+  }
+
+  const solicitudId = qp('solicitud_id') || qp('id');
+
+  function productoDesdeModalidad(mod){
+    const m = String(mod || '').replace(/\s+/g,'').toUpperCase();
+    if (m === 'P10') return 'Préstamo Personal 10';
+    if (m === 'P40') return 'Préstamo Personal 40';
+    return 'Préstamo Personal';
+  }
+
+  async function cargarNombreRFCyCURP(){
+    if (!solicitudId) return;
+    const url = `${BASE_URL}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+    try{
+      const j = await getJSON(url);
+      const cli = j?.cliente || {};
+      const nombre = (cli.nombre && cli.nombre.trim())
+        ? cli.nombre
+        : [cli.nombres, cli.apellido_paterno, cli.apellido_materno].filter(Boolean).join(' ');
+      setText('ctlNombre', (nombre || '—'));
+      setText('ctlRFC',    (cli.rfc  || '').toUpperCase() || '—');
+      setText('ctlCURP',   (cli.curp || '').toUpperCase() || '—');
+    } catch {
+      setText('ctlNombre','—'); setText('ctlRFC','—'); setText('ctlCURP','—');
+    }
+  }
+
+  async function cargarMontoYPlazo(){
+    if (!solicitudId) return;
+    const url = `${BASE_URL}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+    try{
+      const j   = await getJSON(url);
+      const sol = j?.solicitud || {};
+
+      const tdProd = document.getElementById('nombreProducto');
+      if (tdProd) tdProd.textContent = productoDesdeModalidad(sol.contrato_modalidad);
+
+      const monto = Number(sol.monto || 0);
+      const meses = parseInt(sol.plazo_meses || sol.plazo || 0, 10) || 0;
+
+      const montoEl = document.getElementById('montoSolicitado');
+      if (montoEl){
+        montoEl.dataset.raw = String(monto);
+        montoEl.textContent = fmtMXN(monto);
+
+        let hid = document.getElementById('montoSolicitadoInput');
+        if (!hid){
+          hid = document.createElement('input');
+          hid.type = 'hidden';
+          hid.id = 'montoSolicitadoInput';
+          (montoEl.parentNode || document.body).appendChild(hid);
+        }
+        hid.value = String(monto);
+
+        // Dispara recalculos (sin console)
+        hid.dispatchEvent(new Event('input',  { bubbles:true }));
+        hid.dispatchEvent(new Event('change', { bubbles:true }));
+        montoEl.dispatchEvent(new Event('input', { bubbles:true }));
+        montoEl.dispatchEvent(new Event('blur',  { bubbles:true }));
+      }
+
+      const plazoEl = document.getElementById('plazo');
+      if (plazoEl){
+        const v = meses > 0 ? String(meses) : '';
+        plazoEl.textContent = v;
+        plazoEl.setAttribute('aria-valuenow', v || '0');
+        plazoEl.dispatchEvent(new Event('input', { bubbles:true }));
+        plazoEl.dispatchEvent(new Event('blur',  { bubbles:true }));
+      }
+    } catch {
+      // silencioso
+    }
+  }
+
+  /* ================= 8) Firma: canvas + imagen de impresión ================= */
+  function isCanvasBlank(cv){
+    if (!cv) return true;
+    // asegurar dimensiones útiles
+    if (!cv.width || !cv.height){
+      const r = cv.getBoundingClientRect();
+      cv.width  = Math.max(1, Math.floor(r.width  * (window.devicePixelRatio||1)));
+      cv.height = Math.max(1, Math.floor(r.height * (window.devicePixelRatio||1)));
+    }
+    const ctx  = cv.getContext('2d');
+    const data = ctx.getImageData(0,0,cv.width,cv.height).data;
+    for (let i=3;i<data.length;i+=4) if (data[i] !== 0) return false;
+    return true;
+  }
+
+  function setSignatureSrc(dataUrl){
+    if (!dataUrl) return;
+
+    const img = document.getElementById('sigPrintImage');
+    if (img){
+      img.src = dataUrl;
+      const cvRect = document.getElementById('sigCanvas')?.getBoundingClientRect();
+      if (cvRect){
+        img.style.width     = cvRect.width + 'px';
+        img.style.height    = cvRect.height + 'px';
+        img.style.objectFit = 'contain';
+      } else {
+        img.style.maxWidth = '100%';
+      }
+    }
+
+    const cv = document.getElementById('sigCanvas');
+    if (cv){
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const r = cv.getBoundingClientRect();
+      cv.width  = Math.max(1, Math.floor(r.width  * ratio));
+      cv.height = Math.max(1, Math.floor(r.height * ratio));
+      const ctx = cv.getContext('2d');
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+
+      const im = new Image();
+      im.onload = () => {
+        const cw = r.width, ch = r.height;
+        ctx.clearRect(0,0,cw,ch);
+        const s = Math.min(cw/im.width, ch/im.height);
+        const w = im.width*s, h = im.height*s;
+        const x = (cw - w)/2, y = (ch - h)/2;
+        ctx.drawImage(im, x, y, w, h);
+        const hidden = document.getElementById('firmaDataURL');
+        if (hidden) hidden.value = cv.toDataURL('image/png');
+      };
+      im.src = dataUrl;
+    } else {
+      const hidden = document.getElementById('firmaDataURL');
+      if (hidden) hidden.value = dataUrl;
+    }
+  }
+
+  function initSignaturePad(){
+    const canvas  = document.getElementById('sigCanvas');
+    const undoBtn = document.getElementById('sigUndo');
+    const clearBtn= document.getElementById('sigClear');
+    const saveBtn = document.getElementById('sigSave');
+    const hidden  = document.getElementById('firmaDataURL');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let strokes = [];
+    let current = [];
+
+    function style(){
+      ctx.lineCap   = 'round';
+      ctx.lineJoin  = 'round';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth   = 2.2;
+    }
+
+    function resize(){
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width  = Math.max(1, Math.floor(rect.width  * ratio));
+      canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.clearRect(0,0,rect.width,rect.height);
+      style();
+      redraw();
+      syncSignatureToImage();
+    }
+
+    function redraw(){
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      style();
+      for (const path of strokes){
+        if (path.length < 2) continue;
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i=1;i<path.length;i++) ctx.lineTo(path[i].x, path[i].y);
+        ctx.stroke();
+      }
+    }
+
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      const p = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+      return { x: p.clientX - r.left, y: p.clientY - r.top };
+    }
+
+    function start(e){ e.preventDefault(); drawing = true; current = [pos(e)]; }
+    function move(e){
+      if (!drawing) return;
+      e.preventDefault();
+      const p = pos(e);
+      const last = current[current.length-1];
+      if (!last || p.x!==last.x || p.y!==last.y){
+        current.push(p);
+        if (current.length >= 2){
+          style();
+          const n = current.length;
+          ctx.beginPath();
+          ctx.moveTo(current[n-2].x, current[n-2].y);
+          ctx.lineTo(current[n-1].x, current[n-1].y);
+          ctx.stroke();
+        }
+      }
+    }
+    function end(){
+      if (!drawing) return;
+      drawing = false;
+      if (current.length>1) strokes.push(current);
+      current=[];
+      updateHidden();
+      syncSignatureToImage();
+    }
+
+    function updateHidden(){
+      if (!hidden) return;
+      hidden.value = strokes.length ? canvas.toDataURL('image/png') : '';
+    }
+
+    function syncSignatureToImage(){
+      const img = document.getElementById('sigPrintImage');
+      if (!img) return;
+      try {
+        const data = canvas.toDataURL('image/png');
+        img.src = data;
+
+        const rect = canvas.getBoundingClientRect();
+        img.style.width     = rect.width + 'px';
+        img.style.height    = rect.height + 'px';
+        img.style.objectFit = 'contain';
+      } catch {
+        img.removeAttribute('src');
+      }
+    }
+
+    canvas.addEventListener('pointerdown', start, {passive:false});
+    canvas.addEventListener('pointermove',  move,  {passive:false});
+    canvas.addEventListener('pointerup',    end,   {passive:false});
+    canvas.addEventListener('pointerleave', end,   {passive:false});
+    canvas.addEventListener('touchstart',   start, {passive:false});
+    canvas.addEventListener('touchmove',    move,  {passive:false});
+    canvas.addEventListener('touchend',     end,   {passive:false});
+
+    undoBtn?.addEventListener('click', () => { strokes.pop(); redraw(); updateHidden(); syncSignatureToImage(); });
+    clearBtn?.addEventListener('click', () => { strokes = []; redraw(); updateHidden(); syncSignatureToImage(); });
+    saveBtn?.addEventListener('click', () => {
+      if (hidden) hidden.value = strokes.length ? canvas.toDataURL('image/png') : '';
+      syncSignatureToImage();
+    });
+
+    window.addEventListener('resize', () => setTimeout(resize, 0));
+    window.addEventListener('beforeprint', syncSignatureToImage);
+    setTimeout(resize, 0);
+  }
+
+  /* ================= 9) Fechas (base + plazo meses, corte -8) ================= */
+  function fmtFechaLarga(d){
+    return d.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  }
+  function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  function toISODate(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function sumarMeses(fecha, meses){
+    const f = new Date(fecha.getTime());
+    const d = f.getDate();
+    f.setMonth(f.getMonth() + meses);
+    if (f.getDate() < d) f.setDate(0);
+    return f;
+  }
+
+  function obtenerPlazoMeses(){
+    const el = document.getElementById('plazo');
+    if (!el) return 0;
+    const n = parseInt((el.textContent || '').replace(/[^\d]/g,''), 10);
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  }
+
+  function actualizarFechasDesde(base){
+    if (!(base instanceof Date) || isNaN(base)) return;
+
+    const elLarga = document.getElementById('fechaLarga');
+    if (elLarga) elLarga.textContent = cap(fmtFechaLarga(base));
+
+    const plazoMeses = obtenerPlazoMeses();
+    const limite = plazoMeses > 0 ? sumarMeses(base, plazoMeses) : base;
+
+    const elLimite = document.getElementById('fechaMasUnAnio');
+    if (elLimite) elLimite.textContent = cap(fmtFechaLarga(limite));
+
+    const h = document.getElementById('fechaLimitePagoISO');
+    if (h) h.value = toISODate(limite);
+
+    const corte = new Date(limite);
+    corte.setDate(corte.getDate() - 8);
+    const elCorte = document.getElementById('fechaMenosOcho');
+    if (elCorte) elCorte.textContent = cap(fmtFechaLarga(corte));
+  }
+  window.actualizarFechasDesde = actualizarFechasDesde;
+
+  function setDateInputToday(inp){
+    if (!inp) return;
+    const hoy = new Date();
+    inp.valueAsDate = hoy;
+    actualizarFechasDesde(new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()));
+  }
+
+  /* ================= 10) Imprimir ================= */
+  function initPrintBtn(){
+    const btn = document.getElementById('btnImprimir');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      if (window.AndroidPrint && typeof window.AndroidPrint.printPage === 'function') {
+        window.AndroidPrint.printPage(); return;
+      }
+      if (window.Android && typeof window.Android.printPage === 'function') {
+        window.Android.printPage(); return;
+      }
+      if (typeof window.print === 'function') { window.print(); return; }
+      alert('Este navegador no soporta imprimir directamente.');
+    });
+  }
+
+  /* ================= 11) Meta leer/guardar (zona/fecha/firma/montos/fecha límite) ================= */
+  const SOLICITUD_ID =
+    qp('solicitud_id') ||
+    qp('id') ||
+    document.querySelector('[data-solicitud-id]')?.dataset?.solicitudId || '';
+  window.SOLICITUD_ID = SOLICITUD_ID;
+
+  const RUTAS = {
+    leer   : `${BASE_URL}app/controllers/concredito/leer_meta.php`,
+    guardar: `${BASE_URL}app/controllers/concredito/guardar_meta.php`,
+  };
+
+  function waitZonasCargadas(timeoutMs = 5000) {
+    return new Promise(resolve => {
+      const sel = $('#zonaSelect');
+      if (!sel) return resolve(null);
+      const started = Date.now();
+      const t = setInterval(() => {
+        const listo = sel.options && sel.options.length > 1;
+        if (listo || (Date.now() - started) > timeoutMs) {
+          clearInterval(t);
+          resolve(sel);
+        }
+      }, 120);
+    });
+  }
+
+  function setDateInputTodayIfEmpty(inp){
+    if (!inp) return;
+    if (!inp.value) {
+      const d = new Date();
+      inp.value = toISODate(d);
+    }
+  }
+
+  async function cargarMetaCaratula(){
+    if (!SOLICITUD_ID) {
+      setDateInputTodayIfEmpty($('#fechaBase'));
+      return;
+    }
+
+    try {
+      const r = await fetch(`${RUTAS.leer}?solicitud_id=${encodeURIComponent(SOLICITUD_ID)}`, {
+        credentials:'same-origin'
+      });
+      const j = await safeJSON(r);
+      if (!j?.ok || !j.meta) {
+        setDateInputTodayIfEmpty($('#fechaBase'));
+        return;
+      }
+
+      const { zona_id, zona_label, fecha_base, firma_dataurl } = j.meta || {};
+
+      const inpFecha = $('#fechaBase');
+      if (inpFecha) {
+        inpFecha.value = (fecha_base && /^\d{4}-\d{2}-\d{2}$/.test(fecha_base))
+          ? fecha_base
+          : inpFecha.value || '';
+        setDateInputTodayIfEmpty(inpFecha);
+
+        inpFecha.dispatchEvent(new Event('input',  { bubbles:true }));
+        inpFecha.dispatchEvent(new Event('change', { bubbles:true }));
+      }
+
+      const sel = await waitZonasCargadas();
+      if (sel) {
+        let setOK = false;
+
+        if (zona_id != null && zona_id !== '') {
+          for (const op of sel.options) {
+            if (String(op.value) === String(zona_id)) {
+              sel.value = op.value; setOK = true; break;
+            }
+          }
+        }
+        if (!setOK && zona_label) {
+          for (const op of sel.options) {
+            if (op.textContent.trim().toLowerCase() === String(zona_label).trim().toLowerCase()) {
+              sel.value = op.value; break;
+            }
+          }
+        }
+        sel.dispatchEvent(new Event('input',  { bubbles:true }));
+        sel.dispatchEvent(new Event('change', { bubbles:true }));
+      }
+
+      if (firma_dataurl) setSignatureSrc(firma_dataurl);
+
+    } catch {
+      setDateInputTodayIfEmpty($('#fechaBase'));
+    }
+  }
+
+  function moneyTextToNumber(text){
+    if (!text) return '';
+    const n = String(text).replace(/[^\d.]/g, '');
+    return (n && n !== '.') ? n : '';
+  }
+
+  function fechaLargaAToISO(fechaTexto){
+    if (!fechaTexto) return '';
+    const meses = {
+      enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6,
+      julio:7, agosto:8, septiembre:9, setiembre:9,
+      octubre:10, noviembre:11, diciembre:12
+    };
+
+    const m = fechaTexto.toLowerCase().match(/(\d{1,2})\s+de\s+([a-zñ]+)\s+de\s+(\d{4})/);
+    if (!m) return '';
+
+    const dia  = m[1].padStart(2,'0');
+    const mes  = String(meses[m[2]] || '').padStart(2,'0');
+    const anio = m[3];
+    if (!mes) return '';
+    return `${anio}-${mes}-${dia}`;
+  }
+
+  async function guardarMetaCaratula(){
+    try {
+      if (!window.SOLICITUD_ID) throw new Error('Falta solicitud_id');
+
+      const sel        = document.querySelector('#zonaSelect');
+      const zona_id    = sel?.value || '';
+      const zona_label = sel?.selectedOptions?.[0]?.textContent?.trim() || '';
+
+      const fecha_base_raw = document.querySelector('#fechaBase')?.value || '';
+      if (fecha_base_raw && !/^\d{4}-\d{2}-\d{2}$/.test(fecha_base_raw)) {
+        throw new Error('Selecciona una fecha base válida (YYYY-MM-DD)');
+      }
+
+      const fechaTexto = document.getElementById('fechaMasUnAnio')?.textContent?.trim() || '';
+      const fecha_limite_pago = fechaLargaAToISO(fechaTexto);
+      if (fechaTexto && fechaTexto !== '—' && !fecha_limite_pago) {
+        throw new Error('No se pudo interpretar la FECHA LÍMITE DE PAGO');
+      }
+
+      let firma_png = '';
+      const cv = document.getElementById('sigCanvas');
+      if (cv && !isCanvasBlank(cv)) firma_png = cv.toDataURL('image/png');
+      if (!firma_png) firma_png = document.getElementById('firmaDataURL')?.value || '';
+
+      const lineaTxt =
+        document.getElementById('montoLineaCredito')?.textContent ||
+        document.getElementById('lineaCredito')?.textContent      || '';
+
+      const totalTxt =
+        document.getElementById('montoTotalPagar')?.textContent ||
+        document.getElementById('minimoPagar')?.textContent     || '';
+
+      let monto_linea_credito = Number(moneyTextToNumber(lineaTxt) || 0);
+      let monto_total_pagar   = Number(moneyTextToNumber(totalTxt) || 0);
+
+      // Salvavidas de inversión
+      if (monto_total_pagar > 0 && monto_linea_credito > 0 && monto_total_pagar < monto_linea_credito) {
+        const tmp = monto_linea_credito;
+        monto_linea_credito = monto_total_pagar;
+        monto_total_pagar   = tmp;
+      }
+
+      const payload = new URLSearchParams();
+      payload.set('solicitud_id', String(SOLICITUD_ID));
+      if (zona_id !== '')        payload.set('zona_id', String(zona_id));
+      if (zona_label)            payload.set('zona_label', zona_label);
+      if (fecha_base_raw)        payload.set('fecha_base', fecha_base_raw);
+      if (fecha_limite_pago)     payload.set('fecha_limite_pago', fecha_limite_pago);
+      if (firma_png)             payload.set('firma_png', firma_png);
+      if (monto_linea_credito)   payload.set('monto_linea_credito', String(monto_linea_credito));
+      if (monto_total_pagar)     payload.set('monto_total_pagar',   String(monto_total_pagar));
+
+      const resp = await fetch(RUTAS.guardar, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload.toString(),
+        credentials: 'same-origin'
+      });
+
+      const txt = await resp.text();
+      let json;
+      try { json = JSON.parse(txt); }
+      catch { throw new Error('Respuesta no-JSON del servidor'); }
+
+      if (!resp.ok || !json?.ok) throw new Error(json?.message || 'No se pudo guardar');
+
+      alert('✅ Guardado correctamente.');
+    } catch (e) {
+      alert('❌ ' + (e?.message || 'Error al guardar'));
+    }
+  }
+  window.guardarMetaCaratula = guardarMetaCaratula;
+
+  /* ================= 12) Folio + Regresar ================= */
+  async function cargarFolio(){
+    const el = $('#folio');
+    if (!el) return;
+
+    const folioParam = qp('folio');
+    if (folioParam) { el.textContent = folioParam; return; }
+
+    const sid = qp('solicitud_id') || qp('id');
+    if (!sid){ el.textContent = '—'; return; }
+
+    try {
+      const url = `${BASE_URL}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(sid)}`;
+      const j = await getJSON(url);
+      const folio = j?.solicitud?.folio || j?.folio || '';
+      el.textContent = folio || '—';
+    } catch {
+      el.textContent = '—';
+    }
+  }
+
+  function initBtnRegresar(){
+    const btn = document.getElementById('btnRegresar') || document.getElementById('btn-regresar');
+    if (!btn) return;
+
+    const FALLBACK_URL = getPublicBase() + 'index.php';
+
+    btn.addEventListener('click', () => {
+      const ref = document.referrer;
+      const hasHistory = history.length > 1;
+      const sameOrigin = ref && new URL(ref, location.href).origin === location.origin;
+
+      const ua = navigator.userAgent || '';
+      const isAndroidWebView = /Android/i.test(ua) && /wv|Version\/\d+\.\d+/i.test(ua);
+
+      if (!isAndroidWebView && hasHistory && sameOrigin) history.back();
+      else window.location.href = FALLBACK_URL;
+    });
+
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+    });
+  }
+
+  /* ================= 13) Bus ligero de recálculo ================= */
+  let scheduled = false;
+  function scheduleRecalc(){
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      recalcChain();
+    });
+  }
+
+  function recalcChain(){
+    try { recalcularInvestigacion(); } catch {}
+    try { actualizarSeguro(); } catch {}
+    try { actualizarCosto65(); } catch {}
+    try { actualizarTotal1({ silentIfZero:true }); } catch {}
+    try { actualizarTotalCaratula(); } catch {}
+    try { recalcularInteresDesdeTotalPagar(); } catch {}
+    try { pintarSumaMes1Total(); } catch {}
+
+    // Refuerzo línea crédito (si algún flujo no pintó)
+    const mlc = document.getElementById('montoLineaCredito');
+    if (mlc && !mlc.textContent.trim()) mlc.textContent = fmtMXN(leerMontoSolicitado());
+  }
+  window.recalcularCaratulaLigero = scheduleRecalc;
+
+  /* ================= INIT ================= */
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Firma
+    initSignaturePad();
+
+    // Zonas
+    await cargarZonas();
+
+    // Datos de solicitud
+    await cargarNombreRFCyCURP();
+    await cargarMontoYPlazo();
+    await cargarFolio();
+
+    // Meta (prefill)
+    await cargarMetaCaratula();
+
+    // Fechas: input fechaBase arranca HOY y recalcula con plazo
+    const inpFecha = document.getElementById('fechaBase');
+    if (inpFecha){
+      // Si quieres forzar siempre HOY, descomenta estas 2 líneas:
+      // setDateInputToday(inpFecha);
+      // inpFecha.dispatchEvent(new Event('input', {bubbles:true}));
+
+      // Si quieres respetar valor existente, pero si está vacío poner hoy:
+      setDateInputTodayIfEmpty(inpFecha);
+      actualizarFechasDesde(new Date(inpFecha.value + 'T00:00:00'));
+
+      const handler = () => actualizarFechasDesde(new Date(inpFecha.value + 'T00:00:00'));
+      inpFecha.addEventListener('input', handler);
+      inpFecha.addEventListener('change', handler);
+    }
+
+    // Plazo: solo dígitos y recalcula interés/fechas
+    const pEl = document.getElementById('plazo');
+    if (pEl){
+      pEl.addEventListener('beforeinput', (e) => {
+        if (e.inputType === 'insertText' && e.data && !/^\d+$/.test(e.data)) e.preventDefault();
+      });
+      pEl.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text  = (e.clipboardData || window.clipboardData).getData('text') || '';
+        const clean = text.replace(/[^\d]/g, '');
+        document.execCommand('insertText', false, clean);
+      });
+      pEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); pEl.blur(); }
+      });
+
+      const handlerPlazo = () => {
+        // normaliza aria + recalculos
+        const v = parseInt((pEl.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+        pEl.setAttribute('aria-valuenow', String(v));
+        scheduleRecalc();
+
+        const base = inpFecha?.value ? new Date(inpFecha.value + 'T00:00:00') : new Date();
+        actualizarFechasDesde(base);
+      };
+
+      pEl.addEventListener('input', handlerPlazo);
+      pEl.addEventListener('blur', () => {
+        let v = parseInt((pEl.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+        v = Math.max(1, Math.min(120, v));
+        pEl.textContent = String(v);
+        pEl.setAttribute('aria-valuenow', String(v));
+        handlerPlazo();
+      });
+    }
+
+    // Botones
+    initPrintBtn();
+    initBtnRegresar();
+    document.getElementById('btnGuardar')?.addEventListener('click', guardarMetaCaratula);
+
+    // Observers mínimos: si cambian celdas clave, recalcula en cadena
+    observarTexto($('#costo65'), scheduleRecalc);
+    observarTexto($('#costoInvestigacion'), scheduleRecalc);
+    observarTexto($('#costoSeguro'), scheduleRecalc);
+    observarTexto($('#montoTotalPagar'), scheduleRecalc);
+    observarTexto($('#montoSolicitado'), scheduleRecalc);
+
+    // Inputs clave
+    document.addEventListener('input', (e) => {
+      if (e.target?.id === 'montoSolicitadoInput') scheduleRecalc();
+      if (e.target?.id === 'zonaSelect') scheduleRecalc();
+    });
+    document.addEventListener('change', (e) => {
+      if (e.target?.id === 'montoSolicitadoInput') scheduleRecalc();
+      if (e.target?.id === 'zonaSelect') scheduleRecalc();
+    });
+
+    // Primer recálculo
+    scheduleRecalc();
+
+    // Antes de imprimir, asegura que la IMG tenga la firma actual
+    window.addEventListener('beforeprint', () => {
+      const cv  = document.getElementById('sigCanvas');
+      const img = document.getElementById('sigPrintImage');
+      if (cv && img && !isCanvasBlank(cv)) img.src = cv.toDataURL('image/png');
+    });
+  });
+})();
+</script>
+
+<script>
+/* ============================================================
+   PANEL PLAZOS — JS (usa window.BASE_URL)
+   - No redefine BASE_URL global
+   - Recalcula TOTAL => montoSolicitado => 6.5% => seguro (PHP)
+   - Llama a funciones del JS #1 si existen
+============================================================ */
+(() => {
+  const $ = s => document.querySelector(s);
+
+  // Usa la misma BASE_URL global (1 sola fuente)
+  const BASE_URL = window.BASE_URL || '/';
+
+  const FACTOR_APERTURA = 0.065; // 6.5%
+  const URL_SEGURO = `${BASE_URL}sempiternal/public/app/controllers/concredito/get_seguro_costo.php`;
+
+  const fmtMXN = v =>
+    new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN' })
+      .format(Number(v || 0));
+
+  function parseMoney(s){
+    if (s == null) return 0;
+    let t = String(s)
+      .replace(/\u00A0/g,'')
+      .replace(/\s+/g,'')
+      .replace(/[^\d.,-]/g,'');
+
+    if (!t) return 0;
+
+    const lastDot = t.lastIndexOf('.');
+    const lastComma = t.lastIndexOf(',');
+    let dec = null;
+
+    if (lastDot !== -1 && lastComma !== -1) dec = lastDot > lastComma ? '.' : ',';
+    else if (lastDot !== -1) dec = (t.length-lastDot-1 <= 2) ? '.' : null;
+    else if (lastComma !== -1) dec = (t.length-lastComma-1 <= 2) ? ',' : null;
+
+    if (dec){
+      const thou = dec === '.' ? ',' : '.';
+      t = t.replace(new RegExp('\\' + thou, 'g'), '');
+      if (dec === ',') t = t.replace(',', '.');
+
+      const parts = t.split('.');
+      if (parts.length > 2){
+        const d = parts.pop();
+        t = parts.join('') + '.' + d;
+      }
+    } else {
+      t = t.replace(/[.,]/g,'');
+    }
+
+    const n = Number(t);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function clamp(n, min, max){
+    n = parseInt(String(n || '').replace(/[^\d]/g,''), 10) || 0;
+    return Math.max(min, Math.min(max, n));
+  }
+
+  function setMontoSolicitado(sum){
+    const el = document.getElementById('montoSolicitado');
+    if (el){
+      el.textContent = fmtMXN(sum);
+      el.dataset.raw = String(sum);
+      el.dispatchEvent(new Event('input', { bubbles:true }));
+      el.dispatchEvent(new Event('blur',  { bubbles:true }));
+    }
+
+    const hid = document.getElementById('montoSolicitadoInput');
+    if (hid){
+      hid.value = String(sum);
+      hid.dataset.raw = String(sum);
+      hid.dispatchEvent(new Event('input',  { bubbles:true }));
+      hid.dispatchEvent(new Event('change', { bubbles:true }));
+    }
+  }
+
+  /* ====== SEGURO (PHP) ====== */
+  let _seguroCache = { monto: null, costo: 0 };
+
+  async function obtenerSeguroCosto(monto){
+    monto = Number(monto || 0);
+    if (!Number.isFinite(monto) || monto <= 0) return 0;
+
+    if (_seguroCache.monto === monto) return _seguroCache.costo;
+
+    const url = `${URL_SEGURO}?monto=${encodeURIComponent(monto)}`;
+    const r = await fetch(url, { credentials:'same-origin', cache:'no-store' });
+    const txt = await r.text();
+    let j;
+    try { j = JSON.parse(txt); } catch { throw new Error('Seguro: respuesta no JSON'); }
+    if (!r.ok || !j?.ok) throw new Error(j?.error || 'No se pudo obtener seguro');
+
+    const costo = Number(j.costo || 0) || 0;
+    _seguroCache = { monto, costo };
+    return costo;
+  }
+
+  function pintarSeguroUI(costo){
+    const td = document.getElementById('costoSeguro');
+    if (td){
+      td.textContent = fmtMXN(costo);
+      td.dataset.raw = String(costo);
+    }
+    const b = document.getElementById('opMes1b');
+    if (b) b.textContent = `SEGURO = ${fmtMXN(costo)}`;
+  }
+function logSumasMes11y12(){
+  const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  if (inputs.length === 0) return;
+
+  const lastTwo = inputs.slice(-2);
+  if (lastTwo.length < 2) return;
+
+  // Penúltimo = x3, Último = x2
+  const el11 = lastTwo[0];
+  const el12 = lastTwo[1];
+
+  const mes11 = Number(el11.dataset.mes || 0);
+  const mes12 = Number(el12.dataset.mes || 0);
+
+  const monto11 = (el11.dataset?.raw != null && el11.dataset.raw !== '')
+    ? Number(el11.dataset.raw)
+    : parseMoney(el11.textContent);
+
+  const monto12 = (el12.dataset?.raw != null && el12.dataset.raw !== '')
+    ? Number(el12.dataset.raw)
+    : parseMoney(el12.textContent);
+
+  const recargo11 = monto11 * (0.113 * 3);
+  const recargo12 = monto12 * (0.113 * 2);
+
+  const sumaRecargos = recargo11 + recargo12;
+  const sumaMontos   = monto11 + monto12;
+
+  console.log(
+    `[SUMA RECARGOS] Mes ${mes11}(x3)=${fmtMXN(recargo11)} + Mes ${mes12}(x2)=${fmtMXN(recargo12)} => ${fmtMXN(sumaRecargos)}`
+  );
+
+  console.log(
+    `[SUMA MONTOS] Mes ${mes11}=${fmtMXN(monto11)} + Mes ${mes12}=${fmtMXN(monto12)} => ${fmtMXN(sumaMontos)}`
+  );
+
+  // (opcional) suma total con recargo incluido:
+  // const sumaTotalConRecargo = sumaMontos + sumaRecargos;
+  // console.log(`[SUMA TOTAL (montos+recargos)] => ${fmtMXN(sumaTotalConRecargo)}`);
+
+  return { sumaRecargos, sumaMontos, recargo11, recargo12, monto11, monto12 };
+}
+
+  // ✅ LOG: Últimos 2 meses → (11.3% * ((plazo-mes)+2) * monto_mes)
+function logUltimos2Mensualidad(){
+  const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  if (inputs.length === 0) return;
+
+  const lastTwo = inputs.slice(-2);
+
+  lastTwo.forEach((el, idx) => {
+    const mes = Number(el.dataset.mes || 0) || 0;
+
+    const monto = (el.dataset?.raw != null && el.dataset.raw !== '')
+      ? Number(el.dataset.raw)
+      : parseMoney(el.textContent);
+
+    // idx=0 (penúltimo) => x3, idx=1 (último) => x2
+    const multiplicador = (idx === 0) ? 3 : 2;
+
+    const recargo = monto * (0.113 * multiplicador);     // lo que “se suma”
+    const total   = monto + recargo;                     // ✅ monto + recargo
+
+    console.log(
+      `[TOTAL+MENSUAL] Mes ${mes} | monto=${fmtMXN(monto)} | recargo(0.113x${multiplicador})=${fmtMXN(recargo)} | TOTAL=${fmtMXN(total)}`
+    );
+  });
+}
+  /* ====== TOTAL PANEL ====== */
+  function calcularTotalPanel(){
+    const inputs = document.querySelectorAll('#plazosPanel .plazo-input');
+    let sum = 0;
+
+    inputs.forEach(el => {
+      const raw = (el.dataset && el.dataset.raw != null) ? Number(el.dataset.raw) : NaN;
+      const n = Number.isFinite(raw) ? raw : parseMoney(el.textContent);
+      el.dataset.raw = String(n);
+      sum += n;
+    });
+
+    const totalEl = document.getElementById('plazosTotal');
+    if (totalEl){
+      totalEl.textContent = fmtMXN(sum);
+      totalEl.dataset.raw = String(sum);
+    }
+
+    // 1) TOTAL => monto solicitado
+    setMontoSolicitado(sum);
+
+    // 2) 6.5% => #costo65
+    const apertura = Math.round((sum * FACTOR_APERTURA) * 100) / 100;
+    const td65 = document.getElementById('costo65');
+    if (td65){
+      td65.textContent = fmtMXN(apertura);
+      td65.dataset.raw = String(apertura);
+    }
+
+    const a = document.getElementById('opMes1a');
+    if (a) a.textContent = `6.5% de TOTAL = ${fmtMXN(apertura)}`;
+
+    const b = document.getElementById('opMes1b');
+    if (b) b.textContent = `SEGURO = ${fmtMXN(0)}`;
+
+    // 3) Seguro PHP
+    obtenerSeguroCosto(sum)
+      .then(costoSeguro => {
+        pintarSeguroUI(costoSeguro);
+
+        // Encadena cálculos del JS #1 si existen
+        window.actualizarTotal1?.();
+        window.actualizarTotalCaratula?.();
+        window.recalcularInteresDesdeTotalPagar?.();
+      })
+      .catch(() => pintarSeguroUI(0));
+
+    // Recalcula con placeholder mientras llega el fetch
+    window.actualizarTotal1?.();
+    window.actualizarTotalCaratula?.();
+    window.recalcularInteresDesdeTotalPagar?.();
+      logUltimos2Mensualidad(); // ✅ consola últimos 2 meses
+
+// ✅ CONSOLE: TOTAL MES 1 (con cargos) + suma meses 2..10
+// ✅ CONSOLE: (TOTAL MES 1 con cargos + suma meses 2..10)  Y luego × (0.113×3)
+(function logTotal1a10PorMensualidadX3(){
+  const FACTOR = 0.113 * 3; // ✅ 11.3% × 3
+
+  // 1) TOTAL MES 1 (mes1 + apertura + seguro + investigación)
+  const mes1El = document.querySelector('#plazosPanel .plazo-input[data-mes="1"]');
+  const mes1 = mes1El
+    ? Number(mes1El.dataset?.raw ?? parseMoney(mes1El.textContent))
+    : 0;
+
+  const apertura = Number(document.getElementById('costo65')?.dataset?.raw ?? parseMoney(document.getElementById('costo65')?.textContent));
+  const seguro   = Number(document.getElementById('costoSeguro')?.dataset?.raw ?? parseMoney(document.getElementById('costoSeguro')?.textContent));
+  const invest   = Number(document.getElementById('costoInvestigacion')?.dataset?.raw ?? parseMoney(document.getElementById('costoInvestigacion')?.textContent));
+
+  const totalMes1 = (mes1||0) + (apertura||0) + (seguro||0) + (invest||0);
+
+  // 2) Suma meses 2..10 (solo montos)
+  let suma2a10 = 0;
+  for (let m = 2; m <= 10; m++){
+    const elM = document.querySelector(`#plazosPanel .plazo-input[data-mes="${m}"]`);
+    if (!elM) break;
+
+    const v = (elM.dataset?.raw != null && elM.dataset.raw !== '')
+      ? Number(elM.dataset.raw)
+      : parseMoney(elM.textContent);
+
+    suma2a10 += (Number.isFinite(v) ? v : 0);
+  }
+
+  const total1a10 = totalMes1 + suma2a10;
+
+  // 3) ✅ MULTIPLICACIÓN PEDIDA
+  const resultado = total1a10 * FACTOR;
+
+  console.log(
+    `[TOTAL 1..10] totalMes1=${fmtMXN(totalMes1)} + sumaMeses2a10=${fmtMXN(suma2a10)} => total1a10=${fmtMXN(total1a10)}`
+  );
+  console.log(
+    `[TOTAL 1..10 × (0.113×3)] factor=${FACTOR.toFixed(3)} => ${fmtMXN(resultado)}`
+  );
+})();
+logSumasMes11y12();
+
+(function logTotalCorrecto(){
+  // ===== 1) total1a10 = TOTAL MES 1 (con cargos) + suma meses 2..10 =====
+  const mes1El = document.querySelector('#plazosPanel .plazo-input[data-mes="1"]');
+  const mes1 = mes1El ? Number(mes1El.dataset?.raw ?? parseMoney(mes1El.textContent)) : 0;
+
+  const apertura = Number(document.getElementById('costo65')?.dataset?.raw ?? parseMoney(document.getElementById('costo65')?.textContent));
+  const seguro   = Number(document.getElementById('costoSeguro')?.dataset?.raw ?? parseMoney(document.getElementById('costoSeguro')?.textContent));
+  const invest   = Number(document.getElementById('costoInvestigacion')?.dataset?.raw ?? parseMoney(document.getElementById('costoInvestigacion')?.textContent));
+
+  const totalMes1 = (mes1||0) + (apertura||0) + (seguro||0) + (invest||0);
+
+  let suma2a10 = 0;
+  for (let m = 2; m <= 10; m++){
+    const elM = document.querySelector(`#plazosPanel .plazo-input[data-mes="${m}"]`);
+    if (!elM) break;
+
+    const v = (elM.dataset?.raw != null && elM.dataset.raw !== '')
+      ? Number(elM.dataset.raw)
+      : parseMoney(elM.textContent);
+
+    suma2a10 += (Number.isFinite(v) ? v : 0);
+  }
+
+  const total1a10 = totalMes1 + suma2a10;
+
+  // ===== 2) [MESES 11-12] montos = monto11 + monto12 (SIN recargos) =====
+  const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  const lastTwo = inputs.slice(-2);
+
+  let monto11 = 0, monto12 = 0;
+  if (lastTwo.length === 2){
+    const el11 = lastTwo[0];
+    const el12 = lastTwo[1];
+
+    monto11 = (el11.dataset?.raw != null && el11.dataset.raw !== '')
+      ? Number(el11.dataset.raw)
+      : parseMoney(el11.textContent);
+
+    monto12 = (el12.dataset?.raw != null && el12.dataset.raw !== '')
+      ? Number(el12.dataset.raw)
+      : parseMoney(el12.textContent);
+  }
+
+  const montos1112 = monto11 + monto12;
+
+  // ===== 3) TOTAL como tú lo pediste =====
+  const total = total1a10 + montos1112;
+
+  console.log(
+    `total1a10=${fmtMXN(total1a10)} + [MESES 11-12] montos=${fmtMXN(montos1112)} => ${fmtMXN(total)}`
+  );
+})();
+
+
+(function logTotalFinalRecargos(){
+  const FACTOR_1A10 = 0.113 * 3; // 0.339
+
+  // ===== A) TOTAL 1..10 (Mes1 con cargos + Mes2..10) =====
+  const mes1El = document.querySelector('#plazosPanel .plazo-input[data-mes="1"]');
+  const mes1 = mes1El ? Number(mes1El.dataset?.raw ?? parseMoney(mes1El.textContent)) : 0;
+
+  const apertura = Number(document.getElementById('costo65')?.dataset?.raw ?? parseMoney(document.getElementById('costo65')?.textContent));
+  const seguro   = Number(document.getElementById('costoSeguro')?.dataset?.raw ?? parseMoney(document.getElementById('costoSeguro')?.textContent));
+  const invest   = Number(document.getElementById('costoInvestigacion')?.dataset?.raw ?? parseMoney(document.getElementById('costoInvestigacion')?.textContent));
+
+  const totalMes1 = (mes1||0) + (apertura||0) + (seguro||0) + (invest||0);
+
+  let suma2a10 = 0;
+  for (let m = 2; m <= 10; m++){
+    const elM = document.querySelector(`#plazosPanel .plazo-input[data-mes="${m}"]`);
+    if (!elM) break;
+
+    const v = (elM.dataset?.raw != null && elM.dataset.raw !== '')
+      ? Number(elM.dataset.raw)
+      : parseMoney(elM.textContent);
+
+    suma2a10 += (Number.isFinite(v) ? v : 0);
+  }
+
+  const total1a10 = totalMes1 + suma2a10;
+  const total1a10Factor = total1a10 * FACTOR_1A10;
+
+  // ===== B) RECARGOS Mes 11 y 12 (penúltimo x3, último x2) =====
+  const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  const lastTwo = inputs.slice(-2);
+
+  let monto11 = 0, monto12 = 0;
+  if (lastTwo.length === 2){
+    const el11 = lastTwo[0]; // penúltimo
+    const el12 = lastTwo[1]; // último
+
+    monto11 = (el11.dataset?.raw != null && el11.dataset.raw !== '')
+      ? Number(el11.dataset.raw)
+      : parseMoney(el11.textContent);
+
+    monto12 = (el12.dataset?.raw != null && el12.dataset.raw !== '')
+      ? Number(el12.dataset.raw)
+      : parseMoney(el12.textContent);
+  }
+
+  const recargo11 = monto11 * (0.113 * 3);
+  const recargo12 = monto12 * (0.113 * 2);
+  const sumaRecargos = recargo11 + recargo12;
+
+  // ===== C) TOTAL FINAL =====
+  const totalFinal = total1a10Factor + sumaRecargos;
+
+  console.log(`[TOTAL 1..10 × (0.113×3)] factor=${FACTOR_1A10.toFixed(3)} => ${fmtMXN(total1a10Factor)}`);
+  console.log(`[SUMA RECARGOS] Mes 11(x3)=${fmtMXN(recargo11)} + Mes 12(x2)=${fmtMXN(recargo12)} => ${fmtMXN(sumaRecargos)}`);
+  console.log(`[TOTAL FINAL] ${fmtMXN(total1a10Factor)} + ${fmtMXN(sumaRecargos)} => ${fmtMXN(totalFinal)}`);
+
+  // opcional: por si lo quieres usar en otros lados
+  // window.totalFinalCIP = totalFinal;
+})();
+
+
+(function logRecargosPlazo(){
+  const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  if (inputs.length < 4) return;
+
+  // ===== helpers locales (para que no dependas del scope global) =====
+  const fmtMXN = v =>
+    new Intl.NumberFormat('es-MX',{ style:'currency', currency:'MXN' })
+      .format(Number(v || 0));
+
+  function parseMoney(s){
+    if (s == null) return 0;
+    let t = String(s)
+      .replace(/\u00A0/g,'')
+      .replace(/\s+/g,'')
+      .replace(/[^\d.,-]/g,'');
+
+    if (!t) return 0;
+
+    const lastDot = t.lastIndexOf('.');
+    const lastComma = t.lastIndexOf(',');
+    let dec = null;
+
+    if (lastDot !== -1 && lastComma !== -1) dec = lastDot > lastComma ? '.' : ',';
+    else if (lastDot !== -1) dec = (t.length-lastDot-1 <= 2) ? '.' : null;
+    else if (lastComma !== -1) dec = (t.length-lastComma-1 <= 2) ? ',' : null;
+
+    if (dec){
+      const thou = dec === '.' ? ',' : '.';
+      t = t.replace(new RegExp('\\' + thou, 'g'), '');
+      if (dec === ',') t = t.replace(',', '.');
+
+      const parts = t.split('.');
+      if (parts.length > 2){
+        const d = parts.pop();
+        t = parts.join('') + '.' + d;
+      }
+    } else {
+      t = t.replace(/[.,]/g,'');
+    }
+
+    const n = Number(t);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  // ===== tu lógica =====
+  const plazo = inputs.length + 1;  // ok
+  const TASA  = 0.113;
+
+  // ✅ detectar el último mes real (por data-mes)
+  const meses = inputs
+    .map(el => parseInt(el.dataset.mes || '0', 10))
+    .filter(n => Number.isFinite(n) && n > 0);
+
+  const ultimoMes = meses.length ? Math.max(...meses) : inputs.length;
+  const HASTA = Math.max(2, ultimoMes - 2); // ✅ excluye últimos 2 meses reales
+
+  console.log(`--- RECARGOS (monto+recargo) Mes 2..${HASTA} | plazo=${plazo} ---`);
+
+  let sumaTotales = 0;
+
+  for (let mes = 2; mes <= HASTA; mes++){
+    const el = document.querySelector(`#plazosPanel .plazo-input[data-mes="${mes}"]`);
+    if (!el) continue;
+
+    const monto = (el.dataset?.raw != null && el.dataset.raw !== '')
+      ? Number(el.dataset.raw)
+      : parseMoney(el.textContent);
+
+    const mult = (plazo - mes + 1); // ej plazo=13: mes2=>12 ... mes10=>4
+    const recargo = (Number(monto || 0) * TASA * mult);
+    const totalMes = (Number(monto || 0) + recargo);
+
+    sumaTotales += totalMes;
+
+    console.log(
+      `Mes ${mes}: monto=${fmtMXN(monto)} | 0.113×${mult}=${(TASA*mult).toFixed(3)} | recargo=${fmtMXN(recargo)} | monto+recargo=${fmtMXN(totalMes)}`
+    );
+  }
+
+  console.log(`✅ SUMA (monto+recargo) (mes 2..${HASTA}) = ${fmtMXN(sumaTotales)}`);
+
+  // ===============================
+  // ✅ SUMAR CON TU BASE (MES1+MENS)
+  // ===============================
+
+function buscarBaseMes1MasMens(){
+  const cands = Array.from(document.querySelectorAll('body *'))
+    .filter(el => (el.textContent || '').toUpperCase().includes('TOTAL (MES 1 + MENSUALIDAD)'));
+
+  cands.sort((a,b) => (a.textContent||'').length - (b.textContent||'').length);
+
+  const el = cands[0] || null;
+  const txt = el ? el.textContent : '';
+
+  // ✅ tomar solo lo de después del "=" para NO agarrar el "1" de "MES 1"
+  let numTxt = '';
+  const mEq = txt.match(/=\s*\$?\s*([0-9][0-9.,]*)/);
+  if (mEq) {
+    numTxt = mEq[1];
+  } else {
+    // fallback: último número del string
+    const all = Array.from(txt.matchAll(/([0-9][0-9.,]*)/g));
+    numTxt = all.length ? all[all.length - 1][1] : '';
+  }
+
+  const n = parseMoney(numTxt);
+  return { el, txt, numTxt, n };
+}
+
+  const baseObj = buscarBaseMes1MasMens();
+  const baseMes1MasMens = baseObj.n;
+
+  console.log('BASE detectada en:', baseObj.el);
+console.log(`BASE RAW = "${baseObj.txt}"`);
+console.log(`BASE NUM TXT = "${baseObj.numTxt}"`);
+console.log(`BASE (TOTAL MES 1 + MENSUALIDAD) = ${fmtMXN(baseMes1MasMens)}`);
+
+  const totalFinal = baseMes1MasMens + sumaTotales;
+  console.log(`🔥 TOTAL FINAL = BASE + SUMA(monto+recargo) = ${fmtMXN(totalFinal)}`);
+
+})();
+    return sum;
+  }
+
+  /* ====== RENDER PLAZOS ====== */
+  function renderPlazos(){
+    const panel = document.getElementById('plazosPanel');
+    const plazoEl = document.getElementById('plazo');
+    if (!panel || !plazoEl) return;
+
+    const plazo = clamp(plazoEl.textContent, 1, 120);
+    const campos = Math.max(0, plazo - 1);
+
+    panel.innerHTML = '';
+
+    for (let i=1; i<=campos; i++){
+      const row = document.createElement('div');
+      row.className = 'plazo-row';
+
+      row.innerHTML = `
+        <b>Mes ${i}</b>
+        <div class="plazo-box">
+          <span class="plazo-val plazo-input"
+                contenteditable="true"
+                inputmode="decimal"
+                data-mes="${i}"
+                data-raw="0"
+                aria-label="Cantidad del mes ${i}">0</span>
+
+            ${i === 1 ? `
+                <div class="plazo-sub" id="opMes1">
+                <div id="opMes1a">—</div>
+                <div id="opMes1b" style="margin-top:2px;">—</div>
+                <div id="opMes1c" style="margin-top:2px;">—</div>
+                <div id="opMes1d" style="margin-top:6px; font-weight:800;">—</div>
+                <div id="opMes1e" style="margin-top:6px; font-weight:800;">—</div>
+                <div id="opMes1f" style="margin-top:6px; font-weight:900;">—</div>
+                </div>
+            ` : ``}
+        </div>
+      `;
+      panel.appendChild(row);
+    }
+
+    const totalRow = document.createElement('div');
+    totalRow.className = 'plazo-row plazo-total';
+    totalRow.innerHTML = `
+      <b>TOTAL</b>
+      <span id="plazosTotal" class="plazo-val total-val" data-raw="0">${fmtMXN(0)}</span>
+    `;
+    panel.appendChild(totalRow);
+
+    calcularTotalPanel();
+  }
+
+  /* ====== INPUT HANDLERS (delegación) ====== */
+  function onBeforeInput(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+
+    if (e.inputType === 'insertText' && e.data && !/^[0-9.,-]+$/.test(e.data)){
+      e.preventDefault();
+    }
+  }
+
+  function onInput(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+
+    const n = parseMoney(el.textContent);
+    el.dataset.raw = String(n);
+    calcularTotalPanel();
+  }
+
+  function onBlur(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+
+    const n = parseMoney(el.textContent);
+    el.dataset.raw = String(n);
+    el.textContent = fmtMXN(n);
+    calcularTotalPanel();
+  }
+
+  /* ====== INIT ====== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const plazoEl = document.getElementById('plazo');
+    if (!plazoEl) return;
+
+    const re = () => renderPlazos();
+
+    plazoEl.addEventListener('input', re);
+    plazoEl.addEventListener('keyup', re);
+    plazoEl.addEventListener('blur',  re);
+
+    document.addEventListener('beforeinput', onBeforeInput, true);
+    document.addEventListener('input', onInput, true);
+    document.addEventListener('blur', onBlur, true);
+
+    renderPlazos();
+  });
+
+  window.recalcularTotalPlazosPanel = calcularTotalPanel;
+})();
+</script>
+
+</body>
+</html>

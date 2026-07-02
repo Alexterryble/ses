@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Panel de Ingeniería · Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.78);backdrop-filter: blur(12px)}
+    .glass-dark{background:rgba(15,23,42,.65);backdrop-filter: blur(12px)}
+    .shadow-soft{box-shadow:0 18px 60px rgba(2,6,23,.10)}
+    .ring-soft{box-shadow: 0 0 0 1px rgba(148,163,184,.45) inset}
+  </style>
+</head>
+
+<body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+  <!-- Top gradient -->
+  <div class="pointer-events-none fixed inset-x-0 top-0 h-64 bg-gradient-to-b from-indigo-200/70 via-violet-200/40 to-transparent dark:from-indigo-900/30 dark:via-violet-900/20"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1400px] px-4 py-4">
+      <div class="flex items-center justify-between gap-3 rounded-2xl glass dark:glass-dark px-4 py-3 shadow-soft">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 grid place-items-center text-white font-bold">
+            IG
+          </div>
+          <div>
+            <div class="text-sm text-slate-500 dark:text-slate-300">Panel de Ingeniería</div>
+            <h1 class="text-lg font-semibold">Dashboard administrativo</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="hidden md:block text-right">
+            <div class="text-xs text-slate-500 dark:text-slate-300">Conectado como</div>
+            <div id="userName" class="text-sm font-medium">—</div>
+          </div>
+
+          <button id="btnTheme" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900">
+            🌙/☀️
+          </button>
+
+          <button id="btnLogout" class="px-3 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
+            Salir
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1400px] px-4 pb-10 pt-6 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+      <!-- Sidebar -->
+      <aside class="lg:sticky lg:top-24 h-fit">
+        <div class="rounded-2xl bg-white/90 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-800/70 p-4 shadow-soft">
+          <div class="mb-4">
+            <div class="text-sm font-semibold">Navegación</div>
+            <div class="text-xs text-slate-500 dark:text-slate-300">Secciones disponibles</div>
+          </div>
+
+          <div class="space-y-2">
+            <button class="navBtn w-full flex items-center gap-3 px-3 py-3 rounded-xl ring-soft hover:bg-slate-50 dark:hover:bg-slate-950/60"
+                    data-view="asesores">
+              <span class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950 grid place-items-center">👥</span>
+              <div class="text-left">
+                <div class="text-sm font-medium">Asesores</div>
+                <div class="text-xs text-slate-500 dark:text-slate-300">Gestión</div>
+              </div>
+            </button>
+
+            <button class="navBtn w-full flex items-center gap-3 px-3 py-3 rounded-xl ring-soft hover:bg-slate-50 dark:hover:bg-slate-950/60"
+                    data-view="valores1">
+              <span class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-950 grid place-items-center">💲</span>
+              <div class="text-left">
+                <div class="text-sm font-medium">Valores 1</div>
+                <div class="text-xs text-slate-500 dark:text-slate-300">Tabla 1</div>
+              </div>
+            </button>
+
+            <button class="navBtn w-full flex items-center gap-3 px-3 py-3 rounded-xl ring-soft hover:bg-slate-50 dark:hover:bg-slate-950/60"
+                    data-view="valores2">
+              <span class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-950 grid place-items-center">⏱️</span>
+              <div class="text-left">
+                <div class="text-sm font-medium">Valores 2</div>
+                <div class="text-xs text-slate-500 dark:text-slate-300">Tabla 2</div>
+              </div>
+            </button>
+
+            <button class="navBtn w-full flex items-center gap-3 px-3 py-3 rounded-xl ring-soft hover:bg-slate-50 dark:hover:bg-slate-950/60"
+                    data-view="valores3">
+              <span class="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-950 grid place-items-center">⚙️</span>
+              <div class="text-left">
+                <div class="text-sm font-medium">Valores 3</div>
+                <div class="text-xs text-slate-500 dark:text-slate-300">Tabla 3</div>
+              </div>
+            </button>
+          </div>
+
+          <div class="mt-5 pt-5 border-t border-slate-200/70 dark:border-slate-800/70">
+            <div class="flex items-start gap-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 p-3">
+              <div class="w-9 h-9 rounded-xl bg-white/80 dark:bg-slate-900 grid place-items-center">ℹ️</div>
+              <div>
+                <div class="text-sm font-semibold text-indigo-700 dark:text-indigo-200">Consejo rápido</div>
+                <div class="text-xs text-indigo-700/80 dark:text-indigo-200/80">Usa “Editar” o “Contraseña” en cada fila.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <section>
+        <!-- VIEW: ASESORES -->
+        <div id="view-asesores" class="view">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <h2 class="text-2xl font-bold">Gestión de Asesores</h2>
+              <p class="text-sm text-slate-500 dark:text-slate-300">Administra los asesores del sistema</p>
+            </div>
+            <button class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow">
+              + Nuevo Asesor
+            </button>
+          </div>
+
+          <!-- KPIs -->
+          <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-soft">
+              <div class="text-xs text-slate-500 dark:text-slate-300">Total</div>
+              <div id="kpiTotal" class="text-3xl font-semibold mt-1">—</div>
+              <div class="text-xs text-slate-400 mt-2">Asesores registrados</div>
+            </div>
+            <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-soft">
+              <div class="text-xs text-slate-500 dark:text-slate-300">Activos</div>
+              <div id="kpiActivos" class="text-3xl font-semibold mt-1 text-emerald-500">—</div>
+              <div class="text-xs text-slate-400 mt-2">Con acceso al sistema</div>
+            </div>
+            <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-soft">
+              <div class="text-xs text-slate-500 dark:text-slate-300">Inactivos</div>
+              <div id="kpiInactivos" class="text-3xl font-semibold mt-1 text-rose-500">—</div>
+              <div class="text-xs text-slate-400 mt-2">Sin acceso</div>
+            </div>
+          </section>
+
+          <!-- Filtros -->
+          <section class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-4 shadow-soft mb-4">
+            <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+              <div class="flex-1">
+                <label class="text-xs text-slate-500 dark:text-slate-300">Buscar</label>
+                <input id="inpQ" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+                       type="search" placeholder="Nombre, usuario, correo, RFC, teléfono…">
+              </div>
+
+              <div class="w-full lg:w-52">
+                <label class="text-xs text-slate-500 dark:text-slate-300">Estado</label>
+                <select id="selActivo" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="">Todos</option>
+                  <option value="1">Activos</option>
+                  <option value="0">Inactivos</option>
+                </select>
+              </div>
+
+              <div class="w-full lg:w-44">
+                <label class="text-xs text-slate-500 dark:text-slate-300">Por página</label>
+                <select id="selPerPage" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="10">10</option><option value="20">20</option><option value="50">50</option><option value="100">100</option>
+                </select>
+              </div>
+
+              <button id="btnBuscar" class="mt-5 lg:mt-6 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow">
+                Filtrar
+              </button>
+            </div>
+          </section>
+
+          <!-- Tabla -->
+          <section class="rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 shadow-soft">
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-950/60 text-slate-600 dark:text-slate-300">
+                  <tr class="text-left">
+                    <th class="px-4 py-3 whitespace-nowrap">ID</th>
+                    <th class="px-4 py-3">Nombre</th>
+                    <th class="px-4 py-3">Usuario</th>
+                    <th class="px-4 py-3">Correo</th>
+                    <th class="px-4 py-3 whitespace-nowrap">Teléfono</th>
+                    <th class="px-4 py-3 whitespace-nowrap">RFC</th>
+                    <th class="px-4 py-3 whitespace-nowrap">Rol</th>
+                    <th class="px-4 py-3">Estado</th>
+                    <th class="px-4 py-3">Dirección</th>
+                    <th class="px-4 py-3 whitespace-nowrap">Acciones</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr><td class="px-4 py-4 text-slate-500" colspan="10">Cargando…</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex items-center justify-between p-3 border-t border-slate-200/70 dark:border-slate-800/70">
+              <div id="pagInfo" class="text-sm text-slate-500 dark:text-slate-300">—</div>
+              <div class="flex gap-2">
+                <button id="btnPrev" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950">Anterior</button>
+                <button id="btnNext" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950">Siguiente</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- VIEWS: valores (placeholder por ahora) -->
+        <div id="view-valores1" class="view hidden">
+          <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-soft">
+            <div class="text-xl font-bold mb-2">Valores 1</div>
+            <div class="text-sm text-slate-500 dark:text-slate-300">Aquí conectaremos la tabla 1.</div>
+          </div>
+        </div>
+
+        <div id="view-valores2" class="view hidden">
+          <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-soft">
+            <div class="text-xl font-bold mb-2">Valores 2</div>
+            <div class="text-sm text-slate-500 dark:text-slate-300">Aquí conectaremos la tabla 2.</div>
+          </div>
+        </div>
+
+        <div id="view-valores3" class="view hidden">
+          <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-soft">
+            <div class="text-xl font-bold mb-2">Valores 3</div>
+            <div class="text-sm text-slate-500 dark:text-slate-300">Aquí conectaremos la tabla 3.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 hidden rounded-2xl px-4 py-3 shadow-soft border border-slate-200/70 dark:border-slate-800/70 bg-white dark:bg-slate-900"></div>
+
+    <!-- Modal -->
+    <div id="modalWrap" class="fixed inset-0 hidden items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative w-full max-w-2xl mx-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/70 shadow-soft">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200/70 dark:border-slate-800/70">
+          <div>
+            <div id="modalTitle" class="text-lg font-semibold">—</div>
+            <div id="modalSub" class="text-xs text-slate-500 dark:text-slate-300">—</div>
+          </div>
+          <button id="modalClose" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-950">✕</button>
+        </div>
+        <div id="modalBody" class="p-5"></div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  /* =========================================================
+   *  BASE: NO CAMBIA TUS RUTAS, SOLO DETECTA SI HAY PREFIJO
+   *  Local:  /sempiternal/public/...
+   *  Prod:   /...
+   * ========================================================= */
+  function detectBasePrefix(){
+    const p = location.pathname || '';
+    if (p.includes('/sempiternal/public/')) return '/sempiternal/public';
+    if (p.includes('/public/')) return '/public';
+    return '';
+  }
+
+  const BASE = detectBasePrefix(); // <- la magia para que no te falle en Railway
+  const API_BASE = `${BASE}/app/controllers`;
+
+  const API = {
+    me:        `${API_BASE}/auth/me.php`,
+    logout:    `${API_BASE}/auth/logout.php`,
+    resumen:   `${API_BASE}/asesores/resumen.php`,
+    listar:    `${API_BASE}/asesores/listar.php`,
+    update:    `${API_BASE}/asesores/update.php`,
+    resetPwd:  `${API_BASE}/asesores/reset_password.php`,
+  };
+
+  const state = { view:'asesores', page: 1, perPage: 10, q: '', activo: '' };
+
+  const $ = (id)=>document.getElementById(id);
+
+  function toast(msg, ok=true){
+    const t = $('toast');
+    t.className = 'fixed bottom-5 right-5 rounded-2xl px-4 py-3 shadow-soft border bg-white dark:bg-slate-900 ' +
+      (ok ? 'border-emerald-200 dark:border-emerald-900' : 'border-rose-200 dark:border-rose-900');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(()=>t.classList.add('hidden'), 1800);
+  }
+
+  async function fetchJSON(url, options={}){
+    const res = await fetch(url, { credentials:'include', ...options });
+    const text = await res.text();
+    let data = null;
+    try { data = JSON.parse(text); } catch {}
+    if (!res.ok) {
+      const msg = (data && (data.error || data.message)) ? (data.error || data.message) : text.slice(0,160);
+      throw new Error(`HTTP ${res.status}: ${msg}`);
+    }
+    return data ?? {};
+  }
+
+  function esc(s){
+    return (s ?? '').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // =========================
+  // Auth header
+  // =========================
+  async function checkMe(){
+    const data = await fetchJSON(API.me).catch(()=>({auth:false}));
+    if (!data || !data.auth){
+      location.href = `${BASE}/login.html`;
+      return false;
+    }
+    $('userName').textContent = data.user?.nombre || data.user?.usuario || 'Usuario';
+    return true;
+  }
+
+  // =========================
+  // KPIs
+  // =========================
+  async function loadResumen(){
+    const data = await fetchJSON(API.resumen);
+    if (!data.ok) throw new Error(data.error || 'Resumen falló');
+    $('kpiTotal').textContent     = data.total ?? 0;
+    $('kpiActivos').textContent   = data.activos ?? 0;
+    $('kpiInactivos').textContent = data.inactivos ?? 0;
+  }
+
+  // =========================
+  // Tabla
+  // =========================
+  async function loadTabla(){
+    const tbody = $('tbody');
+    tbody.innerHTML = `<tr><td class="px-4 py-4 text-slate-500" colspan="10">Cargando…</td></tr>`;
+
+    const params = new URLSearchParams({
+      page: String(state.page),
+      per_page: String(state.perPage),
+      q: state.q
+    });
+    if (state.activo !== '') params.set('activo', state.activo);
+
+    const data = await fetchJSON(`${API.listar}?${params.toString()}`);
+    if (!data.ok) throw new Error(data.error || 'Listar falló');
+
+    const rows = data.data || [];
+    if (!rows.length){
+      tbody.innerHTML = `<tr><td class="px-4 py-4 text-slate-500" colspan="10">Sin resultados</td></tr>`;
+    } else {
+      tbody.innerHTML = rows.map(r=>{
+        const id = r.id_asesor ?? r.id;
+        const chip = (String(r.activo) === '1')
+          ? `<span class="px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Activo</span>`
+          : `<span class="px-2 py-1 rounded-full text-xs bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300">Inactivo</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-950/50" data-row='${esc(JSON.stringify(r))}'>
+            <td class="px-4 py-3 whitespace-nowrap">${esc(id)}</td>
+            <td class="px-4 py-3">
+              <div class="font-medium">${esc(r.nombre || '')}</div>
+            </td>
+            <td class="px-4 py-3">${esc(r.usuario || '')}</td>
+            <td class="px-4 py-3">${esc(r.email || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${esc(r.telefono || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${esc(r.rfc || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              <span class="px-2 py-1 rounded-full text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">${esc(r.rol || '')}</span>
+            </td>
+            <td class="px-4 py-3">${chip}</td>
+            <td class="px-4 py-3">
+              <div class="text-slate-600 dark:text-slate-300">${esc(r.direccion || '')}</div>
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              <div class="flex gap-2">
+                <button class="btnEdit px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950">Editar</button>
+                <button class="btnPwd px-3 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700">Contraseña</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    const pages = data.pages || 1;
+    $('pagInfo').textContent = `Página ${data.page} de ${pages} · ${data.total ?? rows.length} registros`;
+    $('btnPrev').disabled = state.page <= 1;
+    $('btnNext').disabled = state.page >= pages;
+  }
+
+  // =========================
+  // Modal
+  // =========================
+  function openModal(title, sub, bodyHTML){
+    $('modalTitle').textContent = title;
+    $('modalSub').textContent = sub || '';
+    $('modalBody').innerHTML = bodyHTML;
+    $('modalWrap').classList.remove('hidden');
+    $('modalWrap').classList.add('flex');
+  }
+  function closeModal(){
+    $('modalWrap').classList.add('hidden');
+    $('modalWrap').classList.remove('flex');
+    $('modalBody').innerHTML = '';
+  }
+
+  // =========================
+  // View navigation
+  // =========================
+  function setView(view){
+    state.view = view;
+    document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+    const el = document.getElementById(`view-${view}`);
+    if (el) el.classList.remove('hidden');
+
+    document.querySelectorAll('.navBtn').forEach(b=>{
+      const on = b.dataset.view === view;
+      b.classList.toggle('bg-indigo-50', on);
+      b.classList.toggle('dark:bg-indigo-950/40', on);
+      b.classList.toggle('ring-soft', !on);
+    });
+
+    if (view === 'asesores'){
+      loadResumen().catch(e=>toast(e.message,false));
+      loadTabla().catch(e=>toast(e.message,false));
+    }
+  }
+
+  // =========================
+  // Events
+  // =========================
+  $('btnBuscar').addEventListener('click', ()=>{
+    state.q = $('inpQ').value.trim();
+    state.activo = $('selActivo').value;
+    state.perPage = parseInt($('selPerPage').value, 10) || 10;
+    state.page = 1;
+    loadResumen().catch(e=>toast(e.message,false));
+    loadTabla().catch(e=>toast(e.message,false));
+  });
+
+  $('inpQ').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') $('btnBuscar').click(); });
+
+  $('btnPrev').addEventListener('click', ()=>{ if (state.page>1){ state.page--; loadTabla().catch(e=>toast(e.message,false)); }});
+  $('btnNext').addEventListener('click', ()=>{ state.page++; loadTabla().catch(e=>toast(e.message,false)); });
+
+  document.querySelectorAll('.navBtn').forEach(b=>{
+    b.addEventListener('click', ()=> setView(b.dataset.view));
+  });
+
+  $('btnLogout').addEventListener('click', async ()=>{
+    try { await fetchJSON(API.logout); } catch {}
+    location.href = `${BASE}/login.html`;
+  });
+
+  $('btnTheme').addEventListener('click', ()=>{
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  (function initTheme(){
+    const t = localStorage.getItem('theme');
+    if (t === 'dark') document.documentElement.classList.add('dark');
+  })();
+
+  $('modalClose').addEventListener('click', closeModal);
+  $('modalWrap').addEventListener('click', (e)=>{ if (e.target === $('modalWrap')) closeModal(); });
+
+  // Delegación acciones tabla
+  $('tbody').addEventListener('click', (e)=>{
+    const tr = e.target.closest('tr');
+    if (!tr) return;
+
+    let row = {};
+    try { row = JSON.parse(tr.getAttribute('data-row') || '{}'); } catch {}
+    const id = row.id_asesor ?? row.id;
+
+    // EDITAR
+    if (e.target.closest('.btnEdit')){
+      openModal(
+        'Editar asesor',
+        `ID #${id}`,
+        `
+        <form id="frmEdit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="text-sm">Nombre
+            <input name="nombre" value="${esc(row.nombre||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">Usuario
+            <input name="usuario" value="${esc(row.usuario||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">Correo
+            <input name="email" value="${esc(row.email||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">Teléfono
+            <input name="telefono" value="${esc(row.telefono||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">RFC
+            <input name="rfc" value="${esc(row.rfc||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">Rol
+            <input name="rol" value="${esc(row.rol||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+
+          <label class="text-sm">CLABE
+            <input name="clabe" value="${esc(row.clabe||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+          <label class="text-sm">Cuenta
+            <input name="cuenta" value="${esc(row.cuenta||'')}" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+          </label>
+
+          <label class="text-sm md:col-span-2">Dirección
+            <textarea name="direccion" rows="3" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">${esc(row.direccion||'')}</textarea>
+          </label>
+
+          <label class="text-sm">Estado
+            <select name="activo" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="1" ${String(row.activo)==='1'?'selected':''}>Activo</option>
+              <option value="0" ${String(row.activo)==='0'?'selected':''}>Inactivo</option>
+            </select>
+          </label>
+
+          <div class="md:col-span-2 flex justify-end gap-2 pt-2">
+            <button type="button" id="btnCancelEdit" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950">Cancelar</button>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Guardar</button>
+          </div>
+        </form>
+        `
+      );
+
+      $('btnCancelEdit').addEventListener('click', closeModal);
+
+      $('frmEdit').addEventListener('submit', async (ev)=>{
+        ev.preventDefault();
+        const fd = new FormData(ev.target);
+        const payload = {
+          id_asesor: id, // <- NO CAMBIO TU RUTA/FORMATO
+          nombre: fd.get('nombre') || '',
+          usuario: fd.get('usuario') || '',
+          email: fd.get('email') || '',
+          telefono: fd.get('telefono') || '',
+          rfc: fd.get('rfc') || '',
+          rol: fd.get('rol') || '',
+          clabe: fd.get('clabe') || '',
+          cuenta: fd.get('cuenta') || '',
+          direccion: fd.get('direccion') || '',
+          activo: fd.get('activo') || '1'
+        };
+
+        try{
+          const data = await fetchJSON(API.update, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+          });
+          if (!data.ok) throw new Error(data.error || 'No se pudo actualizar');
+          toast('Actualizado ✅');
+          closeModal();
+          await loadResumen();
+          await loadTabla();
+        }catch(err){
+          toast(err.message || 'Error al actualizar', false);
+        }
+      });
+
+      return;
+    }
+
+    // CONTRASEÑA
+    if (e.target.closest('.btnPwd')){
+      openModal(
+        'Cambiar contraseña',
+        `Asesor ID #${id}`,
+        `
+        <form id="frmPwd" class="space-y-4">
+          <div class="text-sm text-slate-500 dark:text-slate-300">
+            Se actualizará la contraseña del asesor seleccionado.
+          </div>
+
+          <label class="text-sm block">Nueva contraseña
+            <input name="p1" type="password" minlength="8" required
+              class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Mínimo 8 caracteres">
+          </label>
+
+          <label class="text-sm block">Confirmar contraseña
+            <input name="p2" type="password" minlength="8" required
+              class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Repite la contraseña">
+          </label>
+
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" id="btnCancelPwd" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950">Cancelar</button>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700">Actualizar</button>
+          </div>
+        </form>
+        `
+      );
+
+      $('btnCancelPwd').addEventListener('click', closeModal);
+
+      $('frmPwd').addEventListener('submit', async (ev)=>{
+        ev.preventDefault();
+        const fd = new FormData(ev.target);
+        const p1 = String(fd.get('p1')||'');
+        const p2 = String(fd.get('p2')||'');
+        if (p1.length < 8) return toast('Mínimo 8 caracteres', false);
+        if (p1 !== p2) return toast('No coinciden las contraseñas', false);
+
+        try{
+          const data = await fetchJSON(API.resetPwd, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            // mando ambos por compatibilidad
+            body: JSON.stringify({ id_asesor: id, id: id, password: p1 })
+          });
+          if (!data.ok) throw new Error(data.error || 'No se pudo cambiar');
+          toast('Contraseña actualizada ✅');
+          closeModal();
+        }catch(err){
+          toast(err.message || 'Error al cambiar contraseña', false);
+        }
+      });
+
+      return;
+    }
+  });
+
+  // =========================
+  // Init
+  // =========================
+  (async function init(){
+    const ok = await checkMe();
+    if (!ok) return;
+
+    // hash view
+    const h = (location.hash || '#asesores').replace('#','');
+    setView(h);
+
+    // nav hash sync
+    window.addEventListener('hashchange', ()=>{
+      const h2 = (location.hash || '#asesores').replace('#','');
+      setView(h2);
+    });
+  })();
+</script>
+</body>
+</html>

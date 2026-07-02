@@ -1,0 +1,1340 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plantilla - Solicitud</title>
+
+  <!-- ✅ PDF (html2pdf) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --line:#111;
+      --muted:#666;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:#f2f2f2;
+      font-family: Arial, Helvetica, sans-serif;
+      color:#111;
+    }
+
+    /* ===== BOTONES (solo pantalla) ===== */
+    .actions{
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      display:flex;
+      gap:10px;
+      z-index:9999;
+    }
+    .btn{
+      border:0;
+      padding:10px 12px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,.15);
+      background:#0b2f5f;
+      color:#fff;
+    }
+    .btn.secondary{ background:#522c84; }
+    .btn:active{ transform: translateY(1px); }
+
+    /* ===== HOJA ===== */
+.page{
+  width: 216mm;          /* ✅ CARTA */
+  min-height: 279mm;     /* ✅ CARTA */
+  margin: 10mm auto;
+  background:#fff;
+  padding: 12mm 12mm 14mm;
+  position: relative;
+}
+
+
+    /* ===== ENCABEZADO ===== */
+    .header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 6mm;
+    }
+    .brand-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 240px;
+    }
+    .brand-left img{
+      height:26px;
+      width:auto;
+      display:block;
+    }
+    .brand-left .brand-text{
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .brand-right{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      min-width: 240px;
+    }
+    .brand-right img{
+      height:26px;
+      width:auto;
+      display:block;
+    }
+
+    /* ===== TABLA ===== */
+        table.form{
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 10.5px; /* un pelín más compacto */
+        }
+
+    table.form td, table.form th{
+      border:1px solid var(--line);
+      padding: 6px 7px;
+      vertical-align: middle;
+      height: 28px;
+    }
+
+    /* Columna izquierda (etiquetas) y derecha (campo) */
+    .label{
+      width: 42%;
+      font-weight:700;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    .field{
+      width: 58%;
+      color:#111;
+    }
+
+    /* Texto guía suave (como el “dd / mm / aaaa”) */
+    .hint{
+      color: var(--muted);
+      font-size: 10px;
+      text-align:center;
+      letter-spacing:.3px;
+    }
+
+    .value{
+  display:block;
+  font-weight:700;
+  font-size:11px;
+  line-height:1.2;
+  margin-bottom:3px; /* separa el texto de la línea */
+  white-space: normal;
+  word-break: break-word;
+}
+
+    /* Campos tipo “línea” */
+    .line{
+      display:block;
+      width:100%;
+      height: 12px;              /* más bajita */
+      border-bottom: 1px solid #bbb;
+      margin-top:2px;
+    }
+
+    /* Sección centrada (DOMICILIO) */
+    .section-title{
+      text-align:center;
+      font-weight:800;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    /* Pie / página */
+    .footer{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom: 8mm;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      pointer-events:none;
+    }
+    .page-num{
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background:#1f3b63;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .small-print{
+      position:absolute;
+      left:12mm;
+      right:12mm;
+      bottom: 3mm;
+      font-size: 9px;
+      color:#777;
+      text-align:center;
+    }
+
+    /* ===== IMPRESIÓN ===== */
+@media print{
+  body{ background:#fff; }
+  .actions{ display:none !important; }
+
+  /* ✅ NO fuerces alto fijo en html/body (eso causa bajadas/centrado raro) */
+  html, body{
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page{
+    size: letter;
+    margin: 10mm; /* o 0mm si quieres a borde */
+  }
+
+  .page{
+    width: 100% !important;      /* se ajusta al área imprimible */
+    min-height: auto !important; /* ✅ evita que empuje contenido */
+    margin: 0 !important;
+    padding: 10mm 10mm 18mm !important; /* tu colchón */
+    box-shadow: none !important;
+
+    page-break-after: always !important;
+    break-after: page !important;
+
+    page-break-inside: avoid !important;
+    break-inside: avoid-page !important;
+  }
+
+  /* ✅ fuerza que cada hoja después de la 1 inicie en página nueva */
+  .page + .page{
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* ✅ MUY IMPORTANTE: deja partir tablas (si no, el navegador hace cosas raras) */
+  table{ 
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+  tr{
+    break-inside: avoid !important; /* evita cortar una fila */
+    page-break-inside: avoid !important;
+  }
+}
+
+
+
+    /* ===== MODO PDF (opcional) ===== */
+    body.pdf-export .page{
+      box-shadow:none;
+      margin:0;
+    }
+
+
+
+    .page{
+  page-break-after: always;
+  break-after: page;
+}
+
+.page:last-child{
+  page-break-after: auto;
+  break-after: auto;
+}
+
+table, tr, td { break-inside: avoid; page-break-inside: avoid; }
+@media print{
+
+  /* ✅ Solo la primera hoja más arriba */
+  .page:first-of-type{
+    padding-top: 6mm !important;      /* antes 10mm */
+    padding-bottom: 14mm !important;  /* reduce un poco el colchón */
+  }
+
+  /* ✅ Encabezado un poco más compacto (solo hoja 1) */
+  .page:first-of-type .header{
+    margin-bottom: 3mm !important;    /* antes 6mm */
+  }
+
+  /* ✅ Filas un poco más compactas (ayuda a que no se brinque la última) */
+  .page:first-of-type table.form td,
+  .page:first-of-type table.form th{
+    padding: 5px 6px !important;      /* antes 6px 7px */
+    height: 26px !important;          /* antes 28px */
+  }
+
+  /* ✅ El circulo un poco más abajo (no estorba) */
+  .page:first-of-type .footer{
+    bottom: 2mm !important;
+  }
+}
+
+
+
+/* =========================
+   MODO PDF: quitar huecos entre hojas
+========================= */
+body.pdf-export{
+  background:#fff !important;
+}
+
+body.pdf-export #doc{
+  width: 216mm;
+  margin: 0 auto !important;
+}
+
+body.pdf-export .page{
+  margin: 0 !important;          /* ✅ adiós al hueco */
+  box-shadow: none !important;
+}
+
+/* Fuerza cortes correctos */
+body.pdf-export .page{
+  page-break-after: always;
+  break-after: page;
+}
+body.pdf-export .page:last-child{
+  page-break-after: auto;
+  break-after: auto;
+}
+
+/* Evita que corte filas */
+body.pdf-export table,
+body.pdf-export tr,
+body.pdf-export td{
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+
+table.form td{
+  line-height: 1.2;
+}
+
+
+
+.value{
+  display:block;
+  font-weight:700;
+  font-size:11px;
+  line-height:1.25;
+  padding-top:2px;
+  padding-bottom:2px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.line{
+  display:block;
+  width:100%;
+  height:10px;
+  border-bottom:1px solid #bdbdbd;
+  margin-top:2px;
+}
+
+/* cuando el valor esté vacío, que no se note feo */
+.value:empty{ min-height:14px; }
+
+/* para textos largos (dirección) no se encimen */
+#txtLugarResidencia{
+  font-size:10.5px;
+  font-weight:600;
+}
+.btn.secondary{
+  background:#444;
+}
+
+.btn.secondary:hover{
+  background:#222;
+}
+
+
+/* ===== HOJA ===== */
+.page{
+  width: 216mm;
+  min-height: 279mm;
+  margin: 10mm auto;
+  background:#fff;
+  padding: 12mm 12mm 24mm;  /* ✅ más espacio abajo para que NO se encime */
+  position: relative;
+}
+
+/* Pie / página */
+.footer{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom: 2mm;              /* ✅ más abajo (antes 8mm) */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+}
+
+
+@media print{
+  .page{
+    width: 216mm !important;
+    min-height: 279mm !important;
+    margin: 0 !important;
+    padding: 10mm 10mm 24mm !important; /* ✅ mismo colchón abajo */
+    box-shadow:none !important;
+    page-break-after: always;
+  }
+
+  .footer{
+    bottom: 2mm !important; /* ✅ baja también en impresión */
+  }
+}
+
+body.pdf-export .page{
+  width: 216mm !important;
+  height: 279mm !important;
+  min-height: 279mm !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  padding: 10mm 10mm 16mm !important;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* =========================
+   HOJA 1 más compacta
+   (solo afecta la primera .page)
+========================= */
+
+/* 1) Encabezado un poquito más chico */
+.page:first-of-type .header{
+  margin-bottom: 3.5mm !important; /* antes 6mm */
+}
+.page:first-of-type .brand-left img,
+.page:first-of-type .brand-right img{
+  height: 22px !important; /* antes 26px */
+}
+
+/* 2) Tabla más compacta en hoja 1 */
+.page:first-of-type table.form{
+  font-size: 10px !important; /* antes 10.5px */
+}
+.page:first-of-type table.form td,
+.page:first-of-type table.form th{
+  padding: 4px 6px !important; /* antes 6px 7px */
+  height: 24px !important;     /* antes 28px */
+}
+
+/* 3) Líneas un poquito más bajitas */
+.page:first-of-type .line{
+  height: 8px !important;       /* antes 10-12px */
+  margin-top: 1px !important;
+}
+
+/* 4) Valores ligeramente más pequeños */
+.page:first-of-type .value{
+  font-size: 10.5px !important; /* antes 11px */
+  line-height: 1.15 !important;
+  margin-bottom: 2px !important;
+}
+
+/* 5) Hint un poquito más compacto */
+.page:first-of-type .hint{
+  font-size: 9.5px !important;
+  margin-top: 2px !important;
+}
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Botones -->
+<div class="actions">
+  <button class="btn secondary" type="button" onclick="regresar()">⬅ Regresar</button>
+  <button class="btn" type="button" onclick="window.print()">🖨️ Imprimir</button>
+  <button class="btn secondary" type="button" onclick="descargarPDF()">📄 Descargar PDF</button>
+</div>
+<div id="doc">
+
+  <!-- ================== HOJA 1 ================== -->
+  <div class="page">
+
+    <div class="header">
+      <div class="brand-left">
+        <img src="../img/Cip_flecha.png" alt="CIP Derecho">
+        <div class="brand-text">CIP FINANCIAL GROUP</div>
+      </div>
+
+      <div class="brand-right">
+        <img src="../img/logo_insignia.png" alt="Insignia Life">
+      </div>
+    </div>
+
+    <table class="form">
+      <tr>
+        <td class="label">NOMBRE (APELLIDO PATERNO, MATERNO, NOMBRES)</td>
+        <td class="field">
+          <span class="value" id="txtNombre"></span>
+          <span class="line"></span>
+          <div class="hint" style="margin-top:3px;">
+            Apellido paterno &nbsp;&nbsp;&nbsp;&nbsp; materno &nbsp;&nbsp;&nbsp;&nbsp; nombres
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">FECHA DE NACIMIENTO</td>
+        <td class="field">
+          <span class="value" id="txtFechaNacimiento"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">LUGAR DE NACIMIENTO</td>
+        <td class="field">
+          <span class="value" id="txtLugarNacimiento"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">LUGAR DE RESIDENCIA</td>
+        <td class="field">
+          <span class="value" id="txtLugarResidencia"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">ESTADO CIVIL (marcar uno)</td>
+        <td class="field" style="font-weight:700; font-size:10px;">
+          <span class="value" id="txtEstadoCivil"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">NACIONALIDAD</td>
+        <td class="field">
+          <span class="value" id="txtNacionalidad"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">OCUPACIÓN (EL ÚLTIMO EMPLEO)</td>
+        <td class="field">
+          <span class="value" id="txtOcupacion"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">RFC CON HOMOCLAVE</td>
+        <td class="field">
+          <span class="value" id="txtRFC"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">CURP</td>
+        <td class="field">
+          <span class="value" id="txtCURP"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">TELÉFONO CELULAR</td>
+        <td class="field">
+          <span class="value" id="txtCelular"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">OTRO TELÉFONO (OPCIONAL)</td>
+        <td class="field">
+          <span class="value" id="txtTelefono"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">CORREO ELECTRÓNICO</td>
+        <td class="field">
+          <span class="value" id="txtCorreo"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="section-title" colspan="2">DOMICILIO</td>
+      </tr>
+
+      <tr>
+        <td class="label">CALLE</td>
+        <td class="field">
+          <span class="value" id="txtCalle"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">NÚMERO</td>
+        <td class="field">
+          <span class="value" id="txtNumero"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">CÓDIGO POSTAL</td>
+        <td class="field">
+          <span class="value" id="txtCP"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">COLONIA</td>
+        <td class="field">
+          <span class="value" id="txtColonia"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">MUNICIPIO Y/O ALCALDÍA</td>
+        <td class="field">
+          <span class="value" id="txtMunicipio"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">CIUDAD Y ESTADO</td>
+        <td class="field">
+          <span class="value" id="txtCiudadEstado"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">OCUPACIÓN (ÚLTIMO EMPLEO)</td>
+        <td class="field">
+          <span class="value" id="txtOcupacionUltimo"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          EMPRESA O DEPENDENCIA DONDE TRABAJA<br>
+          (ÚLTIMO TRABAJO)
+        </td>
+        <td class="field">
+          <span class="value" id="txtEmpresaTrabajo"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">GIRO DE LA EMPRESA</td>
+        <td class="field">
+          <span class="value" id="txtGiroEmpresa"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">PUESTO Y BREVE DESCRIPCIÓN DE LABORES</td>
+        <td class="field">
+          <span class="value" id="txtPuestoLabores"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <div class="page-num">1</div>
+    </div>
+  </div>
+
+
+  <!-- ================== HOJA 2 ================== -->
+  <div class="page">
+
+    <div class="header">
+      <div class="brand-left">
+        <img src="../img/Cip_flecha.png" alt="CIP Derecho">
+      </div>
+      <div class="brand-right">
+        <img src="../img/logo_insignia.png" alt="Insignia Life">
+      </div>
+    </div>
+
+    <table class="form">
+      <tr>
+        <td class="label">INGRESO MENSUAL ACUMULADO</td>
+        <td class="field">$ ________________________</td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          SUMA POR LA CUAL SE VA A ASEGURAR<br>
+          (INCLUYE INTERESES)
+        </td>
+        <td class="field">$ ________________________</td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          TIENE SEGURO DE VIDA EN VIGOR CON OTRA ASEGURADORA
+        </td>
+        <td class="field" style="text-align:center;font-weight:700;">
+          SI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          EN CASO DE TENER SEGURO DAR EL NOMBRE, ANTIGÜEDAD,
+          PLAN Y SUMA ASEGURADA
+        </td>
+        <td class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="section-title" colspan="2">ACTIVIDADES DE ALTO RIESGO</td>
+      </tr>
+
+      <tr>
+        <td class="field" colspan="2">
+          Desempeña labores de asegurado o está expuesto a armas de fuego,
+          explosivos, herramientas punzo cortantes, sustancias químicas,
+          radiaciones, y/o manejo de bebidas alcohólicas
+          <div style="text-align:right;font-weight:700;">SI &nbsp;&nbsp; NO</div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="field" colspan="2">
+          ¿Se dedica a práctica profesional de algún deporte de alto riesgo,
+          ya sea motorizado, de montaña, de agua, de aire?
+          <div style="text-align:right;font-weight:700;">SI &nbsp;&nbsp; NO</div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="field" colspan="2">
+          ¿Viaja más de 50 horas al año como pasajero en aeronaves no comerciales,
+          privadas o militares, desempeña o planea desempeñarse como piloto o
+          miembro de tripulación de alguna aeronave?
+          <div style="text-align:right;font-weight:700;">SI &nbsp;&nbsp; NO</div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="section-title" colspan="2">DATOS DEL TRABAJADOR</td>
+      </tr>
+
+      <tr>
+        <td class="label">PESO EN KILOGRAMOS</td>
+        <td class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="label">ESTATURA EN CENTÍMETROS</td>
+        <td class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          ¿HA MODIFICADO SU PESO DE 5 KILOGRAMOS O MÁS EN EL ÚLTIMO AÑO?
+        </td>
+        <td class="field" style="text-align:center;font-weight:700;">
+          SI &nbsp;&nbsp;&nbsp;&nbsp; NO
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">EN CASO AFIRMATIVO CONTESTAR</td>
+        <td class="field">
+          Aumento &nbsp;&nbsp;&nbsp; disminuyó &nbsp;&nbsp;&nbsp; no. Kilos _______
+          <br><br>
+          Motivo: ________________________________
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">FUMA ACTUALMENTE</td>
+        <td class="field" style="text-align:center;font-weight:700;">
+          SI &nbsp;&nbsp;&nbsp;&nbsp; NO
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">NÚMERO DE CIGARRILLOS AL DÍA</td>
+        <td class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="label">INGIERE BEBIDAS ALCOHÓLICAS</td>
+        <td class="field" style="text-align:center;font-weight:700;">
+          SI &nbsp;&nbsp;&nbsp;&nbsp; NO
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          ¿CONSUME O HA CONSUMIDO ALGUNAS DROGAS?
+          EN CASO DE QUE SÍ FAVOR DE ESCRIBIR EL NOMBRE DE LA DROGA
+        </td>
+        <td class="field">
+          <div style="text-align:right;font-weight:700;">SI &nbsp;&nbsp; NO</div>
+          <br>
+          nombre: ________________________________
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label">
+          SI EL SOLICITANTE ES MUJER, ¿ESTÁ EMBARAZADA?
+          <br>SEMANAS DE GESTACIÓN EN CASO DE SER AFIRMATIVO
+        </td>
+        <td class="field">
+          <div style="text-align:center;font-weight:700;">SI &nbsp;&nbsp; NO</div>
+          <br>
+          semanas: ________________________________
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <div class="page-num">2</div>
+    </div>
+  </div>
+
+
+  <!-- ================== HOJA 3 ================== -->
+  <div class="page">
+
+    <div class="header">
+      <div class="brand-left">
+        <img src="../img/Cip_flecha.png" alt="CIP Derecho">
+      </div>
+      <div class="brand-right">
+        <img src="../img/logo_insignia.png" alt="Insignia Life">
+      </div>
+    </div>
+
+    <table class="form">
+      <tr>
+        <td class="section-title" colspan="3" style="text-transform:none;font-size:11px;">
+          Ha padecido alguna de las siguientes enfermedades
+        </td>
+      </tr>
+
+      <tr>
+        <td class="field">Trastornos cardiacos, de la sangre y aparato respiratorio</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Trastornos endocrinos, digestivos y urológicos</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Trastornos nerviosos y trastornos psiquiátricos</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Tumores benignos y malignos</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Sistema óseo y problemas audiovisuales</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Enfermedades inmunológicas o infecto contagiosas</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field">Otras enfermedades, padecimientos o cirugías</td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td class="field" style="font-size:10px; line-height:1.25;">
+          ¿Ha requerido hospitalización o cuidados especiales en su domicilio como
+          administración de oxígeno a consecuencia de COVID-19, o ha tenido
+          recuperación incompleta de la enfermedad, síntomas persistentes o
+          síndrome post-COVID?
+        </td>
+        <td class="field" style="text-align:center;">SI</td>
+        <td class="field" style="text-align:center;">NO</td>
+      </tr>
+
+      <tr>
+        <td colspan="3" class="field" style="background:#ffe867;font-weight:800;font-size:10px;text-align:center;">
+          Si algún de las respuestas anteriores fue SI favor de solicitarme un anexo medico que se debe de llenar por padecimiento
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3" class="section-title" style="font-size:10.5px;">
+          EN CASO DE TENER ALGUNA ENFERMEDAD DEBE LLENAR LO SIGUIENTE:
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Nombre completo de su médico de cabecera</td>
+        <td colspan="2" class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Especialidad</td>
+        <td colspan="2" class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Teléfono</td>
+        <td colspan="2" class="field"><span class="line"></span></td>
+      </tr>
+
+      <tr>
+        <td colspan="3" class="section-title" style="font-size:10.5px;">REFERENCIAS PERSONALES</td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Nombre completo</td>
+        <td colspan="2" class="field">
+          <span class="value" id="fam1Nombre"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="label" style="width:auto;">Teléfono</td>
+        <td colspan="2" class="field">
+          <span class="value" id="fam1Telefono"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Nombre completo</td>
+        <td colspan="2" class="field">
+          <span class="value" id="fam2Nombre"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="label" style="width:auto;">Teléfono</td>
+        <td colspan="2" class="field">
+          <span class="value" id="fam2Telefono"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+
+      <!-- ✅ FIX: BENEFICIARIO en su TR correcto -->
+      <tr>
+        <td colspan="3" class="section-title" style="font-size:10.5px;">BENEFICIARIO</td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Nombre completo</td>
+        <td colspan="2" class="field">
+          <span class="value" id="codNombre"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label" style="width:auto;">Teléfono</td>
+        <td colspan="2" class="field">
+          <span class="value" id="codTelefono"></span>
+          <span class="line"></span>
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <div class="page-num">3</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function getSolicitudIdFromUrlOrStorage(){
+  const params = new URLSearchParams(location.search);
+  const fromUrl = params.get('solicitud_id');
+  if (fromUrl) {
+    sessionStorage.setItem('solicitud_id', String(fromUrl));
+    return String(fromUrl);
+  }
+  return sessionStorage.getItem('solicitud_id');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const id = getSolicitudIdFromUrlOrStorage();
+  if (!id) {
+    console.warn('No hay solicitud_id en URL ni en sessionStorage');
+    // aquí puedes mandar alerta y regresar si quieres
+    return;
+  }
+  console.log('solicitud_id =', id);
+
+  // ✅ aquí ya haces tus fetch con ese id
+  // fetch(`${BASE_PUBLIC}app/controllers/...?.solicitud_id=${encodeURIComponent(id)}`)
+});
+
+</script>
+
+
+<script>
+/* =========================
+   Loader robusto (Railway friendly)
+   - Si falta html2canvas o jsPDF, los carga.
+========================= */
+function loadScriptOnce(src){
+  return new Promise((resolve, reject) => {
+    // ya existe
+    if ([...document.scripts].some(s => s.src === src)) return resolve();
+
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('No se pudo cargar: ' + src));
+    document.head.appendChild(s);
+  });
+}
+
+async function ensurePdfLibs(){
+  // 1) html2canvas
+  if (!window.html2canvas){
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  }
+
+  // 2) jsPDF (UMD)
+  const hasJsPdf = !!(window.jspdf && window.jspdf.jsPDF) || !!window.jsPDF;
+  if (!hasJsPdf){
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  }
+
+  // compat: window.jsPDF
+  if (!window.jsPDF && window.jspdf && window.jspdf.jsPDF){
+    window.jsPDF = window.jspdf.jsPDF;
+  }
+}
+</script>
+
+<script>
+async function descargarPDF(){
+  const doc = document.getElementById('doc');
+  if(!doc) return alert('No se encontró #doc');
+
+  const pages = Array.from(doc.querySelectorAll('.page'));
+  if(!pages.length) return alert('No hay .page dentro de #doc');
+
+  // ✅ asegura librerías (aunque el bundle no exponga globals)
+  try{
+    await ensurePdfLibs();
+  }catch(e){
+    console.error(e);
+    return alert('No pude cargar librerías PDF: ' + (e?.message || e));
+  }
+
+  // ✅ espera logos
+  const imgs = Array.from(doc.querySelectorAll('img'));
+  await Promise.all(imgs.map(img => {
+    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise(res => { img.onload = res; img.onerror = res; });
+  }));
+
+  document.body.classList.add('pdf-export');
+
+  const prevX = window.scrollX, prevY = window.scrollY;
+  window.scrollTo(0,0);
+
+  const filename = 'plantilla_solicitud.pdf';
+
+  const canvasOpts = {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    scrollX: 0,
+    scrollY: 0
+  };
+
+  try{
+    const jsPDFCtor = window.jsPDF || (window.jspdf && window.jspdf.jsPDF);
+    if(!jsPDFCtor) throw new Error('jsPDF no disponible');
+    if(!window.html2canvas) throw new Error('html2canvas no disponible');
+
+    const pdf = new jsPDFCtor('p', 'mm', 'letter');
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+
+    for(let i=0; i<pages.length; i++){
+      const canvas = await html2canvas(pages[i], canvasOpts);
+      const img = canvas.toDataURL('image/jpeg', 0.98);
+
+      if(i > 0) pdf.addPage();
+      pdf.addImage(img, 'JPEG', 0, 0, pageW, pageH);
+    }
+
+    pdf.save(filename);
+
+  }catch(err){
+    console.error(err);
+    alert('Error generando PDF: ' + (err?.message || err));
+  }finally{
+    window.scrollTo(prevX, prevY);
+    document.body.classList.remove('pdf-export');
+  }
+}
+</script>
+
+
+
+
+
+<script>
+/* ✅ Helper seguro: no rompe si el ID no existe */
+function setTxt(id, value){
+  const el = document.getElementById(id);
+  if(!el){
+    console.warn('No existe el id:', id);
+    return;
+  }
+  el.textContent = (value ?? '').toString();
+}
+
+// yyyy-mm-dd → dd/mm/yyyy
+function formatearFecha(f){
+  if(!f) return '';
+  const s = String(f).trim();
+  const ymd = s.split(' ')[0]; // por si viene con hora
+  const parts = ymd.split('-');
+  if(parts.length !== 3) return s;
+  const [y,m,d] = parts;
+  return `${d}/${m}/${y}`;
+}
+
+async function cargarDatosPersonales(){
+  // 1️⃣ Intentar desde URL
+  const params = new URLSearchParams(window.location.search);
+  let solicitudId = params.get('solicitud_id');
+
+  // 2️⃣ Si no viene en URL, usar sessionStorage
+  if(!solicitudId){
+    solicitudId = sessionStorage.getItem('solicitud_id');
+  }
+
+  if(!solicitudId){
+    console.warn('No se encontró solicitud_id');
+    return;
+  }
+
+  // 3️⃣ Guardar para otras pantallas
+  sessionStorage.setItem('solicitud_id', String(solicitudId));
+
+  // ✅ Base URL (local + producción)
+  const BASE_URL = (() => {
+    const path = location.pathname;
+    if (path.includes('/sempiternal/public/')) return '/sempiternal/public/';
+    return '/';
+  })();
+
+  const url = `${BASE_URL}app/controllers/seguro/get_datos_personales.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+
+  try{
+    const res = await fetch(url, { cache: 'no-store' }); // ✅ evita cache
+
+    // ✅ Si no devuelve JSON (ej. 404/login/html), mostrar error útil
+    const ct = res.headers.get('content-type') || '';
+    if(!ct.includes('application/json')){
+      const txt = await res.text();
+      console.error('El endpoint NO devolvió JSON. Llegó esto (primeros 300 chars):', txt.slice(0,300));
+      console.error('URL usada:', url);
+      return;
+    }
+
+    const json = await res.json();
+
+    if(!json || !json.ok){
+      console.error('Respuesta no ok:', json?.error || json);
+      console.error('URL usada:', url);
+      return;
+    }
+
+    const d = json.data || {};
+
+    // ✅ OCUPACIÓN
+    const ocup = (d.ocupacion || d.puesto_laboral || d.puesto_labores || '');
+
+    // ✅ Pintar datos generales
+    setTxt('txtNombre', d.nombre || '');
+    setTxt('txtFechaNacimiento', formatearFecha(d.fecha_nacimiento || ''));
+    setTxt('txtLugarNacimiento', d.lugar_nacimiento || '');
+    setTxt('txtLugarResidencia', d.lugar_residencia || '');
+    setTxt('txtEstadoCivil', d.estado_civil || '');
+    setTxt('txtNacionalidad', d.nacionalidad || '');
+    setTxt('txtOcupacion', d.ocupacion || '');
+
+    setTxt('txtRFC', d.rfc || '');
+    setTxt('txtCURP', d.curp || '');
+
+    // ✅ aquí tú los invertiste a propósito:
+    setTxt('txtCelular', d.otro_telefono || '');
+    setTxt('txtTelefono', d.telefono_celular || '');
+
+    setTxt('txtCorreo', d.correo || '');
+
+    // ✅ DOMICILIO (CALLE, NÚMERO, CP, COLONIA, MUNICIPIO, CIUDAD/ESTADO)
+    setTxt('txtCalle', d.calle || '');
+    setTxt('txtNumero', d.numero || '');
+    setTxt('txtCP', d.cp || '');
+    setTxt('txtColonia', d.colonia || '');
+    setTxt('txtMunicipio', d.municipio || '');
+    setTxt('txtCiudadEstado', d.ciudad_estado || '');
+    setTxt('txtOcupacionUltimo', d.ocupacion || '');
+    setTxt('txtEmpresaTrabajo', d.empresa_trabajo || '');
+
+
+  }catch(err){
+    console.error('Error al cargar datos:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', cargarDatosPersonales);
+</script>
+
+<script>
+async function cargarReferenciasYCodeudor(){
+  const params = new URLSearchParams(window.location.search);
+  let solicitudId = params.get('solicitud_id') || sessionStorage.getItem('solicitud_id');
+
+  if(!solicitudId){
+    console.warn('No se encontró solicitud_id');
+    return;
+  }
+
+  const BASE_URL = (() => {
+    const path = location.pathname;
+    if (path.includes('/sempiternal/public/')) return '/sempiternal/public/';
+    return '/';
+  })();
+
+  const url = `${BASE_URL}app/controllers/referencias/get_referencia.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+
+  try{
+    const res = await fetch(url, { cache:'no-store' });
+
+    const ct = res.headers.get('content-type') || '';
+    if(!ct.includes('application/json')){
+      const txt = await res.text();
+      console.error('get_referencia.php NO devolvió JSON:', txt.slice(0,200));
+      console.error('URL usada:', url);
+      return;
+    }
+
+    const json = await res.json();
+    if(!json?.ok){
+      console.error('Respuesta no ok:', json?.error || json);
+      return;
+    }
+
+    // =========================
+    // 1) REFERENCIAS FAMILIARES
+    // Tu JSON: json.referencias.Familiar -> { "1": {...}, "2": {...} }
+    // =========================
+    const famObj = json?.referencias?.Familiar || {};
+    const f1 = famObj[1] || famObj["1"] || null;
+    const f2 = famObj[2] || famObj["2"] || null;
+
+    // nombre_completo y teléfono (tu columna puede llamarse diferente)
+    setTxt('fam1Nombre',   f1?.nombre_completo || f1?.nombre || '');
+    setTxt('fam1Telefono', f1?.telefono || f1?.celular || f1?.telefono_celular || '');
+
+    setTxt('fam2Nombre',   f2?.nombre_completo || f2?.nombre || '');
+    setTxt('fam2Telefono', f2?.telefono || f2?.celular || f2?.telefono_celular || '');
+
+    // =========================
+    // 2) BENEFICIARIO = CODEUDOR
+    // Tu JSON: json.codeudor -> { nombre, apellido_paterno, apellido_materno, ... }
+    // =========================
+    const c = json?.codeudor || null;
+
+    const codNombre = c
+      ? [c.nombre, c.apellido_paterno, c.apellido_materno].filter(Boolean).join(' ')
+      : '';
+
+    setTxt('codNombre', codNombre);
+
+    // Si tu API aún no manda teléfono del codeudor, quedará vacío.
+    // Si sí lo manda con otro nombre, aquí lo tomamos:
+    const codTel = c?.telefono || c?.celular || c?.telefono_celular || c?.tel || '';
+    setTxt('codTelefono', codTel);
+
+  }catch(err){
+    console.error('Error cargando referencias/codeudor:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', cargarReferenciasYCodeudor);
+</script>
+
+<script>
+function regresar(){
+
+  // Si viene de otra página dentro del sistema
+  if(document.referrer){
+    window.history.back();
+    return;
+  }
+
+  // Fallback directo (producción)
+  window.location.href = "https://sempiternal-v1-production.up.railway.app/index.php";
+}
+</script>
+
+
+</body>
+</html>

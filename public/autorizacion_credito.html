@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Firmas de Autorización de Crédito</title>
+<link rel="stylesheet" href="css/firmas/firmas.css">
+</head>
+
+<body>
+
+
+<div class="no-print" style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:10px;">
+    <button class="btn-back" onclick="volver()">⬅️ Volver</button>
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimir</button>
+  <button class="btn-pdf" onclick="generarPDF()">📄 Descargar PDF</button>
+</div>
+
+
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="img/Imagen1.png" class="logo left">
+    <img src="img/Cip flecha.png" class="logo right">
+  </div>
+
+  <!-- DATOS -->
+  <div class="datos">
+    <div>Nombre del Cliente: <span id="txtCliente">—</span></div>
+    <div>Nombre del Asesor: <span id="txtAtendido">—</span></div>
+    <div>Folio de Solicitud: <span id="txtFolio">—</span></div>
+  </div>
+
+  <!-- TÍTULO -->
+  <h1>FIRMAS DE AUTORIZACIÓN DE CRÉDITO</h1>
+
+  <!-- BLOQUES -->
+  <div class="grid">
+
+    <!-- INVESTIGACIÓN -->
+    <div class="bloque">
+      <h2>INVESTIGACIÓN</h2>
+      <p>Mercedes Torres Torres<br>Ana Yeli García Pérez</p>
+
+      <div class="firma">FIRMA</div>
+      <div class="obs">Observaciones:</div>
+    </div>
+
+    <!-- VALIDACIÓN -->
+    <div class="bloque">
+      <h2>VALIDACIÓN Y CERTIFICACIÓN</h2>
+      <p>Eder López Dolores<br>María de Lourdes Téllez Lorenzo</p>
+
+      <div class="firma">FIRMA</div>
+      <div class="obs">Observaciones:</div>
+    </div>
+
+    <!-- FINANZAS -->
+    <div class="bloque">
+       <h2>AUTORIZACIÓN</h2>
+      
+<p>Cinthia Hernández Téllez<br>Emanuel Jesús Monroy González</p>
+      <div class="firma">FIRMA</div>
+      <div class="obs">Observaciones:</div>
+    </div>
+
+    <!-- AUTORIZACIÓN -->
+    <div class="bloque">
+     
+
+      <h2>FINANZAS Y DISPERSIÓN</h2>
+      <p>Horacio Antonio Ramírez<br>Mario Colín Martínez</p>
+
+      <div class="firma">FIRMA</div>
+      <div class="obs">Observaciones:</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function imprimir() {
+  window.print();
+}
+</script>
+
+<script>
+const BASE_URL = (() => {
+  const path = location.pathname;
+  if (path.includes('/sempiternal/public/')) return '/sempiternal/public/';
+  return '/';
+})();
+
+function getParam(name){
+  const u = new URL(location.href);
+  return u.searchParams.get(name);
+}
+
+async function cargarDatos(){
+  const id = getParam('id') || getParam('solicitud_id'); // ✅ por si mandas ?solicitud_id=169
+  const folio = getParam('folio');
+
+  let url = `${BASE_URL}app/controllers/obtener_datos/get_autorizacion_credito.php`;
+  if (id) url += `?id=${encodeURIComponent(id)}`;
+  else if (folio) url += `?folio=${encodeURIComponent(folio)}`;
+  else return;
+
+  const res = await fetch(url, { credentials:'same-origin' });
+  const j = await res.json();
+
+  if(!j.success){
+    console.warn(j.message);
+    return;
+  }
+
+  // ✅ IDs de ejemplo en tu HTML:
+  document.getElementById('txtCliente').textContent  = j.data.nombre_cliente || '—';
+  document.getElementById('txtFolio').textContent  = j.data.folio || '—';
+  document.getElementById('txtAtendido').textContent = j.data.atendido_por || '—';
+
+}
+
+document.addEventListener('DOMContentLoaded', cargarDatos);
+</script>
+
+<script>
+async function generarPDF(){
+  const element = document.querySelector('.page');
+  if(!element){
+    alert('No se encontró el contenido (.page).');
+    return;
+  }
+
+  const folio = document.getElementById('txtFolio')?.textContent?.trim() || 'autorizacion_credito';
+
+  // ✅ Márgenes reales (ajústalos si quieres más aire)
+  const MARGIN_MM = 12; // 10-15 recomendado
+
+  const opt = {
+    margin:       [MARGIN_MM, MARGIN_MM, MARGIN_MM, MARGIN_MM], // top, left, bottom, right
+    filename:     `Autorizacion_Credito_${folio}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'letter',
+      orientation: 'portrait'
+    }
+  };
+
+  // ✅ Activa modo PDF (quita sombras y centra)
+  document.body.classList.add('pdf-export');
+
+  // Espera 1 frame para que aplique estilos
+  await new Promise(r => requestAnimationFrame(r));
+
+  try{
+    await html2pdf().set(opt).from(element).save();
+  } finally {
+    document.body.classList.remove('pdf-export');
+  }
+}
+</script>
+
+<script>
+function volver(){
+  const origin = window.location.origin;
+
+  // Detectar entorno por hostname
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+
+  const url = isLocal
+    ? origin + '/sempiternal/public/index.php'
+    : origin + '/index.php';
+
+  window.location.href = url;
+}
+</script>
+
+
+</body>
+</html>

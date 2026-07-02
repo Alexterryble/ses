@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Complemento de Retiro CIP</title>
+<link rel="icon" href="img/elige_hoy.png" type="image/png">
+<style>
+  :root{
+    --azul:#3b82f6;
+    --azul-osc:#678ae9;
+    --borde:#cfd8e3;
+    --gris-fondo:#f7f9fc;
+    --verde:#22c55e69;
+    --morado:#522c84;
+
+    /* Ajustes finos de impresión */
+    --print-width: 260mm;
+    --print-shift-x: -3mm;
+  }
+
+  *{
+    box-sizing:border-box;
+  }
+
+  html,
+  body{
+    margin:0;
+    background:#fff;
+    color:#111;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
+  }
+
+  .wrapper{
+    max-width:1400px;
+    margin:auto;
+    padding:24px;
+  }
+
+  /* Título superior */
+  .titulo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin:0 0 14px;
+  }
+
+  .titulo h1{
+    margin:0;
+    font-size:clamp(24px,3vw,40px);
+    font-weight:900;
+    color:#0f172a;
+  }
+
+  .tag{
+    display:inline-block;
+    padding:.25rem .6rem;
+    border-radius:999px;
+    font-size:12px;
+    background:#eef2ff;
+    color:#3730a3;
+  }
+
+  /* Botón imprimir */
+  .no-print{
+    display:flex;
+    justify-content:flex-end;
+    margin:-6px 0 12px 0;
+  }
+
+  .print-btn{
+    appearance:none;
+    border:1px solid #1d4ed8;
+    background:#2563eb;
+    color:#fff;
+    font-weight:700;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(37,99,235,.25);
+  }
+
+  .print-btn:hover{
+    background:#1d4ed8;
+  }
+
+  .print-btn:active{
+    transform:translateY(1px);
+  }
+
+  /* Cabecera de 3 columnas */
+  .subgrid{
+    display:grid;
+    grid-template-columns:280px 1fr 280px;
+    gap:12px;
+    margin-bottom:14px;
+  }
+
+  .meta,
+  .centro,
+  .nota{
+    background:var(--gris-fondo);
+    border:1px solid var(--borde);
+    border-radius:12px;
+    min-height:180px;
+  }
+
+  .meta{
+    padding:12px;
+  }
+
+  .meta h3{
+    margin:0 0 8px;
+    font-size:15px;
+    color:#334155;
+  }
+
+  .meta .row{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    border-bottom:1px dashed #e5e7eb;
+    padding:6px 0;
+  }
+
+  .meta .row:last-child{
+    border-bottom:none;
+  }
+
+  .meta .k{
+    color:#475569;
+  }
+
+  .meta .v{
+    font-weight:700;
+  }
+
+  .centro{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:12px;
+  }
+
+  .centro h2{
+    margin:0;
+    font-size:clamp(20px,2.6vw,34px);
+    font-weight:900;
+    color:#0f172a;
+    line-height:1.1;
+  }
+
+  .centro .sub{
+    margin-top:6px;
+    font-size:14px;
+    color:#475569;
+    font-weight:600;
+  }
+
+  /* Cuadro derecho con logo */
+  .nota.logo-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+  }
+
+  .nota.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:12px;
+  }
+
+  /* Tablas */
+  .tabla-wrap,
+  .bloque-imss{
+    overflow:auto;
+    border:1px solid var(--borde);
+    border-radius:12px;
+  }
+
+  table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:1100px;
+    background:#fff;
+  }
+
+  thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+    background:linear-gradient(180deg,var(--azul),var(--azul-osc));
+    color:#fff;
+    padding:10px;
+    text-align:center;
+    font-size:14px;
+  }
+
+  tbody td,
+  tbody th,
+  tfoot td{
+    border:1px solid var(--borde);
+    padding:8px 10px;
+    font-size:13px;
+    white-space:nowrap;
+  }
+
+  tbody th{
+    background:#f8fafc;
+    text-align:left;
+  }
+
+  tbody td{
+    text-align:right;
+  }
+
+  tfoot td{
+    background:#f1f5f9;
+    font-weight:800;
+    text-align:right;
+  }
+
+  .align-left{
+    text-align:left;
+  }
+
+  .moneda{
+    font-variant-numeric:tabular-nums;
+  }
+
+  .verde{
+    background:#dcfce7 !important;
+    color:#065f46 !important;
+    font-weight:700;
+  }
+
+  /* Bloque IMSS */
+  .bloque-imss{
+    margin-top:18px;
+  }
+
+  .bloque-imss h2{
+    margin:0;
+    padding:10px 12px;
+    font-size:16px;
+    color:#065f46;
+    background:linear-gradient(180deg,#86efac,#22c55e20);
+    border-bottom:1px solid var(--borde);
+  }
+
+  .resumen{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(220px,1fr));
+    gap:12px;
+    margin-top:12px;
+  }
+
+  .card{
+    border:1px solid var(--borde);
+    border-radius:12px;
+    padding:12px;
+    background:#fff;
+  }
+
+  .card h4{
+    margin:0 0 6px;
+    font-size:14px;
+    color:#334155;
+  }
+
+  .card .big{
+    font-weight:800;
+    font-size:18px;
+    color:#0f172a;
+  }
+
+  .card.verde{
+    background:#ecfdf5;
+    border-color:#bbf7d0;
+  }
+
+  .card.morado{
+    background:#f5f3ff;
+    border-color:#ddd6fe;
+  }
+
+  .money-input{
+    width:120px;
+    border:1px solid #cbd5e1;
+    background:#ffffff;
+    text-align:right;
+    font-weight:700;
+    font-family:inherit;
+    color:#0f172a;
+    font-size:14px;
+  }
+
+  .money-input::placeholder{
+    color:#64748b;
+  }
+
+  .money-input:focus{
+    outline:none;
+    background:#f1f5f9;
+    border-radius:4px;
+    padding-right:3px;
+    border-color:#4878e0;
+    box-shadow:0 0 0 2px rgba(37,99,235,.18);
+  }
+
+  /* Date chip */
+  #firmaContrato.date-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+    border:1px solid var(--borde);
+    border-radius:999px;
+    background:#fff;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    user-select:none;
+  }
+
+  #firmaContrato.date-chip:hover{
+    border-color:var(--azul);
+    box-shadow:0 6px 18px rgba(59,130,246,.18);
+  }
+
+  #firmaContrato .icon{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:13px;
+    color:#fff;
+    background:var(--azul);
+  }
+
+  #firmaContrato .text{
+    font-weight:700;
+    color:#0f172a;
+  }
+
+  #firmaContratoInput{
+    position:absolute;
+    inset:auto auto auto auto;
+    width:0;
+    height:0;
+    opacity:0;
+    pointer-events:none;
+    border:0;
+    padding:0;
+    margin:0;
+  }
+
+  .no-print.botones-top{
+    display:flex;
+    justify-content:flex-end;
+    gap:90px;
+    margin-top:12px;
+  }
+
+  .btn-sec{
+    appearance:none;
+    border:1px solid #64748b;
+    background:#64748b;
+    color:#fff;
+    font-weight:600;
+    padding:10px 16px;
+    border-radius:14px;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(15,23,42,.12);
+  }
+
+  .btn-sec:hover{
+    background:#4b5563;
+  }
+
+  .rate-select{
+    width:120px;
+    border:1px solid #cbd5e1;
+    background:#fff;
+    text-align:right;
+    font-weight:700;
+    font-family:inherit;
+    color:#0f172a;
+    font-size:14px;
+    padding:6px 8px;
+    border-radius:6px;
+  }
+
+  .rate-select:focus{
+    outline:none;
+    border-color:#4878e0;
+    box-shadow:0 0 0 2px rgba(37,99,235,.18);
+  }
+
+  /* Datos persona */
+  .datos-persona{
+    margin:10px auto 0;
+    max-width:800px;
+    width:100%;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    column-gap:28px;
+    row-gap:10px;
+    align-items:start;
+    text-align:left;
+  }
+
+  .campo{
+    min-width:0;
+  }
+
+  .campo label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    margin:0 0 4px;
+    color:#111827;
+    text-align:left;
+  }
+
+  .campo input{
+    width:100%;
+    padding:8px 12px;
+    border:1px solid #cfd8e3;
+    border-radius:11px;
+    outline:none;
+    font-size:14px;
+    background:#fff;
+    box-sizing:border-box;
+    overflow:visible;
+    text-overflow:clip;
+  }
+
+  .campo-beneficiario{
+    grid-column:1 / -1;
+  }
+
+  .campo input:focus{
+    border-color:#3b82f6;
+    box-shadow:0 0 0 3px rgba(59,130,246,.12);
+  }
+
+  .help{
+    display:block;
+    margin-top:4px;
+    font-size:11.5px;
+    color:#6b7280;
+    min-height:12px;
+    text-align:left;
+  }
+
+  .help.bad{
+    color:#dc2626;
+  }
+
+  .help.ok{
+    color:#16a34a;
+  }
+
+  .btn-guardar{
+    padding:9px 14px;
+    border:0;
+    border-radius:12px;
+    cursor:pointer;
+    background:#3b82f6;
+    color:#fff;
+    font-weight:700;
+  }
+
+  .btn-guardar:hover{
+    filter:brightness(0.95);
+  }
+
+  @media (max-width:720px){
+    .datos-persona{
+      grid-template-columns:1fr;
+      column-gap:0;
+      row-gap:10px;
+    }
+
+    .campo-beneficiario{
+      grid-column:auto;
+    }
+  }
+
+  /* =====================================================
+     IMPRESIÓN CORREGIDA
+     1 hoja, centrado y tabla más grande
+  ===================================================== */
+  @media print {
+    *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      box-sizing:border-box !important;
+    }
+
+    @page{
+      size: Letter landscape;
+      margin: 4mm;
+    }
+
+    html,
+    body{
+      width:100% !important;
+      height:auto !important;
+      margin:0 !important;
+      padding:0 !important;
+      background:#fff !important;
+      overflow:hidden !important;
+    }
+
+    .no-print,
+    #btnGuardarPersona,
+    #saveMsg{
+      display:none !important;
+    }
+
+    .wrapper{
+      width:100% !important;
+      max-width:none !important;
+      margin:0 !important;
+      padding:0 !important;
+      overflow:hidden !important;
+    }
+
+    .print-fit{
+      width:var(--print-width) !important;
+      max-width:var(--print-width) !important;
+      margin:0 auto !important;
+      padding:0 !important;
+      position:relative !important;
+      left:var(--print-shift-x) !important;
+      transform:none !important;
+      overflow:hidden !important;
+    }
+
+    .subgrid,
+    .tabla-wrap,
+    .bloque-imss,
+    .resumen{
+      width:100% !important;
+      max-width:100% !important;
+      margin-left:0 !important;
+      margin-right:0 !important;
+      transform:none !important;
+      position:static !important;
+    }
+
+    /* Cabecera */
+    .subgrid{
+      display:grid !important;
+      grid-template-columns:48mm 1fr 42mm !important;
+      gap:2mm !important;
+      margin-bottom:2.5mm !important;
+    }
+
+    .meta,
+    .centro,
+    .nota{
+      min-height:28mm !important;
+      border-radius:4px !important;
+      border-width:1px !important;
+      box-shadow:none !important;
+    }
+
+    .meta{
+      padding:1.6mm !important;
+    }
+
+    .meta h3{
+      font-size:8.5px !important;
+      margin:0 0 1mm !important;
+    }
+
+    .meta .row{
+      padding:0.55mm 0 !important;
+      gap:1mm !important;
+    }
+
+    .meta .k{
+      font-size:7.2px !important;
+      line-height:1.05 !important;
+    }
+
+    .meta .v{
+      font-size:7.8px !important;
+      line-height:1.05 !important;
+    }
+
+    .money-input,
+    .rate-select{
+      width:22mm !important;
+      max-width:22mm !important;
+      font-size:7.8px !important;
+      padding:0 !important;
+      border:none !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      appearance:none !important;
+      -webkit-appearance:none !important;
+    }
+
+    #firmaContrato.date-chip{
+      padding:0 !important;
+      border:none !important;
+      box-shadow:none !important;
+      background:transparent !important;
+    }
+
+    #firmaContrato .icon,
+    #firmaContratoInput{
+      display:none !important;
+    }
+
+    .centro{
+      padding:1.6mm !important;
+      text-align:center !important;
+    }
+
+    .centro h2{
+      font-size:17.5px !important;
+      font-weight:900 !important;
+      line-height:1.05 !important;
+      margin:0 0 1mm !important;
+      letter-spacing:.2px !important;
+    }
+
+    .centro .sub{
+      font-size:8.2px !important;
+      line-height:1.05 !important;
+      margin:0 0 1mm !important;
+    }
+
+    .datos-persona{
+      margin-top:1.2mm !important;
+      max-width:100% !important;
+      width:100% !important;
+      column-gap:3mm !important;
+      row-gap:1mm !important;
+    }
+
+    .campo label{
+      font-size:7px !important;
+      margin:0 0 .5mm !important;
+      line-height:1 !important;
+    }
+
+    .campo input{
+      font-size:7.8px !important;
+      padding:.85mm 1.5mm !important;
+      border-radius:4px !important;
+      min-height:auto !important;
+      line-height:1.05 !important;
+    }
+
+    .help{
+      display:none !important;
+    }
+
+    .nota.logo-box{
+      padding:1mm !important;
+    }
+
+    .nota.logo-box img{
+      display:block !important;
+      width:100% !important;
+      height:24mm !important;
+      max-height:24mm !important;
+      object-fit:contain !important;
+      border-radius:4px !important;
+    }
+
+    /* Tablas */
+    .tabla-wrap,
+    .bloque-imss{
+      overflow:visible !important;
+      border-radius:4px !important;
+    }
+
+    table{
+      width:100% !important;
+      max-width:100% !important;
+      min-width:0 !important;
+      table-layout:fixed !important;
+      border-collapse:collapse !important;
+    }
+
+    thead th{
+      position:static !important;
+      font-size:7.8px !important;
+      padding:1mm .8mm !important;
+      line-height:1.05 !important;
+      white-space:normal !important;
+    }
+
+    tbody td,
+    tbody th,
+    tfoot td{
+      font-size:7.4px !important;
+      padding:.9mm .8mm !important;
+      line-height:1.05 !important;
+      white-space:normal !important;
+    }
+
+    tbody th,
+    th.align-left,
+    tfoot td.align-left{
+      width:25mm !important;
+      font-size:7.2px !important;
+      text-align:left !important;
+    }
+
+    tbody td,
+    tfoot td{
+      text-align:right !important;
+    }
+
+    /* IMSS */
+    .bloque-imss{
+      margin-top:2.8mm !important;
+    }
+
+    .bloque-imss h2{
+      font-size:10.5px !important;
+      padding:1.6mm 2.5mm !important;
+    }
+
+    /* Resumen */
+    .resumen{
+      display:grid !important;
+      grid-template-columns:repeat(3,1fr) !important;
+      gap:2mm !important;
+      margin-top:2.8mm !important;
+    }
+
+    .card{
+      padding:2mm !important;
+      border-radius:4px !important;
+      box-shadow:none !important;
+    }
+
+    .card h4{
+      font-size:8px !important;
+      margin:0 0 .8mm !important;
+      line-height:1.05 !important;
+    }
+
+    .card .big{
+      font-size:9.8px !important;
+      line-height:1.05 !important;
+    }
+
+    table,
+    tr,
+    td,
+    th,
+    .tabla-wrap,
+    .bloque-imss,
+    .resumen,
+    .card{
+      break-inside:avoid !important;
+      page-break-inside:avoid !important;
+    }
+  }
+
+  /* =====================================================
+   ✅ HACER TABLAS MÁS GRANDES EN IMPRESIÓN
+   Pegar al final del <style>
+===================================================== */
+@media print {
+  :root{
+    --print-width: 263mm;
+    --print-shift-x: -3mm;
+  }
+
+  .print-fit{
+    width: var(--print-width) !important;
+    max-width: var(--print-width) !important;
+  }
+
+  .subgrid,
+  .tabla-wrap,
+  .bloque-imss,
+  .resumen{
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Cabecera un poquito más compacta para dar espacio a tablas */
+  .subgrid{
+    grid-template-columns: 46mm 1fr 40mm !important;
+    gap: 2mm !important;
+    margin-bottom: 2mm !important;
+  }
+
+  .meta,
+  .centro,
+  .nota{
+    min-height: 26mm !important;
+  }
+
+  .centro h2{
+    font-size: 16.5px !important;
+  }
+
+  .nota.logo-box img{
+    height: 22mm !important;
+    max-height: 22mm !important;
+  }
+
+  /* ✅ Tablas más legibles */
+  thead th{
+    font-size: 8.8px !important;
+    padding: 1.25mm .9mm !important;
+    line-height: 1.08 !important;
+  }
+
+  tbody td,
+  tbody th,
+  tfoot td{
+    font-size: 8.4px !important;
+    padding: 1.05mm .9mm !important;
+    line-height: 1.08 !important;
+  }
+
+  tbody th,
+  th.align-left,
+  tfoot td.align-left{
+    font-size: 8.2px !important;
+    width: 27mm !important;
+  }
+
+  .bloque-imss{
+    margin-top: 3mm !important;
+  }
+
+  .bloque-imss h2{
+    font-size: 11px !important;
+    padding: 1.8mm 2.5mm !important;
+  }
+
+  .resumen{
+    margin-top: 3mm !important;
+  }
+
+  .card{
+    padding: 2.2mm !important;
+  }
+
+  .card h4{
+    font-size: 8.8px !important;
+  }
+
+  .card .big{
+    font-size: 10.5px !important;
+  }
+}
+
+
+/* =====================================================
+   ✅ TABLAS MÁS ALTAS EN IMPRESIÓN
+   Pegar al final del <style>
+===================================================== */
+@media print {
+
+  /* Bajamos un poco la cabecera para darle espacio a las tablas */
+  .subgrid{
+    margin-bottom: 2mm !important;
+  }
+
+  .meta,
+  .centro,
+  .nota{
+    min-height: 26mm !important;
+  }
+
+  /* Tabla principal más alta */
+  #tablaAportaciones thead th{
+    font-size: 8.4px !important;
+    padding-top: 1.3mm !important;
+    padding-bottom: 1.3mm !important;
+    line-height: 1.15 !important;
+  }
+
+  #tablaAportaciones tbody td,
+  #tablaAportaciones tbody th,
+  #tablaAportaciones tfoot td{
+    font-size: 10px !important;
+    padding-top: 1.95mm !important;
+    padding-bottom: 1.95mm !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Tabla IMSS más alta */
+  #tablaIMSS thead th{
+    font-size: 8.4px !important;
+    padding-top: 1.95mm !important;
+    padding-bottom: 1.95mm !important;
+    line-height: 1.15 !important;
+  }
+
+  #tablaIMSS tbody td,
+  #tablaIMSS tbody th,
+  #tablaIMSS tfoot td{
+    font-size: 8px !important;
+    padding-top: 1.35mm !important;
+    padding-bottom: 1.35mm !important;
+    line-height: 1.15 !important;
+  }
+
+  .bloque-imss{
+    margin-top: 3.5mm !important;
+  }
+
+  .bloque-imss h2{
+    font-size: 11px !important;
+    padding-top: 2mm !important;
+    padding-bottom: 2mm !important;
+  }
+
+  .resumen{
+    margin-top: 3.5mm !important;
+  }
+
+  .card{
+    padding-top: 2.5mm !important;
+    padding-bottom: 2.5mm !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Botón Imprimir -->
+  <div class="no-print" style="justify-content:flex-end;margin-top:12px">
+    <button id="btnRegresar" class="print-btn" type="button" style="background:#64748b;border-color:#64748b">
+      ⬅️ Regresar
+    </button>
+
+    <button id="btnImprimir" class="print-btn" type="button">
+      🖨️ Imprimir
+    </button>
+  </div>
+
+  <div class="no-print" style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+    <button type="button" id="btnGuardarPersona" class="btn-guardar">
+      Guardar datos
+    </button>
+    <small id="saveMsg" class="help"></small>
+  </div>
+
+  <!-- ✅ CONTENIDO QUE SE CENTRA Y AJUSTA EN IMPRESIÓN -->
+  <div class="print-fit">
+
+    <!-- Cabecera 3 columnas -->
+    <div class="subgrid">
+
+      <!-- Izquierda: datos -->
+      <div class="meta">
+        <h3>Datos del contrato</h3>
+
+        <div class="row">
+          <span class="k">Firma de contrato</span>
+          <span class="v" id="firmaContrato">—</span>
+        </div>
+
+        <div class="row">
+          <span class="k">Ingreso de capital</span>
+          <span class="v">
+            <input type="text" id="ingresoCapital" class="money-input">
+          </span>
+        </div>
+
+        <div class="row">
+          <span class="k">Aportación mensual</span>
+          <span class="v" id="aportacionMensual">$ 8,000.00</span>
+        </div>
+
+        <div class="row">
+          <span class="k">Pensión IMSS (Estimada)</span>
+          <span class="v">
+            <input
+              type="text"
+              id="pensionBase"
+              class="money-input"
+              value="9209.93"
+              placeholder="$ 0.00"
+              inputmode="decimal"
+              autocomplete="off"
+            />
+          </span>
+        </div>
+
+        <div class="row">
+          <span class="k">Rendimiento mensual</span>
+          <span class="v">
+            <select id="rendimientoRate" class="rate-select">
+              <option value="0.016">1.6%</option>
+              <option value="0.017">1.7%</option>
+              <option value="0.018">1.8%</option>
+              <option value="0.019">1.9%</option>
+              <option value="0.02">2.0%</option>
+            </select>
+          </span>
+        </div>
+      </div>
+
+      <!-- Centro: nombre -->
+      <div class="centro">
+        <div>
+          <h2 id="nombrePrincipal">Complemento de Retiro CIP</h2>
+          <div class="sub" id="subNombre">Simulación • Proyección 2026–2036</div>
+
+          <div class="datos-persona">
+            <div class="campo campo-nombre">
+              <label for="nombreCompleto">Nombre completo</label>
+              <input id="nombreCompleto" type="text" placeholder="Ej. Juan Pérez López" autocomplete="name">
+            </div>
+
+            <div class="campo campo-rfc">
+              <label for="rfc">RFC</label>
+              <input id="rfc" type="text" placeholder="Ej. PELJ900101ABC" maxlength="13" autocapitalize="characters" autocomplete="off">
+              <small id="rfcHelp" class="help"></small>
+            </div>
+
+            <div class="campo campo-beneficiario">
+              <label for="beneficiario">Beneficiario</label>
+              <input id="beneficiario" type="text" placeholder="Ej. María López Pérez" autocomplete="name">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derecha: logo -->
+      <div class="nota logo-box" aria-label="Logo CIP">
+        <img src="img/logo.png" alt="CIP Financial México" onerror="this.style.display='none'">
+      </div>
+
+    </div>
+
+    <!-- TABLA PRINCIPAL -->
+    <div class="tabla-wrap" aria-label="Tabla principal de aportaciones por mes y año">
+      <table id="tablaAportaciones">
+        <thead>
+          <tr>
+            <th class="align-left">Mes</th>
+            <th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th>
+            <th>2030</th><th>2031</th><th>2032</th><th>2033</th><th>2034</th><th>2035</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr data-mes="enero"><th>ENERO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="febrero"><th>FEBRERO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="marzo"><th>MARZO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="abril"><th>ABRIL</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="mayo"><th>MAYO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="junio"><th>JUNIO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="julio"><th>JULIO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="agosto"><th>AGOSTO</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="septiembre"><th>SEPTIEMBRE</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="octubre"><th>OCTUBRE</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="noviembre"><th>NOVIEMBRE</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+          <tr data-mes="diciembre"><th>DICIEMBRE</th><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td></tr>
+
+          <tr data-mes="bono">
+            <th>BONO FIN DE AÑO</th>
+            <td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td><td>$ 0</td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td class="align-left"><strong>Total anual</strong></td>
+            <td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td>
+            <td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- PENSIÓN IMSS DEBAJO -->
+    <div class="bloque-imss" role="region" aria-label="Pensión IMSS e Indicadores">
+      <h2>Pensión IMSS e Indicadores</h2>
+
+      <table id="tablaIMSS">
+        <thead>
+          <tr>
+            <th class="align-left">Concepto</th>
+            <th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th>
+            <th>2030</th><th>2031</th><th>2032</th><th>2033</th><th>2034</th><th>2035</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr data-key="pension">
+            <th class="align-left verde">Pensión IMSS (Inflación del 4% Fijo)</th>
+            <td class="moneda verde">$ 9,412.99</td>
+            <td class="moneda verde">$ 9,789.51</td>
+            <td class="moneda verde">$ 10,181.09</td>
+            <td class="moneda verde">$ 10,588.33</td>
+            <td class="moneda verde">$ 11,011.87</td>
+            <td class="moneda verde">$ 11,452.34</td>
+            <td class="moneda verde">$ 11,910.44</td>
+            <td class="moneda verde">$ 12,386.85</td>
+            <td class="moneda verde">$ 12,882.33</td>
+            <td class="moneda verde">$ 13,397.62</td>
+            <td class="moneda verde">$ 13,933.52</td>
+          </tr>
+
+          <tr data-key="inflacion"></tr>
+
+          <tr data-key="rendimiento">
+            <th class="align-left">Rendimiento</th>
+            <td class="moneda">$ 17,789.51</td>
+            <td>$ 18,181.09</td>
+            <td>$ 16,588.33</td>
+            <td>$ 19,011.87</td>
+            <td>$ 19,452.34</td>
+            <td>$ 19,910.44</td>
+            <td>$ 20,386.85</td>
+            <td>$ 20,882.33</td>
+            <td>$ 21,397.62</td>
+            <td>$ 21,933.52</td>
+            <td>$ 22,490.87</td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr id="imssTotalRow">
+            <td class="align-left"><strong>Total (Pensión + Rendimiento)</strong></td>
+            <td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td>
+            <td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td><td class="moneda"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="resumen" aria-label="Resumen de capital y recuperación">
+      <div class="card morado">
+        <h4>Rendimiento (estimado)</h4>
+        <div class="big" id="resRendimiento">$0.00</div>
+      </div>
+
+      <div class="card">
+        <h4>Capital</h4>
+        <div class="big" id="resCapital">$0.00</div>
+      </div>
+
+      <div class="card verde">
+        <h4>Recuperación total</h4>
+        <div class="big" id="resTotal">$0.00</div>
+      </div>
+    </div>
+
+  </div><!-- /.print-fit -->
+
+</div><!-- /.wrapper -->
+<!-- === SIMULADOR CIP (REEMPLAZAR TODO ESTE BLOQUE) === -->
+
+<script>
+/* =========================================================
+   1) Helpers globales
+   ========================================================= */
+function getPensionBase() {
+  const el  = document.getElementById('pensionBase');
+  const raw = (el?.value ?? '');
+  if (raw.trim() === '') return 0;
+  return parseFloat(raw.replace(/[^\d.]/g, '')) || 0;
+}
+
+function getRendRate() {
+  const sel = document.getElementById('rendimientoRate'); // <select>
+  const v = parseFloat(sel?.value);
+  return Number.isFinite(v) ? v : 0.016; // default 1.6%
+}
+</script>
+
+<script>
+/* =========================================================
+   2) Pintar fecha de firma y guardar mes/año de INICIO
+      - regla: 1–5 => +1 mes, 6+ => +2 meses
+   ========================================================= */
+(function () {
+  const el = document.getElementById('firmaContrato');
+  if (!el) return;
+
+  const tz  = 'America/Mexico_City';
+  const hoy = new Date();
+
+  const mesActual  = new Intl.DateTimeFormat('es-MX', { month:'long', timeZone: tz }).format(hoy);
+  const anioActual = new Intl.DateTimeFormat('es-MX', { year:'numeric', timeZone: tz }).format(hoy);
+  const capMes     = mesActual.charAt(0).toUpperCase() + mesActual.slice(1);
+  el.textContent   = `${capMes} ${anioActual}`;
+
+  const dia        = hoy.getDate();
+  const saltoMeses = (dia >= 6) ? 2 : 1;
+
+  const fechaInicio = new Date(hoy);
+  fechaInicio.setMonth(hoy.getMonth() + saltoMeses);
+
+  el.dataset.startMonth = String(fechaInicio.getMonth());
+  el.dataset.startYear  = String(fechaInicio.getFullYear());
+
+  el.dispatchEvent(new Event('change'));
+})();
+</script>
+
+<script>
+/* =========================================================
+   3) Date chip (opcional) + recalcular inicio al cambiar fecha
+   ========================================================= */
+(() => {
+  const $ = s => document.querySelector(s);
+
+  const fmtFechaLarga = d => {
+    const s = d.toLocaleDateString('es-MX', {
+      weekday:'long', day:'numeric', month:'long', year:'numeric'
+    });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  function montarDateChip(){
+    const v = $('#firmaContrato');
+    if (!v) return;
+
+    v.classList.add('date-chip');
+    const contenido = v.textContent.trim() || 'Seleccionar fecha';
+    v.innerHTML = `<span class="icon">📅</span><span class="text">${contenido}</span>`;
+
+    let inp = document.getElementById('firmaContratoInput');
+    if (!inp){
+      inp = document.createElement('input');
+      inp.type = 'date';
+      inp.id   = 'firmaContratoInput';
+      inp.min  = '2000-01-01';
+      inp.max  = '2100-12-31';
+      v.insertAdjacentElement('afterend', inp);
+      Object.assign(inp.style, { width:'0', height:'0', opacity:'0', pointerEvents:'none' });
+    }
+
+    const abrir = () => {
+      if (typeof inp.showPicker === 'function') inp.showPicker();
+      else inp.click();
+    };
+
+    v.addEventListener('click', abrir);
+    v.setAttribute('tabindex','0');
+    v.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); }
+    });
+
+    inp.addEventListener('change', () => {
+      if (!inp.value) return;
+      const d = new Date(inp.value + 'T00:00:00');
+      v.querySelector('.text').textContent = fmtFechaLarga(d);
+
+      const dia   = d.getDate();
+      const salto = (dia >= 6) ? 2 : 1;
+      const inicio = new Date(d);
+      inicio.setMonth(d.getMonth() + salto);
+
+      v.dataset.startMonth = String(inicio.getMonth());
+      v.dataset.startYear  = String(inicio.getFullYear());
+
+      v.dispatchEvent(new Event('change'));
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', montarDateChip);
+})();
+</script>
+
+<script>
+/* =========================================================
+   4) TABLA PRINCIPAL APORTACIONES
+      - mensual = capital * getRendRate()  (select)
+      - +4% anual por columna
+      - bono fin de año = mensual del año
+   ========================================================= */
+(() => {
+  const capitalInput = document.getElementById('ingresoCapital');
+  const aportacionEl = document.getElementById('aportacionMensual');
+  const tabla        = document.getElementById('tablaAportaciones');
+  const firmaSpan    = document.getElementById('firmaContrato');
+  const rateSelect   = document.getElementById('rendimientoRate'); // ✅ select
+
+  const fmt = n => n.toLocaleString('es-MX', {
+    style:'currency', currency:'MXN', minimumFractionDigits:2
+  });
+
+  function leerInicioContrato() {
+    const dm = parseInt(firmaSpan?.dataset.startMonth ?? '', 10);
+    const dy = parseInt(firmaSpan?.dataset.startYear  ?? '', 10);
+    if (!Number.isNaN(dm) && !Number.isNaN(dy)) return { m: dm, y: dy };
+
+    const mesesES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const mapMes  = Object.fromEntries(mesesES.map((m,i)=>[m,i]));
+    const raw = (firmaSpan?.textContent || '').trim().toLowerCase();
+    const [mesTxt, anioTxt] = raw.split(/\s+/);
+    return { m: mapMes[mesTxt] ?? 0, y: parseInt(anioTxt,10) || new Date().getFullYear() };
+  }
+
+  function pintarEncabezados(startYear){
+    if (!tabla) return;
+    const ths = tabla.querySelectorAll('thead th:not(.align-left)');
+    ths.forEach((th,i)=> th.textContent = startYear + i);
+  }
+
+  function actualizarTablaAportaciones(montoBase){
+    if (!tabla) return;
+
+    const { m: startMonth, y: startYear } = leerInicioContrato();
+    const ths  = tabla.querySelectorAll('thead th:not(.align-left)');
+    const cols = ths.length || 11;
+    const totalMeses  = 120;
+    const incremento  = 0.04;
+
+    pintarEncabezados(startYear);
+
+    const filasMes = Array.from(tabla.querySelectorAll('tbody tr'))
+      .filter(tr => tr.dataset.mes && tr.dataset.mes !== 'bono');
+    const filaBono = tabla.querySelector('tbody tr[data-mes="bono"]');
+
+    filasMes.forEach(tr => tr.querySelectorAll('td').forEach(td => td.textContent = fmt(0)));
+    if (filaBono) filaBono.querySelectorAll('td').forEach(td => td.textContent = fmt(0));
+
+    for (let y = 0; y < cols; y++){
+      const factorAnual = Math.pow(1 + incremento, y);
+      const mensualAnio = montoBase * factorAnual;
+
+      for (let m = 0; m < 12; m++){
+        const idxAbs  = y*12 + m;
+        const enRango = idxAbs >= startMonth && idxAbs < startMonth + totalMeses;
+        if (!enRango) continue;
+
+        const celda = filasMes[m]?.querySelectorAll('td')[y];
+        if (celda) celda.textContent = fmt(mensualAnio);
+      }
+    }
+
+    if (filaBono){
+      for (let fin = startMonth + 11; fin < startMonth + totalMeses; fin += 12){
+        const col = Math.floor(fin / 12);
+        if (col < cols){
+          const factorAnual = Math.pow(1 + incremento, col);
+          const mensualAnio = montoBase * factorAnual;
+          const td = filaBono.querySelectorAll('td')[col];
+          if (td) td.textContent = fmt(mensualAnio);
+        }
+      }
+    }
+
+    const tfootTds = tabla.querySelectorAll('tfoot td.moneda');
+    for (let y = 0; y < cols; y++){
+      let suma = 0;
+      for (let m = 0; m < 12; m++){
+        const txt = filasMes[m]?.querySelectorAll('td')[y]?.textContent || '0';
+        suma += parseFloat(txt.replace(/[^\d.]/g,'')) || 0;
+      }
+      if (filaBono){
+        const txtB = filaBono.querySelectorAll('td')[y]?.textContent || '0';
+        suma += parseFloat(txtB.replace(/[^\d.]/g,'')) || 0;
+      }
+      if (tfootTds[y]) tfootTds[y].textContent = fmt(suma);
+    }
+
+    if (typeof window.actualizarResumen === 'function') window.actualizarResumen();
+  }
+
+  function actualizarAportacionYTabla(){
+    const val = parseFloat((capitalInput?.value || '').replace(/[^\d.]/g,'')) || 0;
+    const mensual = val * getRendRate(); // ✅ del select
+
+    if (aportacionEl){
+      aportacionEl.textContent = mensual.toLocaleString('es-MX',{
+        style:'currency', currency:'MXN', minimumFractionDigits:2
+      });
+    }
+
+    actualizarTablaAportaciones(mensual);
+
+    // ✅ Si existe recalculo IMSS, lánzalo también
+    if (typeof window.recalcularIMSS === 'function') window.recalcularIMSS();
+  }
+
+  document.addEventListener('DOMContentLoaded', actualizarAportacionYTabla);
+  capitalInput?.addEventListener('input', actualizarAportacionYTabla);
+  rateSelect?.addEventListener('change', actualizarAportacionYTabla); // ✅
+
+  firmaSpan?.addEventListener('change', () => {
+    const txt = aportacionEl?.textContent || '0';
+    const monto = parseFloat(txt.replace(/[^\d.]/g,'')) || 0;
+    actualizarTablaAportaciones(monto);
+    if (typeof window.recalcularIMSS === 'function') window.recalcularIMSS();
+  });
+
+  window.__recalcularTablaAportaciones = actualizarAportacionYTabla;
+})();
+</script>
+
+<script>
+function getInicioContratoDesdeFirma() {
+  const firmaSpan = document.getElementById('firmaContrato');
+
+  const dm = parseInt(firmaSpan?.dataset.startMonth ?? '', 10);
+  const dy = parseInt(firmaSpan?.dataset.startYear ?? '', 10);
+
+  if (!Number.isNaN(dm) && !Number.isNaN(dy)) {
+    return { startMonth: dm, startYear: dy };
+  }
+
+  const hoy = new Date();
+  return {
+    startMonth: hoy.getMonth(),
+    startYear: hoy.getFullYear()
+  };
+}
+
+function pintarHeadTablaIMSS(startYear) {
+  const tablaIMSS = document.getElementById('tablaIMSS');
+  if (!tablaIMSS) return;
+
+  const ths = tablaIMSS.querySelectorAll('thead th:not(.align-left)');
+  ths.forEach((th, i) => {
+    th.textContent = String(startYear + i);
+  });
+}
+</script>
+
+
+<script>
+(() => {
+  const tablaIMSS    = document.getElementById('tablaIMSS');
+  const pensionInput = document.getElementById('pensionBase');
+  const capitalInput = document.getElementById('ingresoCapital');
+  const rateSelect   = document.getElementById('rendimientoRate');
+  const firmaSpan    = document.getElementById('firmaContrato');
+
+  if (!tablaIMSS) return;
+
+  const RATE_IMSS = 0.04;
+
+  const fmt = n => n.toLocaleString('es-MX',{
+    style:'currency',
+    currency:'MXN',
+    minimumFractionDigits:2
+  });
+
+  const toNum = s => parseFloat((s || '0').toString().replace(/[^\d.]/g,'')) || 0;
+
+  function getInicioContratoDesdeFirma() {
+    const dm = parseInt(firmaSpan?.dataset.startMonth ?? '', 10);
+    const dy = parseInt(firmaSpan?.dataset.startYear ?? '', 10);
+
+    if (!Number.isNaN(dm) && !Number.isNaN(dy)) {
+      return { startMonth: dm, startYear: dy };
+    }
+
+    const hoy = new Date();
+    return {
+      startMonth: hoy.getMonth(),
+      startYear: hoy.getFullYear()
+    };
+  }
+
+  function pintarHeadTablaIMSS(startYear) {
+    const ths = tablaIMSS.querySelectorAll('thead th:not(.align-left)');
+    ths.forEach((th, i) => {
+      th.textContent = String(startYear + i);
+    });
+  }
+
+  function recalcularIMSSIndicadores(){
+    const rowPension = tablaIMSS.querySelector('tbody tr[data-key="pension"]');
+    const rowRend    = tablaIMSS.querySelector('tbody tr[data-key="rendimiento"]');
+    const totalRow   = tablaIMSS.querySelector('#imssTotalRow');
+    if (!rowPension || !rowRend || !totalRow) return;
+
+    const { startYear } = getInicioContratoDesdeFirma();
+    pintarHeadTablaIMSS(startYear);
+
+    const tdsP = rowPension.querySelectorAll('td');
+    const tdsR = rowRend.querySelectorAll('td');
+    const tdsT = totalRow.querySelectorAll('td.moneda');
+
+    const basePension = window.getPensionBase ? window.getPensionBase() : toNum(pensionInput?.value);
+    const capital     = toNum(capitalInput?.value);
+    const rendBase    = capital * getRendRate();
+
+    const cols = Math.min(tdsP.length, tdsR.length, tdsT.length);
+
+    for (let i = 0; i < cols; i++){
+      const pensionMes = basePension * Math.pow(1 + RATE_IMSS, i);
+      const rendMes    = rendBase    * Math.pow(1 + RATE_IMSS, i);
+
+      if (tdsP[i]) tdsP[i].textContent = fmt(pensionMes);
+      if (tdsR[i]) tdsR[i].textContent = fmt(rendMes);
+      if (tdsT[i]) tdsT[i].textContent = fmt(pensionMes + rendMes);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', recalcularIMSSIndicadores);
+  pensionInput?.addEventListener('input', recalcularIMSSIndicadores);
+  pensionInput?.addEventListener('change', recalcularIMSSIndicadores);
+  capitalInput?.addEventListener('input', recalcularIMSSIndicadores);
+  rateSelect?.addEventListener('change', recalcularIMSSIndicadores);
+  firmaSpan?.addEventListener('change', recalcularIMSSIndicadores);
+
+  window.recalcularIMSS = recalcularIMSSIndicadores;
+})();
+</script>
+
+<script>
+/* =========================================================
+   6) RESUMEN (Rendimiento – Capital – Recuperación)
+   ========================================================= */
+(() => {
+  const tablaAport = document.getElementById('tablaAportaciones');
+  const inpCapital = document.getElementById('ingresoCapital');
+
+  const boxRend = document.getElementById('resRendimiento');
+  const boxCap  = document.getElementById('resCapital');
+  const boxTot  = document.getElementById('resTotal');
+
+  const fmt = n => n.toLocaleString('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2});
+  const num = s => parseFloat((s||'0').toString().replace(/[^\d.]/g,'')) || 0;
+
+  function sumarTotalesAnuales(){
+    if (!tablaAport) return 0;
+    const tds = tablaAport.querySelectorAll('tfoot td.moneda');
+    let suma = 0;
+    tds.forEach(td => suma += num(td.textContent));
+    return suma;
+  }
+
+  function actualizarResumen(){
+    const rend = sumarTotalesAnuales();
+    const cap  = num(inpCapital?.value);
+    const tot  = rend + cap;
+
+    if (boxRend) boxRend.textContent = fmt(rend);
+    if (boxCap)  boxCap.textContent  = fmt(cap);
+    if (boxTot)  boxTot.textContent  = fmt(tot);
+  }
+
+  document.addEventListener('DOMContentLoaded', actualizarResumen);
+  inpCapital?.addEventListener('input', actualizarResumen);
+
+  window.actualizarResumen = actualizarResumen;
+})();
+</script>
+
+<script>
+/* =========================================================
+   7) Disparar cálculo al cargar
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pensionBase')
+    ?.dispatchEvent(new Event('input', { bubbles:true }));
+});
+</script>
+
+<script>
+/* =========================================================
+   8) Botones imprimir / regresar
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const btnImprimir = document.getElementById('btnImprimir');
+  const btnRegresar = document.getElementById('btnRegresar');
+
+  btnImprimir?.addEventListener('click', () => {
+    if (window.AndroidPrint && typeof window.AndroidPrint.printPage === 'function') {
+      window.AndroidPrint.printPage();
+    } else {
+      window.print();
+    }
+  });
+
+  btnRegresar?.addEventListener('click', () => {
+    if (window.AndroidNav && typeof window.AndroidNav.goBack === 'function') {
+      window.AndroidNav.goBack();
+      return;
+    }
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = 'index.html';
+  });
+});
+</script>
+
+<script>
+document.addEventListener('click', function(e){
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  const target = document.querySelector(link.getAttribute('href'));
+  if (target) {
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+</script>
+
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+
+  function parseMoney(txt){
+    if (txt == null) return null;
+    let s = String(txt).trim();
+    if (!s) return null;
+    s = s.replace(/\$/g,'').replace(/\s+/g,'').replace(/,/g,'');
+    s = s.replace(/[^0-9.\-]/g,'');
+    if (!s) return null;
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function getTableAportaciones(){
+    const t = document.getElementById('tablaAportaciones');
+    if (!t) return null;
+
+    const years = Array.from(t.querySelectorAll('thead th'))
+      .slice(1)
+      .map(th => th.textContent.trim());
+
+    const rows = Array.from(t.querySelectorAll('tbody tr')).map(tr => {
+      const mes = tr.getAttribute('data-mes') || tr.querySelector('th')?.textContent?.trim();
+      const celdas = Array.from(tr.querySelectorAll('td')).map(td => parseMoney(td.textContent));
+      const values = {};
+      years.forEach((y, i)=> values[y] = celdas[i] ?? 0);
+      return { mes, values };
+    });
+
+    return { years, rows };
+  }
+
+
+  function getTableIMSS(){
+    const t = document.getElementById('tablaIMSS');
+    if (!t) return null;
+
+    const years = Array.from(t.querySelectorAll('thead th'))
+      .slice(1)
+      .map(th => th.textContent.trim());
+
+    const rows = Array.from(t.querySelectorAll('tbody tr')).map(tr => {
+      const key = tr.getAttribute('data-key') || tr.querySelector('th')?.textContent?.trim();
+      const tds = Array.from(tr.querySelectorAll('td'));
+      const celdas = tds.map(td => parseMoney(td.textContent));
+      const values = {};
+      years.forEach((y, i)=> values[y] = celdas[i] ?? 0);
+      return { key, values };
+    });
+
+    return { years, rows };
+  }
+
+  const btn = $('btnGuardarPersona');
+  const msg = $('saveMsg');
+
+  function setMsg(t, ok=true){
+    if(!msg) return;
+    msg.textContent = t || '';
+    msg.classList.toggle('ok', !!ok && !!t);
+    msg.classList.toggle('bad', !ok && !!t);
+  }
+
+  async function guardarTodo(){
+    try{
+      setMsg('Guardando...', true);
+
+      const payload = {
+        // persona
+        nombre_completo: ($('nombreCompleto')?.value || '').trim(),
+        rfc: ($('rfc')?.value || '').trim(),
+        beneficiario: ($('beneficiario')?.value || '').trim(),
+
+        // contrato + inputs
+        firma_contrato: ($('firmaContrato')?.textContent || '').trim(),
+        ingreso_capital: parseMoney($('ingresoCapital')?.value),
+        aportacion_mensual: parseMoney($('aportacionMensual')?.textContent),
+        pension_base: parseMoney($('pensionBase')?.value),
+        rendimiento_rate: Number($('rendimientoRate')?.value || 0),
+
+        // resumen
+        resumen_rendimiento: parseMoney($('resRendimiento')?.textContent),
+        resumen_capital: parseMoney($('resCapital')?.textContent),
+        resumen_total: parseMoney($('resTotal')?.textContent),
+
+        // tablas (opcional)
+        tabla_aportaciones: getTableAportaciones(),
+        tabla_imss: getTableIMSS()
+      };
+
+      const res = await fetch('/app/controllers/complemento/guardar_cipcom.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      const json = await res.json().catch(()=> ({}));
+      if (!res.ok || !json.ok) throw new Error(json.error || 'No se pudo guardar');
+
+      setMsg('✅ Guardado completo (datos + valores)', true);
+    }catch(e){
+      console.error(e);
+      setMsg('❌ ' + (e?.message || 'Error'), false);
+    }
+  }
+
+  if (btn) btn.addEventListener('click', guardarTodo);
+})();
+</script>
+
+<script>
+function attachMoneyMaskSmart(input, opts = {}) {
+  if (!input) return;
+
+  const decimals = opts.decimals ?? 2;
+  const initial  = opts.initial ?? '0';
+
+  const clean = (v) => {
+    v = (v ?? '').toString();
+
+    // quitar $ , comas y espacios
+    v = v.replace(/\$/g, '').replace(/,/g, '').replace(/\s+/g, '');
+
+    // solo números y punto
+    v = v.replace(/[^0-9.]/g, '');
+
+    // solo un punto
+    const parts = v.split('.');
+    if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+
+    // limitar decimales
+    if (v.includes('.')) {
+      const [a, b] = v.split('.');
+      v = a + '.' + (b ?? '').slice(0, decimals);
+    }
+
+    return v;
+  };
+
+  const toNum = (v) => {
+    const n = parseFloat(clean(v));
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const format = (n) => '$' + Number(n || 0).toLocaleString('en-US', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+
+  // ===== Inicial =====
+  input.value = format(toNum(input.value || initial));
+
+  // ✅ AL ENTRAR: si es 0, limpiar el campo
+  input.addEventListener('focus', () => {
+    const n = toNum(input.value);
+    if (n === 0) {
+      input.value = '';
+    } else {
+      input.value = clean(input.value);
+    }
+
+    requestAnimationFrame(() => {
+      input.setSelectionRange(input.value.length, input.value.length);
+    });
+  });
+
+  // Mientras escribe (sin formato, sin $)
+  input.addEventListener('input', () => {
+    const v = clean(input.value);
+    if (v !== input.value) input.value = v;
+  });
+
+  // ✅ AL SALIR: formatear bonito
+  input.addEventListener('blur', () => {
+    const n = toNum(input.value);
+    input.value = format(n);
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+}
+
+// ✅ Aplicar
+attachMoneyMaskSmart(document.getElementById('ingresoCapital'), { initial: '0' });
+attachMoneyMaskSmart(document.getElementById('pensionBase'),   { initial: '9209.93' });
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ingreso = document.getElementById('ingresoCapital');
+  const pension = document.getElementById('pensionBase');
+
+  if (ingreso) attachMoneyMaskSmart(ingreso, { initial: '0' });
+  if (pension) attachMoneyMaskSmart(pension, { initial: '9209.93' });
+
+  // 🔒 Forzar formato moneda aunque el input esté readonly / disabled
+  [ingreso, pension].forEach(inp => {
+    if (!inp) return;
+    const n = parseFloat((inp.value || '').replace(/[^0-9.]/g,'')) || 0;
+    inp.value = '$' + n.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  });
+});
+</script>
+
+</body>
+</html>

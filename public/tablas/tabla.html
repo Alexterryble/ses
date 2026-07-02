@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabla de Amortización Completa - CIP</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #eef2f8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .document-container {
+    max-width: 8.5in;
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+  }
+
+  .content-padding {
+    padding: 1.8rem 2rem 1.5rem;
+  }
+
+  /* =========================
+     HEADER
+  ========================== */
+  .header-modern{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    gap:0.08rem;
+    margin-bottom:0.35rem;
+    padding-bottom:0.28rem;
+    border-bottom:1px solid #dfe7ef;
+  }
+
+  .logo-group{
+    display:none;
+  }
+
+  .logo-img{
+    display:block;
+    margin:0 auto;
+    width:auto;
+    height:64px;
+    object-fit:contain;
+  }
+
+  .logo-center{
+    height:190px;
+    max-width:260px;
+  }
+
+  .title-modern{
+    display:block;
+    width:100%;
+    margin-top:0;
+    text-align:center;
+    font-size:1.15rem;
+    font-weight:800;
+    letter-spacing:0.2px;
+    line-height:1.1;
+    background:linear-gradient(135deg, #0a2b3e, #1f5e7e);
+    background-clip:text;
+    -webkit-background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+  }
+
+  /* =========================
+     FOLIO
+  ========================== */
+  .folio-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+  
+  .folio {
+    background: linear-gradient(135deg, #f0f4fa, #e8eff5);
+    padding: 0.4rem 1.2rem;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1f6390;
+    display: inline-block;
+    border: 1px solid #d4e2ef;
+  }
+
+  /* =========================
+     DATOS CLIENTE
+  ========================== */
+  .data-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eef2f8;
+    margin-bottom: 1rem;
+  }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fafcff;
+  }
+
+  .data-item {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid #edf2f7;
+    border-right: 1px solid #edf2f7;
+  }
+
+  .data-item:nth-child(4n) {
+    border-right: none;
+  }
+
+  .data-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b8a9e;
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .data-value {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1e3b4f;
+  }
+
+  .full-name-item {
+    grid-column: span 2;
+    background: #f9fbfe;
+    border-left: 3px solid #e6b422;
+  }
+
+  /* =========================
+     RESUMEN
+  ========================== */
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .stat-card {
+    flex: 1;
+    min-width: 110px;
+    background: white;
+    border-radius: 14px;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    border: 1px solid #e9eff4;
+  }
+
+  .stat-card-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #7f9ab0;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-card-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1f5680;
+  }
+
+  .stat-card-value.highlight {
+    background: #1f5680;
+    color: white;
+    display: inline-block;
+    padding: 0.15rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.95rem;
+  }
+
+  /* =========================
+     TABLA
+  ========================== */
+  .table-container {
+    overflow-x: auto;
+    margin: 0.8rem 0 1rem;
+    border-radius: 14px;
+  }
+
+  .amort-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+  }
+
+  .amort-table th {
+    padding: 0.6rem 0.4rem;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #5c7f9c;
+    border-bottom: 2px solid #e2eaf1;
+    text-align: center;
+    background: #f8fafd;
+  }
+
+  .amort-table td {
+    padding: 0.55rem 0.4rem;
+    text-align: center;
+    border-bottom: 1px solid #eff3f8;
+    color: #1a3a4e;
+    font-weight: 500;
+  }
+
+  .amort-table td:nth-child(2),
+  .amort-table td:nth-child(3),
+  .amort-table td:nth-child(4),
+  .amort-table td:nth-child(5) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .amort-table td:first-child {
+    font-weight: 700;
+    color: #d97706;
+    background: #fffbf5;
+  }
+
+  /* =========================
+     NOTAS
+  ========================== */
+  .notes-area {
+    background: #fafdff;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0 1rem;
+    border: 1px solid #eef3f9;
+  }
+
+  .notes-text {
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: #2c5a78;
+  }
+
+  .notes-text p {
+    margin-bottom: 0.8rem;
+  }
+
+  .notes-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .notes-text .highlight {
+    font-weight: 800;
+    background: #fef2de;
+    color: #c26b1a;
+    padding: 0 4px;
+    border-radius: 8px;
+  }
+
+  /* =========================
+     FIRMA
+  ========================== */
+  .signature-modern{
+    background:#fff;
+    border:1px solid #e7eef5;
+    border-radius:18px;
+    padding:1rem 1rem 1.2rem;
+    margin-top:1rem;
+  }
+
+  /* ocultar el área grande de firma */
+  .sig-canvas-area{
+    display:none;
+    position:relative;
+    width:100%;
+    min-height:120px;
+    border:1.5px dashed #cfdbe7;
+    border-radius:14px;
+    background:#fcfeff;
+    overflow:hidden;
+    margin-bottom:0.5rem;
+  }
+
+  /* solo mostrar si decides agregar esta clase por JS */
+  .sig-canvas-area.has-signature{
+    display:block;
+  }
+
+  #sigCanvas{
+    display:block;
+    width:100%;
+    height:120px;
+    touch-action:none;
+    cursor:crosshair;
+  }
+
+  /* también ocultamos la imagen de firma por defecto */
+  #sigImage{
+    display:none;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#fff;
+  }
+
+  .sig-canvas-area.has-signature #sigImage{
+    display:block;
+  }
+
+  .sig-buttons{
+    display:flex;
+    justify-content:center;
+    gap:.8rem;
+    flex-wrap:wrap;
+    margin:.9rem 0 1rem;
+  }
+
+  .sig-buttons button{
+    border:none;
+    border-radius:999px;
+    padding:.5rem 1rem;
+    font-size:.78rem;
+    font-weight:700;
+    cursor:pointer;
+    background:#eef4fa;
+    color:#1f5680;
+  }
+
+  .signature-line-area{
+    text-align:center;
+    margin-top:.5rem;
+  }
+
+  .thumbprints-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100%;
+    max-width:500px;
+    margin:.2rem auto 1.2rem;
+    gap:0;
+    flex-wrap:nowrap;
+  }
+
+  .thumb-box{
+    width:130px;
+    height:130px;
+    border:1.5px dashed #cbdbe0;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fcfdff;
+    flex:0 0 auto;
+  }
+
+  .thumb-label{
+    font-size:.62rem;
+    font-weight:700;
+    color:#7a8ea1;
+    line-height:1.2;
+    text-align:center;
+  }
+
+  #firmaImg{
+    display:none;
+    max-height:42px;
+    margin:0 auto .35rem;
+  }
+
+  #firmaImg.show{
+    display:block;
+  }
+
+  .signature-divider{
+    width:190px;
+    border-top:1.5px solid #cbdbe0;
+    margin:0 auto .25rem;
+  }
+
+  #firmaNombre{
+    margin:0;
+    font-size:.75rem;
+    font-weight:700;
+    color:#1f5680;
+    text-align:center;
+  }
+
+  /* =========================
+     BOTONES FLOTANTES
+  ========================== */
+  .action-buttons {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.6rem;
+    z-index: 100;
+  }
+
+  .action-btn {
+    background: #1f5680;
+    border: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .action-btn.green { background: #2b7551; }
+  .action-btn.gray { background: #5c6f87; }
+
+  /* =========================
+     IMPRESIÓN
+  ========================== */
+  @page {
+    size: letter;
+    margin: 0.28in 0.24in;
+  }
+
+  @media print {
+    body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .action-buttons {
+      display: none !important;
+    }
+
+    .document-container {
+      max-width: 100% !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+    }
+
+    .content-padding {
+      padding: 0.06cm 0.10cm !important;
+    }
+
+    .header-modern{
+      display:flex !important;
+      flex-direction:column !important;
+      justify-content:center !important;
+      align-items:center !important;
+      text-align:center !important;
+      gap:0.02in !important;
+      margin-bottom:0.06in !important;
+      padding-bottom:0.04in !important;
+      border-bottom:1px solid #dfe7ef !important;
+      page-break-inside:avoid !important;
+      break-inside:avoid !important;
+    }
+
+    .logo-img{
+      display:block !important;
+      margin:0 auto !important;
+      width:auto !important;
+      height:1.00in !important;
+      max-width:3.8in !important;
+      object-fit:contain !important;
+    }
+
+    .logo-center{
+      height:1.28in !important;
+      max-width:4.8in !important;
+    }
+
+    .title-modern{
+      display:block !important;
+      width:100% !important;
+      text-align:center !important;
+      margin-top:0 !important;
+      font-size:11.5pt !important;
+      font-weight:800 !important;
+      line-height:1.02 !important;
+      letter-spacing:0.2px !important;
+      color:#0a2b3e !important;
+      -webkit-text-fill-color:#0a2b3e !important;
+      background:none !important;
+      visibility:visible !important;
+      opacity:1 !important;
+    }
+
+    .folio-container{
+      margin-bottom:0.10cm !important;
+    }
+
+    .folio {
+      font-size: 7.4pt !important;
+      padding: 0.12cm 0.42cm !important;
+    }
+
+    .data-card{
+      margin-bottom:0.20rem !important;
+    }
+
+    .data-item {
+      padding: 0.11cm 0.14cm !important;
+    }
+
+    .data-label{
+      font-size:5.8pt !important;
+      margin-bottom:0.03cm !important;
+    }
+
+    .data-value {
+      font-size: 7.2pt !important;
+      line-height:1.10 !important;
+    }
+
+    .stats-row{
+      gap:0.25rem !important;
+      margin-bottom:0.22rem !important;
+    }
+
+    .stat-card {
+      padding: 0.10cm 0.08cm !important;
+      min-width: 0 !important;
+    }
+
+    .stat-card-label{
+      font-size:5.6pt !important;
+      margin-bottom:0.02cm !important;
+    }
+
+    .stat-card-value {
+      font-size: 7.4pt !important;
+      line-height:1.05 !important;
+    }
+
+    .stat-card-value.highlight{
+      padding:0.04cm 0.18cm !important;
+      font-size:7.2pt !important;
+    }
+
+    .table-container {
+      margin: 0.14rem 0 0.22rem !important;
+    }
+
+    .amort-table {
+      font-size: 6pt !important;
+    }
+
+    .amort-table th {
+      padding: 0.08cm 0.06cm !important;
+      font-size: 5.7pt !important;
+    }
+
+    .amort-table td {
+      padding: 0.07cm 0.06cm !important;
+      font-size: 5.8pt !important;
+      line-height:1.02 !important;
+    }
+
+    .notes-area {
+      padding: 0.11cm 0.16cm !important;
+      margin: 0.10cm 0 !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .notes-text {
+      font-size: 5.8pt !important;
+      line-height: 1.14 !important;
+    }
+
+    .notes-text p{
+      margin-bottom:0.08cm !important;
+    }
+
+    .signature-modern{
+      border:1px solid #d8e3ec !important;
+      border-radius:.16cm !important;
+      padding:.10cm .14cm .12cm !important;
+      margin-top:.10cm !important;
+      break-inside:avoid !important;
+      page-break-inside:avoid !important;
+    }
+
+    .sig-buttons{
+      display:none !important;
+    }
+
+    /* en impresión también ocultamos el cuadro largo */
+    .sig-canvas-area{
+      display:none !important;
+      min-height:1.20cm !important;
+      border:none !important;
+      margin-bottom:0 !important;
+      background:transparent !important;
+    }
+
+    .sig-canvas-area.has-signature{
+      display:block !important;
+    }
+
+    #sigCanvas{
+      display:none !important;
+    }
+
+    #sigImage{
+      display:none !important;
+      position:relative !important;
+      inset:auto !important;
+      width:100% !important;
+      height:1.20cm !important;
+      object-fit:contain !important;
+      background:#fff !important;
+    }
+
+    .sig-canvas-area.has-signature #sigImage{
+      display:block !important;
+    }
+
+    .thumbprints-row{
+      justify-content:space-between !important;
+      align-items:center !important;
+      width:100% !important;
+      max-width:6.8cm !important;
+      margin:.04cm auto .10cm !important;
+      gap:0 !important;
+      flex-wrap:nowrap !important;
+    }
+
+    .thumb-box{
+      width:2.00cm !important;
+      height:2.00cm !important;
+      border-radius:.10cm !important;
+    }
+
+    .thumb-label{
+      font-size:4.6pt !important;
+      line-height:1.02 !important;
+    }
+
+    #firmaImg{
+      display:none !important;
+      max-height:.24in !important;
+      margin:0 auto .02cm !important;
+    }
+
+    #firmaImg.show{
+      display:block !important;
+    }
+
+    .signature-divider{
+      width:3.4cm !important;
+      margin:0 auto .02cm !important;
+    }
+
+    #firmaNombre{
+      font-size:5.8pt !important;
+      font-weight:700 !important;
+      color:#1f5680 !important;
+      line-height:1.02 !important;
+    }
+
+    .amort-table tbody tr,
+    .notes-area,
+    .signature-modern {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+  }
+
+  /* =========================
+     RESPONSIVE
+  ========================== */
+  @media (max-width: 680px) {
+    body {
+      padding: 0.8rem;
+    }
+
+    .content-padding {
+      padding: 1rem;
+    }
+
+    .data-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .data-item:nth-child(4n) {
+      border-right: 1px solid #edf2f7;
+    }
+
+    .full-name-item {
+      grid-column: span 2;
+    }
+
+    .signature-modern{
+      padding:.9rem .8rem 1rem;
+    }
+
+    .sig-canvas-area{
+      min-height:100px;
+    }
+
+    #sigCanvas{
+      height:100px;
+    }
+
+    .thumbprints-row{
+      max-width:320px;
+      margin:.2rem auto 1rem;
+    }
+
+    .thumb-box{
+      width:86px;
+      height:86px;
+    }
+
+    .signature-divider{
+      width:160px;
+    }
+
+    #firmaNombre{
+      font-size:.7rem;
+    }
+  }
+@media print{
+  .print-btn,
+  .save-btn,
+  .back-btn,
+  .action-buttons,
+  .menu-actions{
+    display:none !important;
+  }
+}
+  
+
+  #sigActions,
+.sig-actions,
+.sig-buttons,
+#sigClear,
+#sigSave{
+  display:none !important;
+}
+
+
+.header-modern{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;          /* antes flex-start */
+  justify-content:space-between !important;
+  gap:18px !important;
+  width:100% !important;
+  margin-bottom:8px !important;
+}
+
+.header-modern-left{
+  flex:0 0 auto !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+}
+
+.header-modern-left .logo-img,
+#logoMain.logo-img{
+  display:block !important;
+  width:220px !important;                /* cambia aquí tamaño logo */
+  max-width:220px !important;
+  height:auto !important;
+  margin:0 !important;
+}
+
+.header-modern-right{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-end !important;       /* manda texto a la derecha */
+  justify-content:flex-start !important;
+  text-align:right !important;
+  color:#1f2d3d !important;
+  line-height:1.15 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+.header-modern-right .top-frase{
+  font-weight:700 !important;
+  font-size:-10px !important;             /* baja aquí */
+  color:#0d5c86 !important;
+  margin:0 0 2px 0 !important;
+}
+
+.header-modern-right .top-direccion,
+.header-modern-right .top-correo{
+  font-size:11px !important;             /* baja aquí */
+  margin:0 !important;
+}
+
+.title-modern{
+  width:100% !important;
+  text-align:center !important;
+  font-weight:800 !important;
+  font-size:22px !important;
+  margin-top:-50px !important;   /* sube título */
+  margin-bottom:4px !important;
+}
+
+/* si la línea azul está en un hr */
+.header-divider,
+hr{
+  margin-top:0 !important;
+  margin-bottom:1px !important;
+}
+
+/* si la línea azul es borde del contenedor del título */
+.title-wrap,
+.title-section,
+.header-title-wrap{
+  margin-top:-90px !important;   /* sube línea + título juntos */
+  padding-top:0 !important;
+}
+
+
+/* =========================
+   BOTONES FLOTANTES
+========================== */
+.action-buttons{
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 22px !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 9999 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+
+  padding: 10px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.86) !important;
+  border: 1px solid rgba(148,163,184,.35) !important;
+  box-shadow: 0 18px 45px rgba(15,23,42,.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.action-btn{
+  min-width: 112px !important;
+  height: 42px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0 18px !important;
+
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+
+  box-shadow: 0 10px 24px rgba(15,23,42,.18) !important;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+}
+
+.action-btn:hover{
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 30px rgba(15,23,42,.25) !important;
+  filter: brightness(1.04) !important;
+}
+
+.action-btn:active{
+  transform: translateY(0) scale(.98) !important;
+}
+
+/* Imprimir */
+#btnPrint{
+  background: linear-gradient(135deg,#0e6a98,#083e5b) !important;
+}
+
+/* Guardar */
+#btnSave,
+.action-btn.green{
+  background: linear-gradient(135deg,#1f8f5f,#16613f) !important;
+}
+
+/* Volver */
+#btnBack,
+.action-btn.gray{
+  background: linear-gradient(135deg,#64748b,#334155) !important;
+}
+
+/* Responsive */
+@media (max-width: 680px){
+  .action-buttons{
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    border-radius: 18px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .action-btn{
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+  }
+}
+
+/* Ocultar al imprimir */
+@media print{
+  .action-buttons,
+  .action-btn,
+  .print-btn,
+  .save-btn,
+  .back-btn{
+    display: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="action-buttons">
+  <button id="btnPrint" class="action-btn">🖨️ Imprimir</button>
+  <button id="btnSave" class="action-btn green">💾 Guardar</button>
+  <button id="btnBack" class="action-btn gray">⬅️ Volver</button>
+</div>
+
+<div class="document-container">
+  <div class="content-padding">
+
+    <!-- HEADER -->
+<div class="header-modern">
+  <div class="header-modern-left">
+    <img id="logoMain" class="logo-img" src="../img/logo.png" alt="CIP Group" />
+  </div>
+
+  <div class="header-modern-right">
+    <div class="top-frase">Seguridad para tu retiro, confianza para tu futuro.</div>
+    <div class="top-direccion">📍 Jose Maria Pino Suarez 119, Santa Ana Tlapaltitlán, 52160 Toluca de Lerdo, Méx.</div>
+    <div class="top-correo">✉️ contacto@cipmexico.com.mx</div>
+  </div>
+</div>
+
+<div class="title-modern">TABLA DE AMORTIZACIÓN</div>
+
+    <!-- FOLIO -->
+    <div class="folio-container">
+      <div class="folio">Folio: CIPE-006</div>
+    </div>
+
+    <!-- DATOS CLIENTE -->
+    <div class="data-card client-data-container">
+      <section class="client-data-section data-grid">
+
+        <div class="data-item">
+          <span class="data-label data-item-label">CURP</span>
+          <span id="curpVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">NSS</span>
+          <span id="nssVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">RFC</span>
+          <span id="rfcVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">Correo</span>
+          <span id="mailVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">Teléfono</span>
+          <span id="telVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">Fecha Emisión</span>
+          <span id="fechaVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label data-item-label">Mód. Pago</span>
+          <span id="modPagoVal" class="data-value data-item-value">—</span>
+        </div>
+
+        <div class="data-item full-name-item w-66">
+          <span class="data-label data-item-label">Nombre Completo del Cliente</span>
+          <span id="nombreClienteVal" class="data-value data-item-value">—</span>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- RESUMEN -->
+    <section class="credit-summary stats-row">
+      <div class="credit-row stat-card">
+        <span class="credit-label stat-card-label">LÍNEA DE CRÉDITO</span>
+        <span id="lineaCredito" class="credit-value stat-card-value" data-static="1">$0.00</span>
+      </div>
+
+      <div class="credit-row stat-card">
+        <span class="credit-label stat-card-label">INTERESES</span>
+        <span class="credit-value stat-card-value">(9.74% + IVA)</span>
+      </div>
+
+      <div class="credit-row stat-card">
+        <span class="credit-label stat-card-label">MESES</span>
+        <span id="mesesResumen" class="credit-value stat-card-value" data-static="1">16</span>
+      </div>
+
+      <div class="credit-row stat-card">
+        <span class="credit-label stat-card-label">MÍNIMO A PAGAR</span>
+        <span id="minimoPagar" class="credit-value stat-card-value highlight" data-static="1">$3,000.00</span>
+      </div>
+
+      <div class="credit-row stat-card">
+        <span class="credit-label stat-card-label">PAGO MENSUAL</span>
+        <span id="pagoMensual" class="credit-value stat-card-value payment">—</span>
+      </div>
+    </section>
+
+    <!-- TABLA -->
+    <div class="table-container">
+      <table class="amortization-table amort-table">
+        <thead>
+          <tr>
+            <th>MES</th>
+            <th>PAGO MENSUAL</th>
+            <th>INTERÉS</th>
+            <th>CAPITAL</th>
+            <th>SALDO RESTANTE</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- NOTAS + FIRMA -->
+    <section class="notes-block notes-area">
+      <div class="table-note notes-text">
+        <p>
+          Este préstamo tiene un plazo de
+          <span class="highlight" data-nota="meses">16 meses</span>
+          con una tasa mensual fija del 9.74% + IVA. En este periodo el monto total para devolver es de:
+          <span class="highlight" id="notaTotal" data-minimo-pagar>$0.00</span>.
+        </p>
+
+        <p>
+          Esta tabla muestra de forma ilustrativa cómo se distribuyen los intereses y el capital a lo largo de los
+          <span class="highlight" data-nota="meses">16 meses</span>.
+          Cada mes, el préstamo genera un interés fijo de
+          <span class="highlight" id="notaIntMes">$0.00</span>.
+          Es decir, independientemente de si se paga mes a mes o al final, estos intereses se van acumulando.
+        </p>
+
+        <p>
+          La tabla te permite ver cómo, si se fueran haciendo pagos mensuales, una parte cubriría los intereses y otra parte amortizaría (reduciría) el capital.
+        </p>
+
+        <p>
+          Al final de los
+          <span class="highlight" data-nota="meses">16 meses</span>
+          se habría pagado tanto el capital como los intereses generados.
+          Esto no significa que deba pagar mensualmente, pero te ayuda a entender cuánto se está generando por intereses cada mes y cómo se compone el total a pagar.
+        </p>
+      </div>
+
+      <!-- FIRMA CAPTURA -->
+      <div id="sigBlock" class="signature-modern">
+        <div class="sig-pad sig-canvas-area">
+          <canvas id="sigCanvas"></canvas>
+          <img id="sigImage" alt="Firma capturada" style="display:none;" />
+        </div>
+
+        <div id="sigActions" class="sig-actions sig-buttons">
+          <button type="button" id="sigClear">Limpiar</button>
+          <button type="button" id="sigSave">Guardar firma</button>
+        </div>
+
+        <input type="hidden" name="firma_dataurl" id="firmaDataUrl" />
+
+        <!-- FIRMA FINAL -->
+        <div class="signature-section signature-line-area">
+          <div class="thumbprints-row">
+            <div class="thumb-box">
+              <span class="thumb-label">PULGAR<br>IZQUIERDO</span>
+            </div>
+
+            <div class="thumb-box">
+              <span class="thumb-label">PULGAR<br>DERECHO</span>
+            </div>
+          </div>
+
+          <img id="firmaImg" alt="" />
+          <div class="signature-line signature-divider"></div>
+          <p id="firmaNombre"></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- JS 1: lógica de amortización y edición de meses (máx. 16) -->
+<script>
+(function(){
+  // ====== Config ======
+  const TASA_MENSUAL = 0.0974;  // 9.74% mensual (SIN IVA)
+  const MODO         = 'simple';
+  const LIMITE_MESES = 16;
+
+  // ====== Utils ======
+  const $id = id => document.getElementById(id);
+  const fmtMXN = v => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(+v||0);
+
+  const parseMoney = s => {
+    const n = Number(String(s||'').replace(/[^\d.]/g,''));
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const sanitizeMeses = s => {
+    const n = parseInt(String(s||'').replace(/[^\d]/g,''),10);
+    return Number.isFinite(n)
+      ? Math.max(1, Math.min(LIMITE_MESES, n))
+      : null;
+  };
+
+  // ====== Nota ======
+function actualizarNota({ lineaCred, montoMin, meses }){
+  const note = document.querySelector('.table-note');
+  if (!note) return;
+
+  const pagoMensual = montoMin / meses;
+  const capitalFijo = lineaCred / meses;
+  const interesMensual = pagoMensual - capitalFijo;
+
+  const sIntMes = note.querySelector('#notaIntMes');
+  if (sIntMes) sIntMes.textContent = fmtMXN(interesMensual);
+
+  const sMeses = note.querySelectorAll('[data-nota="meses"]');
+  sMeses.forEach(el => el.textContent = `${meses} meses`);
+}
+
+  // ====== Render ======
+  function renderAmortizacion({ montoMin, meses, tasaMensual, modo='simple' }){
+    const tbody = document.querySelector('.amortization-table tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!(montoMin>0 && meses>0)) return;
+
+    const lineaCred = parseMoney($id('lineaCredito')?.textContent || '') || 0;
+
+    // ✅ FILA 0 = MÍNIMO A PAGAR
+    tbody.insertAdjacentHTML(
+      'beforeend',
+      `<tr>
+        <td>0</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>${fmtMXN(montoMin)}</td>
+      </tr>`
+    );
+
+    let saldo = montoMin;
+
+if (modo === 'simple') {
+
+  // Pago mensual
+  const pagoMensual = montoMin / meses;
+
+  // Capital fijo
+  const capitalFijo = lineaCred / meses;
+
+  // Interés = pago mensual - capital
+  const interesMensual = pagoMensual - capitalFijo;
+
+  for (let i = 1; i <= meses; i++) {
+
+    const interes = interesMensual;
+    const capital = Math.min(capitalFijo, saldo);
+
+    saldo = Math.max(0, saldo - pagoMensual);
+
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td>${i}</td>
+        <td>${fmtMXN(pagoMensual)}</td>
+        <td>${fmtMXN(interes)}</td>
+        <td>${fmtMXN(capital)}</td>
+        <td>${i===meses ? '—' : fmtMXN(saldo)}</td>
+      </tr>
+    `);
+  }
+
+  const spPago  = $id('pagoMensual');
+  const spMeses = $id('mesesResumen');
+  if (spPago)  spPago.textContent = fmtMXN(pagoMensual);
+  if (spMeses) spMeses.textContent = String(meses);
+
+  actualizarNota({ lineaCred, montoMin, meses });
+}
+  }
+
+  // ====== Lee datos y pinta ======
+  function leerYRenderizar(){
+    const meses = sanitizeMeses($id('mesesResumen')?.textContent || '');
+    const montoMin = parseMoney($id('minimoPagar')?.textContent || '');
+
+    if (!(meses>0 && montoMin>0)) return;
+
+    renderAmortizacion({
+      montoMin,
+      meses,
+      tasaMensual: TASA_MENSUAL,
+      modo: MODO
+    });
+  }
+
+  window.AMORT_apply = leerYRenderizar;
+
+  document.addEventListener('DOMContentLoaded', leerYRenderizar);
+  window.addEventListener('beforeprint', leerYRenderizar);
+
+})();
+</script>
+
+
+
+
+  <!-- JS 2: ajuste fino de impresión (sin hojas extra) -->
+  
+
+
+<script>
+  (function (){
+    const btn = document.getElementById('btnPrint');
+    if(!btn) return;
+
+    btn.addEventListener('click', () => {
+      try{
+        if (window.fitToFirstPage) {
+          // Ajuste inmediato y un frame para que el layout asiente
+          window.fitToFirstPage();
+          requestAnimationFrame(() => window.print());
+        } else {
+          window.print();
+        }
+      }catch(e){
+        // fallback silencioso
+        window.print();
+      }
+    });
+  })();
+</script>
+
+ 
+
+
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+
+  /* ================== Endpoints ================== */
+// ===== Base de endpoints (auto-detecta prod/dev)
+/* ================== Endpoints ================== */
+function getPublicBase(){
+  const b = document.querySelector('base')?.href;
+  if (b) return b.replace(/\/+$/, '/');
+
+  const { origin, pathname } = window.location;
+  const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+  // Local XAMPP: /hp/public/
+  if (p.includes('/hp/public/')) {
+    return `${origin}/hp/public/`;
+  }
+
+  // Local XAMPP: /sempiternal/public/
+  if (p.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public/`;
+  }
+
+  // Render / Railway
+  return `${origin}/`;
+}
+
+const PUBLIC = window.PUBLIC_BASE || window.BASE_URL || getPublicBase();
+window.BASE_URL = PUBLIC;
+
+const BASE_API = PUBLIC.replace(/\/+$/, '');
+// ===== Endpoints
+const API_SOLI = `${BASE_API}/app/controllers/obtener_datos/get_solicitud_por_id.php`;
+const API_NSS  = `${BASE_API}/app/controllers/obtener_datos/get_nss.php`;
+const API_META = `${BASE_API}/app/controllers/concredito/leer_meta.php`;
+
+// (Opcional) si usas lo de amortización que hicimos:
+const API_AMORT_LEER = `${BASE_API}/app/controllers/amortizacion/leer_firma.php`;
+
+
+  /* ================== Helpers ================== */
+  function readIdFromURL() {
+    const sp = new URLSearchParams(location.search);
+    const n = Number(sp.get('solicitud_id') || sp.get('id') || 0);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+
+  function fechaLarga(d = new Date()) {
+    return new Intl.DateTimeFormat('es-MX', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    }).format(d);
+  }
+
+  // Siempre poner “hoy” en el bloque de Fecha Emisión
+  function setFechaEmisionHoy() {
+    const el = document.getElementById('fechaVal');
+    if (el) el.textContent = fechaLarga(new Date());
+  }
+
+  function mapFrecuencia(s) {
+    if (!s) return 'MENSUAL';
+    const t = String(s).toLowerCase();
+    if (t.includes('mens'))  return 'MENSUAL';
+    if (t.includes('seman')) return 'SEMANAL';
+    if (t.includes('quinc')) return 'QUINCENAL';
+    return String(s).toUpperCase();
+  }
+
+  async function safeJSON(resp) {
+    const txt = await resp.text();
+    try { return JSON.parse(txt); }
+    catch {
+      console.error('Respuesta no-JSON del servidor:\n', txt);
+      throw new Error('El endpoint devolvió HTML (404/500). Revisa la ruta.');
+    }
+  }
+
+  function buildNombre(cliente = {}) {
+    const { nombre, nombres, apellido_paterno, apellido_materno } = cliente;
+    if (nombre && nombre.trim()) return nombre.trim();
+    return [nombres, apellido_paterno, apellido_materno]
+      .filter(Boolean).map(s => String(s).trim()).join(' ') || '—';
+  }
+
+  const fmtMXN = (v) =>
+    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' })
+      .format(+v || 0);
+
+  function updateMesesText(n) {
+    const num = Number(n) || 0;
+    const label = `${num} ${num === 1 ? 'mes' : 'meses'}`;
+    document.querySelectorAll('[data-meses]').forEach(el => { el.textContent = label; });
+  }
+
+  function paintMinimoPagarInNotes(monto) {
+    document.querySelectorAll('[data-minimo-pagar]').forEach(el => {
+      el.textContent = fmtMXN(monto);
+    });
+  }
+
+  /* ========== NUEVO: sincroniza notaTotal con minimoPagar ========== */
+  function syncNotaTotalWithMinimo() {
+    const elMin   = document.getElementById('minimoPagar');
+    const elTotal = document.getElementById('notaTotal');
+    if (!elMin || !elTotal) return;
+    const val = (elMin.textContent || '').trim();
+    elTotal.textContent = val;
+
+    // si tienes otros placeholders en la nota
+    document.querySelectorAll('[data-minimo-pagar]').forEach(n => n.textContent = val);
+  }
+
+  /* ================== Cargas ================== */
+
+  // Datos de la solicitud y del cliente (NO toca la fecha de emisión)
+async function cargarDatosCliente(sid) {
+  const url = `${API_SOLI}?solicitud_id=${encodeURIComponent(sid)}`;
+  const r   = await fetch(url, { credentials: 'same-origin' });
+  const j   = await safeJSON(r);
+  if (!j?.ok) throw new Error(j?.message || 'No se pudo obtener la solicitud');
+
+  const { cliente = {}, solicitud = {} } = j;
+  const $ = s => document.querySelector(s);
+
+  // === Datos básicos ===
+  $('#curpVal')  && ($('#curpVal').textContent  = cliente.curp     || '—');
+  $('#rfcVal')   && ($('#rfcVal').textContent   = cliente.rfc      || '—');
+  $('#mailVal')  && ($('#mailVal').textContent  = cliente.correo   || '—');
+  $('#telVal')   && ($('#telVal').textContent   = cliente.telefono || '—');
+
+  // === Folio (cabecera) + id crédito (sincronizados) ===
+  const rawFolio = String(solicitud.folio || '').trim();
+  const folioUI  = rawFolio !== ''
+    ? rawFolio                                   // ej. "CIP-2025-00025"
+    : `CIPE-${String(solicitud.id || sid || '').padStart(3, '0')}`; // ej. "CIPE-006"
+
+  const folioDiv = document.querySelector('.folio');
+  if (folioDiv) folioDiv.textContent = `Folio: ${folioUI}`;
+  const idCredEl = document.getElementById('idCredVal');
+  if (idCredEl) idCredEl.textContent = folioUI;
+
+  // === Modo de pago / estatus ===
+  $('#modPagoVal') && ($('#modPagoVal').textContent = mapFrecuencia(
+    solicitud.frecuencia_pago || solicitud.frecuencia || ''
+  ));
+  $('#estatusVal') && ($('#estatusVal').textContent = 'ACTIVO');
+
+  // === Nombre (tarjeta y firma) ===
+  const nombreCompleto = buildNombre(cliente);
+  $('#nombreClienteVal') && ($('#nombreClienteVal').textContent = nombreCompleto);
+  $('#firmaNombre')      && ($('#firmaNombre').textContent      = nombreCompleto);
+
+  // === MESES desde backend (acepta varias llaves) ===
+  let meses = Number(
+    solicitud.plazo_meses ?? solicitud.plazo ?? solicitud.meses ?? 0
+  );
+  if (!Number.isFinite(meses) || meses < 1) meses = 1;
+  if (meses > 16) meses = 16;
+
+  // Franja
+  const spMeses = document.getElementById('mesesResumen');
+  if (spMeses) spMeses.textContent = String(meses);
+
+  // Notas (todas las apariciones)
+  document.querySelectorAll('[data-nota="meses"]').forEach(el => {
+    el.textContent = `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+  });
+
+  // Flag para CSS (opcional)
+  const doc = document.querySelector('.document-container');
+  if (doc) doc.setAttribute('data-rows', String(meses));
+
+  // Recalcular amortización y ajustar a 1 hoja
+  if (typeof window.AMORT_apply === 'function') {
+    window.AMORT_apply();
+  } else if (typeof window.renderAmortizacion === 'function') {
+    window.renderAmortizacion();
+  }
+
+  requestAnimationFrame(() => {
+    if (typeof window.fitToFirstPage === 'function') window.fitToFirstPage();
+  });
+}
+
+
+
+  // NSS independiente
+  async function cargarNSS(sid) {
+    const r = await fetch(`${API_NSS}?solicitud_id=${encodeURIComponent(sid)}`, { credentials: 'same-origin' });
+    const j = await safeJSON(r);
+    if (j?.ok && j.data) {
+      $('#nssVal') && ($('#nssVal').textContent = j.data.nss || '—');
+    } else {
+      $('#nssVal') && ($('#nssVal').textContent = '—');
+    }
+  }
+
+  // Resumen de carátula/meta: línea de crédito + mínimo a pagar
+  async function cargarResumenMeta(sid) {
+    const url = `${API_META}?solicitud_id=${encodeURIComponent(sid)}`;
+    const r   = await fetch(url, { credentials: 'same-origin' });
+    const j   = await safeJSON(r);
+
+    if (!j?.ok || !j.meta) return;
+
+    const rawLinea = j.meta.monto_linea_credito;
+    const rawMin   = j.meta.monto_total_pagar;
+
+    const montoLinea = (rawLinea == null || rawLinea === '') ? 0 : Number(rawLinea);
+    const montoMin   = (rawMin   == null || rawMin   === '') ? 0 : Number(rawMin);
+
+    const elLinea = document.getElementById('lineaCredito');
+    if (elLinea) elLinea.textContent = fmtMXN(montoLinea);
+
+    const elMin = document.getElementById('minimoPagar');
+    if (elMin) {
+      elMin.textContent = fmtMXN(montoMin);
+      paintMinimoPagarInNotes(montoMin);
+      syncNotaTotalWithMinimo();              // <<==== NUEVO
+    }
+
+    window.AMORT_apply?.();
+  }
+
+  /* ================== Arranque ================== */
+  window.addEventListener('DOMContentLoaded', () => {
+    setFechaEmisionHoy();                     // <- siempre "hoy"
+    syncNotaTotalWithMinimo();                // <<==== NUEVO (por si ya hay valor)
+    const sid = (window.SOLICITUD_ID) || readIdFromURL();
+    if (!sid) return;
+    cargarDatosCliente(sid).catch(err => console.error('cargarDatosCliente:', err));
+    cargarNSS(sid).catch(err => console.error('cargarNSS:', err));
+    cargarResumenMeta(sid).catch(err => console.error('cargarResumenMeta:', err));
+  });
+
+  // Asegurar en impresión
+  window.addEventListener('beforeprint', syncNotaTotalWithMinimo);  // <<==== NUEVO
+})();
+</script>
+
+
+
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+
+  const canvas    = $('#sigCanvas');
+  const ctx       = canvas.getContext('2d', { willReadFrequently: true });
+  const imgPad    = $('#sigImage');    // preview dentro del recuadro
+  const imgLine   = $('#firmaImg');    // imagen sobre la línea
+  const btnClear  = $('#sigClear');
+  const btnSave   = $('#sigSave');
+  const hiddenUrl = $('#firmaDataUrl');
+
+  // Evitar zoom-gestures en iOS al tocar con 2 dedos accidentalmente
+  ['gesturestart','gesturechange','gestureend'].forEach(ev =>
+    document.addEventListener(ev, e => e.preventDefault(), {passive:false})
+  );
+
+  // ===== Ajuste de tamaño físico del canvas (DPR aware) =====
+  function resizeCanvas(){
+    const padEl = canvas.parentElement;             // .sig-pad
+    const rect  = padEl.getBoundingClientRect();
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+    // Tamaño del lienzo en píxeles REALES (atributos width/height)
+    canvas.width  = Math.max(1, Math.floor(rect.width  * ratio));
+    canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+
+    // Tamaño visual (CSS)
+    canvas.style.width  = rect.width  + 'px';
+    canvas.style.height = rect.height + 'px';
+
+    // Escala de dibujo para que 1 unidad = 1 px CSS
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = '#000';
+
+    // Rehidratar firma previa si existe
+    if (hiddenUrl?.value) {
+      const im = new Image();
+      im.onload = () => {
+        // Dibuja imagen ajustada al canvas (en unidades CSS)
+        ctx.clearRect(0,0, rect.width, rect.height);
+        ctx.drawImage(im, 0, 0, rect.width, rect.height);
+      };
+      im.src = hiddenUrl.value;
+    }
+  }
+  window.addEventListener('resize', resizeCanvas);
+  // Asegúrate de ejecutar después de que el contenedor tenga layout
+  window.addEventListener('load', resizeCanvas);
+  document.addEventListener('DOMContentLoaded', resizeCanvas);
+
+  // ===== DIBUJO con Pointer Events (mouse, dedo, stylus) =====
+  let drawing = false, lastX = 0, lastY = 0;
+
+  function getPos(evt){
+    const r = canvas.getBoundingClientRect();
+    return { x: evt.clientX - r.left, y: evt.clientY - r.top };
+  }
+
+  function onPointerDown(e){
+    if (!e.isPrimary) return;               // evita multitouch
+    drawing = true;
+    canvas.setPointerCapture?.(e.pointerId);
+    const p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+
+  function onPointerMove(e){
+    if (!drawing || !e.isPrimary) return;
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+
+  function onPointerUpOrCancel(e){
+    if (!e.isPrimary) return;
+    drawing = false;
+    canvas.releasePointerCapture?.(e.pointerId);
+    e.preventDefault();
+  }
+
+  // Bloquear scroll/zoom dentro del canvas en móviles
+  canvas.style.touchAction = 'none';
+
+  // Eventos pointer (soportado por iOS/Android/desktop modernos)
+  canvas.addEventListener('pointerdown', onPointerDown, {passive:false});
+  canvas.addEventListener('pointermove', onPointerMove,   {passive:false});
+  canvas.addEventListener('pointerup', onPointerUpOrCancel, {passive:false});
+  canvas.addEventListener('pointercancel', onPointerUpOrCancel, {passive:false});
+  canvas.addEventListener('pointerleave', onPointerUpOrCancel, {passive:false});
+
+  // ===== Acciones =====
+  btnClear?.addEventListener('click', () => {
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0, rect.width, rect.height);
+    if (imgPad){ imgPad.src=''; imgPad.style.display='none'; }
+    if (imgLine){ imgLine.src=''; imgLine.classList.remove('show'); }
+    if (hiddenUrl) hiddenUrl.value='';
+  });
+
+  btnSave?.addEventListener('click', () => {
+    const dataURL = canvas.toDataURL('image/png');
+    if (imgPad){ imgPad.src = dataURL; imgPad.style.display = 'block'; }
+    if (imgLine){ imgLine.src = dataURL; imgLine.classList.add('show'); }
+    if (hiddenUrl) hiddenUrl.value = dataURL;
+  });
+
+  // Asegura que salga en impresión aunque no hayas pulsado guardar
+  window.addEventListener('beforeprint', () => {
+    if ((!imgLine?.src || imgLine.src === window.location.href) && imgPad?.src){
+      imgLine.src = imgPad.src;
+      imgLine.classList.add('show');
+    }
+  });
+})();
+</script>
+
+
+  <!-- JS 4: fecha de emisión hoy si está vacío -->
+
+
+  
+<script>
+(function () {
+  // En producción tus controllers viven en /app/controllers
+const PUBLIC = window.PUBLIC_BASE || window.BASE_URL || getPublicBase();
+
+const API_GUARDAR_FIRMA =
+  `${PUBLIC}app/controllers/amortizacion/guardar_firma.php`;
+
+  async function safeJSON(resp) {
+    const txt = await resp.text();
+    try { return JSON.parse(txt); }
+    catch { throw new Error('Respuesta no válida del servidor (¿404/500?).'); }
+  }
+
+  // Firma opcional: si dataUrl === '' el backend deja firma en NULL/sin cambio
+  // clearFirma=true para borrar explícitamente la firma (opcional)
+  window.guardarFirmaEnServidor = async function ({
+    solicitudId,
+    dataUrl = '',
+    fechaEmision = '',  // 'YYYY-MM-DD' (si no envías, el PHP usa hoy)
+    clearFirma = false
+  } = {}) {
+    const body = new FormData();
+    body.append('solicitud_id', String(solicitudId));
+    if (dataUrl)      body.append('firma_dataurl', dataUrl);
+    if (fechaEmision) body.append('fecha_emision', fechaEmision);
+    if (clearFirma)   body.append('clear_firma', '1');
+
+    const resp = await fetch(API_GUARDAR_FIRMA, {
+      method: 'POST',
+      body,
+      credentials: 'same-origin'
+    });
+
+    const json = await safeJSON(resp);
+    if (!resp.ok || !json?.ok) {
+      throw new Error(json?.message || 'No se pudo guardar la firma');
+    }
+    return json; // { ok:true, amortizacion:{...} }
+  };
+})();
+</script>
+
+
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+
+  function readIdFromURL(){
+    const sp = new URLSearchParams(location.search);
+    const n = Number(sp.get('solicitud_id') || sp.get('id') || 0);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  function todayISO(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function fechaValToISO(){
+    const el = document.getElementById('fechaVal');
+    if (!el) return todayISO();
+    if (el.dataset.fixed === '1') return todayISO();
+
+    const txt = (el.textContent || '').trim().toLowerCase();
+    const m = txt.match(/(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})/i);
+    const meses = {
+      enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,
+      julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12
+    };
+    if (m){
+      const dia = parseInt(m[1],10);
+      const mesNom = m[2].normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      const mes = meses[mesNom] || null;
+      const anio = parseInt(m[3],10);
+      if (mes){
+        const pad = n => String(n).padStart(2,'0');
+        return `${anio}-${pad(mes)}-${pad(dia)}`;
+      }
+    }
+    return todayISO();
+  }
+
+  function getSigDataURL(){
+    // si ya hay imagen en el cuadro o en la línea, úsala
+    const img = document.getElementById('sigImage') || document.getElementById('firmaImg');
+    if (img && img.src && img.src.startsWith('data:image')) return img.src;
+
+    // si no, intenta del canvas (y evita guardar canvas vacío)
+    const cv = document.getElementById('sigCanvas');
+    if (cv && cv.toDataURL){
+      try{
+        const ctx = cv.getContext('2d');
+        const data = ctx.getImageData(0,0,cv.width,cv.height).data;
+        for (let i=3;i<data.length;i+=4){
+          if (data[i]) return cv.toDataURL('image/png');
+        }
+      }catch(_) {}
+    }
+    return null; // <- sin firma
+  }
+
+async function onSave(){
+  const btn = document.getElementById('btnSave');
+  const solicitudId = readIdFromURL();
+
+  if (!solicitudId){
+    Swal.fire({
+      icon: 'error',
+      title: 'Falta solicitud',
+      text: 'No encontré el parámetro solicitud_id en la URL.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#dc2626',
+      background: '#0b1220',
+      color: '#e5e7eb'
+    });
+    return;
+  }
+
+  const dataUrl = getSigDataURL();  // puede ser null
+  const fechaISO = fechaValToISO();
+
+  try{
+    const old = btn?.textContent || '💾 Guardar';
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Guardando…';
+      btn.dataset.oldText = old;
+    }
+
+    Swal.fire({
+      title: 'Guardando tabla…',
+      html: 'Estoy guardando la tabla de amortización y la firma.',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      background: '#0b1220',
+      color: '#e5e7eb',
+      didOpen: () => Swal.showLoading()
+    });
+
+    await window.guardarFirmaEnServidor({
+      solicitudId,
+      dataUrl,
+      fechaEmision: fechaISO
+    });
+
+const PUBLIC = window.PUBLIC_BASE || window.BASE_URL || getPublicBase();
+
+const pagareUrl = `${PUBLIC}pagare.php?solicitud_id=${encodeURIComponent(String(solicitudId))}`;
+
+const result = await Swal.fire({
+  icon: 'success',
+  title: 'Tabla guardada',
+  html: 'La tabla de amortización se guardó correctamente.<br>¿Deseas avanzar al pagaré?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Avanzar',
+  denyButtonText: 'Salir',
+  cancelButtonText: 'Quedarme aquí',
+  confirmButtonColor: '#0a567d',
+  denyButtonColor: '#64748b',
+  cancelButtonColor: '#475569',
+  reverseButtons: true,
+  background: '#0b1220',
+  color: '#e5e7eb'
+});
+
+if (result.isConfirmed) {
+  window.location.href = pagareUrl;
+}
+
+    if (result.isConfirmed) {
+      if (window.AMORT_apply) window.AMORT_apply();
+
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+if (result.isDenied) {
+  const PUBLIC = window.PUBLIC_BASE || window.BASE_URL || getPublicBase();
+  window.location.href = `${PUBLIC}index.php`;
+}
+
+  }catch(err){
+    console.error(err);
+
+    Swal.fire({
+      icon: 'error',
+      title: 'No se pudo guardar',
+      text: err.message || 'Ocurrió un error al guardar la tabla.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#dc2626',
+      background: '#0b1220',
+      color: '#e5e7eb'
+    });
+
+  }finally{
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.oldText || '💾 Guardar';
+    }
+  }
+}
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnSave');
+    if (btn) btn.addEventListener('click', onSave);
+  });
+
+  // Ctrl/Cmd+S para guardar
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){
+      e.preventDefault();
+      const btn = document.getElementById('btnSave');
+      if (btn && !btn.disabled) btn.click();
+    }
+  });
+})();
+</script>
+
+
+
+
+<script>
+(function () {
+  // ---- helpers ----
+  const fmtLargo = d =>
+    new Intl.DateTimeFormat('es-MX', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    }).format(d);
+
+  function parseISOToDate(iso) { // 'YYYY-MM-DD' -> Date local
+    const [y, m, d] = String(iso || '').split('-').map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  async function cargarFirmaYFecha(solicitudId) {
+const PUBLIC = window.PUBLIC_BASE || window.BASE_URL || getPublicBase();
+
+const url = `${PUBLIC}app/controllers/amortizacion/leer_firma.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+
+    // Parseo seguro por si el servidor responde HTML
+    const resp = await fetch(url, { credentials: 'same-origin' });
+    const txt  = await resp.text();
+    let j;
+    try { j = JSON.parse(txt); } catch { console.error('Respuesta no JSON:', txt); return; }
+    if (!j?.ok) return;
+
+    // Soporta ambos formatos: amortizacion o meta
+    const meta = j.amortizacion || j.meta;
+    if (!meta) return;
+
+    // 1) Fecha emisión (solo mostrar)
+    if (meta.fecha_emision) {
+      const f = parseISOToDate(meta.fecha_emision);
+      if (f) {
+        const el = document.getElementById('fechaVal');
+        if (el) el.textContent = fmtLargo(f);
+      }
+    }
+
+    // 2) Firma (dataURL)
+    if (meta.firma_dataurl) {
+      // imagen sobre la línea (impresión)
+      const imgLine = document.getElementById('firmaImg');
+      if (imgLine) {
+        imgLine.src = meta.firma_dataurl;
+        imgLine.classList.add('show'); // asegúrate que en CSS .show { display:block }
+      }
+
+      // preview dentro del pad (opcional)
+      const imgPad = document.getElementById('sigImage');
+      if (imgPad) {
+        imgPad.src = meta.firma_dataurl;
+        imgPad.style.display = 'block';
+      }
+
+      // hidden para rehidratar canvas (acepta ambos ids)
+      const hidden1 = document.getElementById('firmaDataUrl');
+      const hidden2 = document.getElementById('firmaDataURL');
+      if (hidden1) hidden1.value = meta.firma_dataurl;
+      if (hidden2) hidden2.value = meta.firma_dataurl;
+    }
+  }
+
+  // Arranque
+  window.addEventListener('DOMContentLoaded', () => {
+    const sid =
+      window.SOLICITUD_ID ||
+      Number(new URLSearchParams(location.search).get('solicitud_id') || 0) ||
+      Number(new URLSearchParams(location.search).get('id') || 0);
+
+    if (sid > 0) {
+      cargarFirmaYFecha(sid).catch(console.error);
+    }
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const btn = document.getElementById('btnBack');
+  if(!btn) return;
+
+  // Detecta prod (Railway) vs local y arma la URL de regreso
+  const HOME_PROD  = 'https://hp-v1-production.up.railway.app/';
+  const HOME_LOCAL = '/hp/public/index.php'; // ajusta si tu index local está en otra ruta
+
+  const isProd = location.hostname.includes('railway.app');
+  const HOME   = isProd ? HOME_PROD : HOME_LOCAL;
+
+  btn.addEventListener('click', () => {
+    window.location.href = HOME;
+  });
+})();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extractor de Estado de Cuenta AFORE</title>
+  <style>
+    :root{
+      --bg:#f4f8fc;
+      --card:#ffffff;
+      --text:#16324f;
+      --muted:#6c7d90;
+      --line:#d9e4f0;
+      --primary:#0b5cab;
+      --primary-2:#0f75d1;
+      --soft:#eef5ff;
+      --success:#117a45;
+      --danger:#b42318;
+      --shadow:0 14px 40px rgba(15, 48, 87, 0.12);
+      --radius:22px;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg, #eef5fc 0%, #f8fbff 100%);
+      color:var(--text);
+    }
+
+    body{
+      min-height:100vh;
+    }
+
+    .wrap{
+      width:min(1180px, calc(100% - 32px));
+      margin:28px auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:22px;
+      padding:18px 10px 6px;
+    }
+
+    .hero h1{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.1;
+      color:#12385f;
+    }
+
+    .hero p{
+      margin:0 auto;
+      max-width:860px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.7;
+    }
+
+    .panel{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid rgba(201, 217, 232, 0.9);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-head{
+      padding:18px 22px;
+      background:linear-gradient(135deg, #0b5cab 0%, #0f75d1 100%);
+      color:#fff;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .card-body{
+      padding:22px;
+    }
+
+    .dropzone{
+      border:2px dashed #b8cde4;
+      border-radius:20px;
+      padding:34px 22px;
+      text-align:center;
+      background:linear-gradient(180deg, #f9fcff 0%, #f2f8ff 100%);
+      cursor:pointer;
+      transition:.2s ease;
+      display:block;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover{
+      border-color:#6ea8df;
+      background:linear-gradient(180deg, #f4f9ff 0%, #eaf4ff 100%);
+      transform:translateY(-1px);
+    }
+
+    .dropzone .icon{
+      font-size:42px;
+      margin-bottom:10px;
+    }
+
+    .dropzone h3{
+      margin:0 0 8px;
+      font-size:22px;
+      color:#183d62;
+    }
+
+    .dropzone p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    input[type="file"]{
+      display:none;
+    }
+
+    .file-name{
+      margin-top:14px;
+      font-size:14px;
+      color:#35516d;
+      font-weight:700;
+      background:#f7faff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px 14px;
+      word-break:break-word;
+    }
+
+    .file-row{
+      margin-top:16px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      outline:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:13px 18px;
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:.2px;
+      transition:.2s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+      color:#fff;
+      box-shadow:0 12px 24px rgba(11, 92, 171, 0.22);
+    }
+
+    .btn-soft{
+      background:var(--soft);
+      color:var(--primary);
+      border:1px solid #d5e5f8;
+    }
+
+    .status{
+      margin-top:16px;
+      display:none;
+      border-radius:14px;
+      padding:14px 15px;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.5;
+    }
+
+    .status.show{
+      display:block;
+    }
+
+    .status.loading{
+      background:#eef5ff;
+      color:var(--primary);
+      border:1px solid #cfe0f7;
+    }
+
+    .status.success{
+      background:#f1fbf5;
+      color:var(--success);
+      border:1px solid #bce8d0;
+    }
+
+    .status.error{
+      background:#fff1f1;
+      color:var(--danger);
+      border:1px solid #f1c6c6;
+    }
+
+    .result-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .metric{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+
+    .metric-label{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+
+    .metric-value{
+      font-size:28px;
+      font-weight:800;
+      color:var(--text);
+      line-height:1.1;
+      word-break:break-word;
+    }
+
+    .metric.total{
+      grid-column:1 / -1;
+      background:linear-gradient(135deg, #0b5cab 0%, #0f75d1 100%);
+      border:none;
+    }
+
+    .metric.total .metric-label,
+    .metric.total .metric-value{
+      color:#fff;
+    }
+
+    .meta{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .meta-item{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px 14px;
+      background:#fafcff;
+    }
+
+    .meta-title{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:4px;
+      text-transform:uppercase;
+    }
+
+    .meta-value{
+      font-size:14px;
+      color:var(--text);
+      font-weight:600;
+      word-break:break-word;
+    }
+
+    .debug-box{
+      margin-top:16px;
+      border:1px solid var(--line);
+      background:#0f1720;
+      color:#cde0ff;
+      border-radius:14px;
+      padding:14px;
+      font-size:12px;
+      line-height:1.55;
+      white-space:pre-wrap;
+      max-height:260px;
+      overflow:auto;
+      display:none;
+    }
+
+    .debug-box.show{
+      display:block;
+    }
+
+    .metric-input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:24px;
+  font-weight:800;
+  color:var(--text);
+  background:#fff;
+  outline:none;
+}
+
+.metric-input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(11,92,171,.12);
+}
+
+/* ===== Botones flotantes derecha ===== */
+.floating-actions{
+  position:fixed;
+  right:22px;
+  top:86%;
+  transform:translateY(-50%);
+  z-index:9999;
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  width:230px;
+  margin:0;
+  padding:0;
+
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
+/* Base general */
+.floating-actions .btn{
+  width:100%;
+  min-width:0;
+
+  cursor:pointer;
+  border-radius:999px;
+  padding:12px 18px;
+
+  font-size:14px;
+  font-weight:800;
+  font-family:Arial, Helvetica, sans-serif;
+
+  color:#ffffff;
+  border:1px solid transparent;
+
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+
+  transition:.18s ease;
+}
+
+.floating-actions .btn:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+/* ===== Ver debug ===== */
+.floating-actions #btnToggleDebug{
+  background:linear-gradient(135deg, rgba(108,92,231,.92) 0%, rgba(88,74,201,.92) 100%);
+  color:#ffffff;
+  border-color:rgba(255,255,255,.10);
+}
+
+.floating-actions #btnToggleDebug:hover{
+  background:linear-gradient(135deg, rgba(98,82,220,.98) 0%, rgba(78,64,190,.98) 100%);
+}
+
+/* ===== Ir a caratula ===== */
+.floating-actions #btnIrResumen{
+  background:linear-gradient(135deg, rgba(11,92,171,.95) 0%, rgba(15,117,209,.95) 100%);
+  color:#ffffff;
+  border-color:rgba(255,255,255,.10);
+}
+
+.floating-actions #btnIrResumen:hover{
+  background:linear-gradient(135deg, rgba(9,82,154,.98) 0%, rgba(13,104,186,.98) 100%);
+}
+
+/* ===== Volver a retroactivo ===== */
+.floating-actions #btnVolverRetroactivo{
+  background:linear-gradient(135deg, rgba(243,156,18,.92) 0%, rgba(230,126,34,.92) 100%);
+  color:#ffffff;
+  border-color:rgba(255,255,255,.10);
+}
+
+.floating-actions #btnVolverRetroactivo:hover{
+  background:linear-gradient(135deg, rgba(232,146,8,.98) 0%, rgba(219,116,24,.98) 100%);
+}
+
+/* ===== Salir al menú ===== */
+.floating-actions #btnSalirMenu{
+  background:linear-gradient(135deg, rgba(220,53,69,.90) 0%, rgba(192,57,43,.90) 100%);
+  color:#ffffff;
+  border-color:rgba(255,255,255,.10);
+}
+
+.floating-actions #btnSalirMenu:hover{
+  background:linear-gradient(135deg, rgba(210,43,59,.98) 0%, rgba(182,47,33,.98) 100%);
+}
+
+/* Responsive */
+@media (max-width:900px){
+  .floating-actions{
+    left:12px;
+    right:12px;
+    bottom:12px;
+    top:auto;
+    transform:none;
+
+    width:auto;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .floating-actions .btn{
+    width:auto;
+    min-width:135px;
+    flex:1 1 135px;
+  }
+}
+
+/* Ocultar en impresión */
+@media print{
+  .floating-actions{
+    display:none !important;
+  }
+}
+
+
+    @media (max-width: 900px){
+      .panel{
+        grid-template-columns:1fr;
+      }
+
+      .result-grid{
+        grid-template-columns:1fr;
+      }
+
+      .metric.total{
+        grid-column:auto;
+      }
+
+      .hero h1{
+        font-size:26px;
+      }
+
+      .metric-value{
+        font-size:24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Extractor de Estado de Cuenta AFORE</h1>
+      <p>
+        Sube o arrastra un PDF para extraer automáticamente los montos de
+        IMSS 1997, SAR IMSS 1992, SAR INFONAVIT 1992 e INFONAVIT 1997.
+      </p>
+    </section>
+
+    <section class="panel">
+      <!-- IZQUIERDA -->
+      <article class="card">
+        <div class="card-head">Cargar archivo PDF</div>
+        <div class="card-body">
+          <form id="formPdf" enctype="multipart/form-data">
+            <label class="dropzone" id="dropzone" for="pdfInput">
+              <div class="icon">📄</div>
+              <h3>Arrastra tu PDF aquí</h3>
+              <p>o haz clic para seleccionar un archivo desde tu equipo</p>
+            </label>
+
+            <input type="file" id="pdfInput" name="pdf" accept="application/pdf" required>
+
+            <div class="file-name" id="fileName">Ningún archivo seleccionado</div>
+
+            <div class="file-row">
+              <button type="button" class="btn btn-soft" id="btnChoose">Elegir archivo</button>
+              <button type="submit" class="btn btn-primary" id="btnSubmit">Subir y extraer</button>
+            </div>
+
+            <div class="status" id="statusBox"></div>
+          </form>
+        </div>
+      </article>
+
+      <!-- DERECHA -->
+      <article class="card">
+        <div class="card-head">Resultados detectados</div>
+        <div class="card-body">
+
+
+        <div class="result-grid">
+          <div class="metric">
+            <div class="metric-label">IMSS 1997</div>
+            <input class="metric-input" id="valImss1997" type="number" step="0.01" value="0">
+          </div>
+
+          <div class="metric">
+            <div class="metric-label">SAR IMSS 1992</div>
+            <input class="metric-input" id="valSarImss1992" type="number" step="0.01" value="0">
+          </div>
+
+          <div class="metric">
+            <div class="metric-label">SAR INFONAVIT 1992</div>
+            <input class="metric-input" id="valSarInfonavit1992" type="number" step="0.01" value="0">
+          </div>
+
+          <div class="metric">
+            <div class="metric-label">INFONAVIT 1997</div>
+            <input class="metric-input" id="valInfonavit1997" type="number" step="0.01" value="0">
+          </div>
+
+          <div class="metric total">
+            <div class="metric-label">Resultado total</div>
+            <div class="metric-value" id="valTotal">$0.00</div>
+          </div>
+
+        </div>
+
+
+          <div class="meta">
+            <div class="meta-item">
+              <div class="meta-title">Método de lectura</div>
+              <div class="meta-value" id="valMetodo">—</div>
+            </div>
+
+            <div class="meta-item">
+              <div class="meta-title">Ruta temporal del PDF</div>
+              <div class="meta-value" id="valRuta">—</div>
+            </div>
+          </div>
+
+            <div class="floating-actions">
+              <button type="button" class="btn btn-soft" id="btnToggleDebug">Ver debug</button>
+
+              <button type="button" class="btn btn-primary" id="btnIrResumen">
+                Ir a caratula
+              </button>
+
+              <button type="button" class="btn btn-soft" id="btnVolverRetroactivo">
+                Volver a retroactivo
+              </button>
+
+              <button type="button" class="btn btn-soft" id="btnSalirMenu">
+                Salir al menú
+              </button>
+            </div>
+
+
+
+          <div class="debug-box" id="debugBox">Sin información de debug.</div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+<script>
+  const form = document.getElementById('formPdf');
+  const pdfInput = document.getElementById('pdfInput');
+  const btnChoose = document.getElementById('btnChoose');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const dropzone = document.getElementById('dropzone');
+  const fileName = document.getElementById('fileName');
+  const statusBox = document.getElementById('statusBox');
+
+  const valImss1997 = document.getElementById('valImss1997');
+  const valSarImss1992 = document.getElementById('valSarImss1992');
+  const valSarInfonavit1992 = document.getElementById('valSarInfonavit1992');
+  const valInfonavit1997 = document.getElementById('valInfonavit1997');
+
+  const valTotal = document.getElementById('valTotal');
+  const valMetodo = document.getElementById('valMetodo');
+  const valRuta = document.getElementById('valRuta');
+
+  const btnToggleDebug = document.getElementById('btnToggleDebug');
+  const debugBox = document.getElementById('debugBox');
+
+  function money(value){
+    const n = Number(value);
+    if (isNaN(n)) return '$0.00';
+
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 2
+    }).format(n);
+  }
+
+  function num(value){
+    const n = Number(String(value ?? '').replace(/[$,\s]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function setInputValue(input, value){
+    if (!input) return;
+    input.value = Number(value || 0).toFixed(2);
+  }
+
+  function leerSessionData(){
+    const rawPrev = sessionStorage.getItem('CIP_DATOS_TABLA3');
+    try {
+      return rawPrev ? JSON.parse(rawPrev) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+function guardarAforeDesdeInputs(){
+  const imss1997 = num(valImss1997?.value || 0);
+  const sarImss1992 = num(valSarImss1992?.value || 0);
+  const sarInfonavit1992 = num(valSarInfonavit1992?.value || 0);
+  const infonavit1997 = num(valInfonavit1997?.value || 0);
+
+  const total = imss1997 + sarImss1992 + sarInfonavit1992 + infonavit1997;
+
+  if (valTotal) {
+    valTotal.textContent = money(total);
+  }
+
+  const prevData = leerSessionData();
+
+  const nuevosDatos = {
+    ...prevData,
+    imss1997,
+    sarImss1992,
+    sarInfonavit1992,
+    infonavit1997,
+    resultadoTotalAfore: total
+  };
+
+  // ✅ Ya no guardamos cipFinancialMexico desde AFORE
+  delete nuevosDatos.cipFinancialMexico;
+
+  sessionStorage.setItem('CIP_DATOS_TABLA3', JSON.stringify(nuevosDatos));
+
+  console.log('Datos AFORE guardados:', nuevosDatos);
+}
+
+  function setStatus(message, type = 'loading'){
+    if (!statusBox) return;
+    statusBox.className = `status show ${type}`;
+    statusBox.textContent = message;
+  }
+
+  function clearResults(){
+    setInputValue(valImss1997, 0);
+    setInputValue(valSarImss1992, 0);
+    setInputValue(valSarInfonavit1992, 0);
+    setInputValue(valInfonavit1997, 0);
+
+    if (valTotal) valTotal.textContent = '$0.00';
+    if (valMetodo) valMetodo.textContent = '—';
+    if (valRuta) valRuta.textContent = '—';
+    if (debugBox) debugBox.textContent = 'Sin información de debug.';
+
+    guardarAforeDesdeInputs();
+  }
+
+  function setFileName(file){
+    if (!fileName) return;
+    fileName.textContent = file ? `Archivo seleccionado: ${file.name}` : 'Ningún archivo seleccionado';
+  }
+
+  btnChoose?.addEventListener('click', () => {
+    pdfInput?.click();
+  });
+
+  pdfInput?.addEventListener('change', () => {
+    const file = pdfInput.files[0] || null;
+    setFileName(file);
+  });
+
+  ['dragenter','dragover'].forEach(evt => {
+    dropzone?.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add('dragover');
+    });
+  });
+
+  ['dragleave','drop'].forEach(evt => {
+    dropzone?.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('dragover');
+    });
+  });
+
+  dropzone?.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      pdfInput.files = files;
+      setFileName(files[0]);
+    }
+  });
+
+  btnToggleDebug?.addEventListener('click', () => {
+    debugBox?.classList.toggle('show');
+  });
+
+  [
+  valImss1997,
+  valSarImss1992,
+  valSarInfonavit1992,
+  valInfonavit1997
+  ].forEach(input => {
+    input?.addEventListener('input', guardarAforeDesdeInputs);
+
+    input?.addEventListener('blur', () => {
+      setInputValue(input, num(input.value));
+      guardarAforeDesdeInputs();
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const file = pdfInput?.files?.[0];
+    if (!file) {
+      setStatus('Selecciona un archivo PDF primero.', 'error');
+      return;
+    }
+
+    clearResults();
+    setStatus('Procesando PDF, espera un momento...', 'loading');
+
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Extrayendo...';
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('pdf', file);
+
+      const res = await fetch('extraer_afore.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setStatus(data.error || 'Ocurrió un error al procesar el PDF.', 'error');
+        if (debugBox) debugBox.textContent = JSON.stringify(data, null, 2);
+        return;
+      }
+
+      const result = data.data || {};
+      const debug = data.debug || {};
+
+      setInputValue(valImss1997, result.imss_1997);
+      setInputValue(valSarImss1992, result.sar_imss_1992);
+      setInputValue(valSarInfonavit1992, result.sar_infonavit_1992);
+      setInputValue(valInfonavit1997, result.infonavit_1997);
+
+      guardarAforeDesdeInputs();
+
+      if (valMetodo) valMetodo.textContent = debug.method || '—';
+      if (valRuta) valRuta.textContent = debug.pdf_path || '—';
+      if (debugBox) debugBox.textContent = JSON.stringify(data, null, 2);
+
+      setStatus('Extracción completada correctamente. Puedes editar los montos si lo necesitas.', 'success');
+
+    } catch (err) {
+      setStatus('No se pudo conectar con el servidor o la respuesta no fue válida.', 'error');
+      if (debugBox) debugBox.textContent = String(err);
+    } finally {
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Subir y extraer';
+      }
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const data = leerSessionData();
+
+    setInputValue(valImss1997, data.imss1997 || 0);
+    setInputValue(valSarImss1992, data.sarImss1992 || 0);
+    setInputValue(valSarInfonavit1992, data.sarInfonavit1992 || 0);
+    setInputValue(valInfonavit1997, data.infonavit1997 || 0);
+
+    guardarAforeDesdeInputs();
+  });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const raw = sessionStorage.getItem('CIP_DATOS_TABLA3');
+
+  try {
+    const data = raw ? JSON.parse(raw) : {};
+
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? '';
+    };
+
+    const money = (value) => {
+      if (value === null || value === undefined || value === '') return '$0.00';
+
+      const limpio = String(value)
+        .replace(/\$/g, '')
+        .replace(/,/g, '')
+        .replace(/\s/g, '')
+        .trim();
+
+      const n = Number(limpio);
+
+      if (!Number.isFinite(n)) {
+        return String(value);
+      }
+
+      return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(n);
+    };
+
+    const hoy = new Date();
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const yyyy = hoy.getFullYear();
+    const fechaHoy = `${dd}/${mm}/${yyyy}`;
+
+    const semanasActuales =
+      data.semanasTotalesFinales ||
+      data.semanas ||
+      '0';
+
+    const salarioInversion =
+      data.diario1750 ||
+      data.calculoFinal?.diarioFinal ||
+      data.diario ||
+      '0.00';
+
+    const pensionFinal =
+      data.pensionFinal ||
+      data.calculoFinal?.pensionFinal ||
+      data.pensionEstimada ||
+      '$0.00';
+
+    const cuantiaBasicaFinal =
+      data.calculoFinal?.cuantiaBasicaFinal ||
+      data.cuantiaBasicaTotal ||
+      '$0.00';
+
+    const incrementosFinal =
+      data.calculoFinal?.incrementosFinal ||
+      data.incrementosCuantiaTotal ||
+      '$0.00';
+
+    const semanasExcedentesFinal =
+      data.calculoFinal?.semanasExcedentesFinal ||
+      data.semanasExcedentes ||
+      '0';
+
+    const semanasOriginales =
+      data.semanasOriginales ||
+      '0';
+
+    const semanasDescontadas =
+      data.semanasDescontadasDesempleo ||
+      data.semanasDescontadas ||
+      '0';
+
+    const salarioOriginal =
+      data.diarioOriginal1750 ||
+      data.calculoOriginal?.diarioOriginal ||
+      data.salarioPromedioOriginal ||
+      '0.00';
+
+    const pensionOriginal =
+      data.pensionOriginal ||
+      data.calculoOriginal?.pensionOriginal ||
+      '$0.00';
+
+    const cuantiaBasicaOriginal =
+      data.cuantiaBasicaOriginal ||
+      data.calculoOriginal?.cuantiaBasicaOriginal ||
+      '$0.00';
+
+    const incrementosOriginal =
+      data.incrementosOriginal ||
+      data.calculoOriginal?.incrementosOriginal ||
+      '$0.00';
+
+    const semanasExcedentesOriginal =
+      data.semanasExcedentesOriginal ||
+      data.calculoOriginal?.semanasExcedentesOriginal ||
+      '0';
+
+    // ================================
+    // ✅ MONTO RETROACTIVO / MONTO GRANDE
+    // ================================
+    const montoGrande =
+      data.montoGrande ||
+      data.montoRetroactivo ||
+      data.montoSolicitado ||
+      '$0.00';
+
+    const montoGrandeNumero =
+      data.montoGrandeNumero ||
+      data.montoRetroactivoNumero ||
+      data.montoSolicitadoNumero ||
+      0;
+
+    setText('nombreCliente', data.nombre || '');
+    setText('nssCliente', data.nss || '');
+    setText('curpCliente', data.curp || '');
+
+    setText('fechaNacimiento', data.fechaNacimiento || '--/--/----');
+    setText('fechaRetiro', data.edadRetiro ? `${data.edadRetiro} años` : '--');
+    setText('fechaCalculo', fechaHoy);
+
+    setText('cuantiaBasicaAnual', cuantiaBasicaFinal);
+    setText('incrementosAnuales', incrementosFinal);
+
+    setText('salarioPromedio', money(salarioInversion));
+    setText('semanasExcedentes', semanasExcedentesFinal);
+
+    setText('pensionFinal', pensionFinal);
+    setText('semanasActuales', semanasActuales);
+    setText('salarioInversion', money(salarioInversion));
+
+    setText('semanasOriginales', semanasOriginales);
+    setText('semanasDescontadas', semanasDescontadas);
+    setText('salarioOriginal', money(salarioOriginal));
+    setText('pensionOriginal', pensionOriginal);
+
+    setText('cuantiaBasicaOriginal', cuantiaBasicaOriginal);
+    setText('incrementosOriginal', incrementosOriginal);
+    setText('semanasExcedentesOriginal', semanasExcedentesOriginal);
+
+    setText('pensionPMG', data.pensionPMG || '$0.00');
+    setText('incrementoSemanas', data.incrementoSemanas || data.semanasMod40 || '0');
+
+    // ✅ Aquí pintamos la variable enviada desde retroactivo
+    setText('montoGrande', money(montoGrande));
+    setText('montoSolicitado', money(montoGrande));
+    setText('montoRetroactivo', money(montoGrande));
+
+    console.log('Datos cargados desde CIP_DATOS_TABLA3:');
+    console.table({
+      nombre: data.nombre || '',
+      nss: data.nss || '',
+      curp: data.curp || '',
+      fechaNacimiento: data.fechaNacimiento || '',
+      edadRetiro: data.edadRetiro || '',
+      fechaCalculo: fechaHoy,
+
+      semanasActuales,
+      salarioInversion: money(salarioInversion),
+      pensionFinal,
+      cuantiaBasicaFinal,
+      incrementosFinal,
+      semanasExcedentesFinal,
+
+      semanasOriginales,
+      semanasDescontadas,
+      salarioOriginal: money(salarioOriginal),
+      pensionOriginal,
+      cuantiaBasicaOriginal,
+      incrementosOriginal,
+      semanasExcedentesOriginal,
+
+      montoGrande: money(montoGrande),
+      montoGrandeNumero,
+
+      pensionPMG: data.pensionPMG || '$0.00',
+      semanasMod40Agregadas: data.incrementoSemanas || data.semanasMod40 || '0'
+    });
+
+  } catch (e) {
+    console.error('Error leyendo CIP_DATOS_TABLA3:', e);
+  }
+});
+</script>
+
+<script>
+const btnIrResumen = document.getElementById('btnIrResumen');
+
+btnIrResumen?.addEventListener('click', () => {
+  const qs = window.location.search || '';
+
+  try {
+    const raw = sessionStorage.getItem('CIP_DATOS_TABLA3');
+    const data = raw ? JSON.parse(raw) : {};
+
+    data.origenAfore = '/analisis/afore/';
+    data.updatedAt = Date.now();
+
+    sessionStorage.setItem('CIP_DATOS_TABLA3', JSON.stringify(data));
+  } catch (e) {
+    console.error('No se pudieron conservar variables antes de carátula:', e);
+  }
+
+  window.location.href = '/analisis/caratulas/seleccion.html' + qs;
+});
+
+const qs = window.location.search || '';
+
+const btnVolverRetroactivo = document.getElementById('btnVolverRetroactivo');
+btnVolverRetroactivo?.addEventListener('click', () => {
+  window.location.href = '/analisis/retroactivo/retroactivo.html' + qs;
+});
+
+const btnSalirMenu = document.getElementById('btnSalirMenu');
+btnSalirMenu?.addEventListener('click', () => {
+  window.location.href = '/index.php' + qs;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Formato de Visita a Domicilio</title>
+<style>
+:root{
+  --blue:#2f5fa8;
+  --line:#2f5fa8;
+  --text:#0f172a;
+}
+
+/* =========================
+   Impresión A4
+========================= */
+@page{
+  size: A4;
+  margin: 6mm;
+}
+
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  color:var(--text);
+  background:#f3f4f6;
+}
+
+/* =========================
+   Toolbar (no se imprime)
+========================= */
+.toolbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0b1120;
+  color: #fff;
+  padding: 10px 12px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+}
+.toolbar .left{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:700;
+  font-size:.92rem;
+}
+.btn{
+  border:1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.08);
+  color:#fff;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:.85rem;
+}
+.btn:hover{ background: rgba(255,255,255,.14); }
+
+/* =========================
+   Página A4
+========================= */
+.page{
+  width: 210mm;
+  min-height: 297mm;
+  margin: 16px auto;
+  background:#fff;
+  box-shadow: 0 20px 45px rgba(2,6,23,.18);
+  padding: 0;
+}
+.sheet{ padding: 0; }
+
+/* =========================
+   Encabezado
+========================= */
+.header{
+  display:grid;
+  grid-template-columns: 28mm 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+.logoBox{
+  border-right: 1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height: 14mm;
+}
+.logoMark{
+  width: 18mm;
+  height: 10mm;
+  border: 1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow: hidden;
+}
+.logoImg{
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display:block;
+}
+.titleBar{
+  background: var(--blue);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  letter-spacing:.04em;
+  height: 14mm;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* =========================
+   Tablas generales
+========================= */
+table{
+  width:100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 11px;
+}
+td, th{
+  border: 1px solid var(--line);
+  padding: 4px 6px;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+.label{
+  font-weight:700;
+  text-transform: uppercase;
+  font-size: 10px;
+  color:#0b1b3a;
+}
+.value{
+  margin-top: 2px;
+  min-height: 6mm;
+  font-size: 11px;
+}
+
+.sectionTitle{
+  background: #ffffff;
+  color: var(--text);
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: .03em;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+.sectionTitle--blue{
+  background: var(--blue);
+  color: #ffffff;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: .03em;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+/* =========================
+   Croquis + Checks (bloque 2 columnas)
+========================= */
+.grid2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 0;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  min-height: 62mm;
+}
+.grid2 .box{
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+}
+.grid2 .box:last-child{ border-right: 0; }
+
+/* Croquis izquierda */
+.sketch{
+  flex: 1;
+  position: relative;
+  min-height: 62mm;
+}
+.sketch .mini{
+  position: absolute;
+  inset: 6mm;
+  border: 1px dashed rgba(47,95,168,.6);
+}
+.sketchHint{
+  position:absolute;
+  bottom: 4px;
+  left: 6px;
+  right: 6px;
+  font-size: 10px;
+  color: rgba(15,23,42,.75);
+}
+
+/* =========================
+   CHECKS (croquis derecha)
+   - Contorno + solo líneas horizontales
+========================= */
+table.checks{
+  width:100%;
+  height:100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+}
+table.checks td, table.checks th{
+  border: 0 !important;
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+table.checks tr:not(:last-child) td{
+  border-bottom: 1px solid var(--line) !important;
+}
+table.checks td.center{
+  width: 16mm;
+  text-align: center;
+}
+
+/* Checks */
+.check{
+  display:inline-flex;
+  gap:6px;
+  align-items:center;
+  white-space:normal;
+  font-size: 11px;
+}
+.boxCheck{
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--line);
+  display:inline-block;
+  flex: 0 0 auto;
+}
+.checks tr:last-child td{
+  height: 100%;
+  vertical-align: top;
+}
+.checks .label{
+  display:block;
+  margin-bottom: 4px;
+}
+.checks .value{
+  box-sizing: border-box;
+  padding: 6px;
+}
+
+/* =========================
+   Nota final
+========================= */
+.note{
+  font-size: 10px;
+  color:#0b1b3a;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-top: 0;
+}
+.small{ font-size: 10px; }
+.center{ text-align:center; }
+
+/* Tabla mini (sin línea inferior) */
+.topTable--mini{ border-bottom: none; }
+.topTable--mini td{ border-bottom: none; }
+
+.sep-top{ margin-top: 6px; display:block; }
+.innerLine{
+  border-top: 1px solid var(--line);
+  margin: 6px -6px;
+}
+
+/* =========================
+   Bloque 3x3 - "¿Tiene exterior?"
+========================= */
+.extGrid3{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid var(--line);
+  position: relative;      /* ✅ para pseudolíneas */
+  overflow: hidden;        /* ✅ evita cortes */
+}
+
+/* Bordes por celda (horizontales + inferiores) */
+.extGrid3 > div{
+  border-bottom: 1px solid var(--line);
+  padding: 6px 8px;
+  font-size: 11px;
+  box-sizing: border-box;
+}
+
+/* 🔥 FORZAR las 2 líneas verticales SIEMPRE visibles */
+.extGrid3::before,
+.extGrid3::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width: 1px;
+  background: var(--line);
+  pointer-events:none;
+}
+.extGrid3::before{ left: 33.3333%; }
+.extGrid3::after { left: 66.6666%; }
+
+/* Encabezados */
+.extHead{
+  background: #ffffff;
+  color: var(--text);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: .03em;
+}
+
+/* Celdas con checks */
+.extCell{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: flex-start;
+}
+.extList2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 14px;
+}
+.extNums .check{ min-width: 64px; }
+.extRooms .check{ min-width: 90px; }
+
+/* =========================
+   Bloques 50/50 (Datos informante + Firmas)
+========================= */
+
+/* TD contenedor: marco lateral + borde inferior (arriba NO) */
+.fila-50-marco{
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-top: 0 !important;
+  padding: 0 !important;
+}
+
+/* Tabla interna 50/50 */
+.fila-50{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 0;
+}
+.fila-50 td{
+  border: 0 !important;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: top;
+}
+
+/* ÚNICA línea central */
+.fila-50 .lado-izq{
+  border-right: 1px solid var(--line);
+}
+
+/* Firma: altura estable */
+.firma-cell{
+  height: 30mm;
+  vertical-align: top;
+}
+.firma-cell .value{
+  min-height: 20mm;
+}
+
+/* =========================
+   Print tweaks
+========================= */
+@media print{
+  body{ background:#fff; }
+  .toolbar{ display:none !important; }
+
+  .page{
+    width: 188mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    min-height: auto !important;
+    background:#fff !important;
+    overflow: visible !important;
+  }
+
+  /* ⚠️ Mantienes zoom, pero ya no se pierden líneas por usar pt abajo */
+  .sheet{ zoom: 0.80; }
+
+  table{ font-size: 10px !important; }
+  td, th{ padding: 3px 5px !important; }
+
+  .label{ font-size: 9px !important; }
+  .value{ margin-top: 1px !important; min-height: 5mm !important; }
+
+  .grid2{ min-height: 52mm !important; }
+  .sketch{ min-height: 52mm !important; }
+
+  .descBox{ min-height: 14mm !important; }
+
+  .note{
+    font-size: 8.6px !important;
+    line-height: 1.1 !important;
+    padding: 4px 6px !important;
+  }
+
+  table, tr, td, th, .grid2, .extGrid3, .note{
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* ====== FIX BORDES EN IMPRESIÓN (pt = estable con zoom) ====== */
+  td, th{
+    border: 0.8pt solid var(--line) !important;
+  }
+
+  .boxCheck{
+    border: 0.8pt solid var(--line) !important;
+  }
+
+  /* extGrid3: bordes + líneas verticales en pt */
+  .extGrid3{
+    border-top: 0.8pt solid var(--line) !important;
+  }
+  .extGrid3 > div{
+    border-bottom: 0.8pt solid var(--line) !important;
+  }
+  .extGrid3::before,
+  .extGrid3::after{
+    width: 0.8pt !important;
+  }
+
+  /* 50/50 en pt */
+  .fila-50-marco{
+    border-left: 0.8pt solid var(--line) !important;
+    border-right: 0.8pt solid var(--line) !important;
+    border-bottom: 0.8pt solid var(--line) !important;
+  }
+  .fila-50 .lado-izq{
+    border-right: 0.8pt solid var(--line) !important;
+  }
+
+  /* Firma impresión */
+  .firma-cell{
+    height: 25mm !important;
+  }
+  .firma-cell .value{
+    min-height: 20mm !important;
+  }
+}
+
+/* LOCALIZACIÓN – tabla checks SIN borde exterior */
+table.checks{
+  border: 0 !important;          /* quita marco */
+}
+
+/* mantiene líneas horizontales entre filas */
+table.checks tr:not(:last-child) td{
+  border-bottom: 1px solid var(--line) !important;
+}
+
+/* columna del check sin borde */
+table.checks td.center{
+  border-left: 0 !important;
+}
+
+/* Quitar bordes superior e inferior del bloque ¿TIENE EXTERIOR? */
+.extGrid3{
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+@media print{
+  .extGrid3{
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+  }
+}
+/* Evita doble línea antes del SectionTitle */
+.extGrid3 > div:last-child{
+  border-bottom: 0 !important;
+}
+
+/* Por si el borde viene del contenedor */
+.extGrid3{
+  border-bottom: 0 !important;
+}
+/* Quitar borde inferior SOLO de la última fila del extGrid3 */
+.extGrid3 > div:nth-last-child(-n+3){
+  border-bottom: 0 !important;
+}
+@media print{
+  .extGrid3 > div:nth-last-child(-n+3){
+    border-bottom: 0 !important;
+  }
+}
+
+/* ====== SOLO VISTA: forzar líneas centrales visibles ====== */
+@media screen{
+
+  /* 50/50: línea central */
+  .fila-50 .lado-izq{
+    border-right: 1px solid var(--line) !important;
+  }
+
+  /* extGrid3: 2 separadores verticales siempre visibles */
+  .extGrid3::before,
+  .extGrid3::after{
+    opacity: 1 !important;
+    width: 1px !important;
+    background: var(--line) !important;
+  }
+
+  /* Por si algo las tapa */
+  .extGrid3{
+    position: relative !important;
+  }
+}
+
+@media screen{
+  .innerLine{
+    border-top: 1px solid var(--line) !important; /* o 2px si quieres */
+    transform: translateZ(0); /* ayuda a que el navegador la renderice */
+  }
+}
+/* ===== innerLine: visible en vista HTML ===== */
+@media screen{
+  .innerLine{
+    border: 0 !important;                 /* ya no dependemos del border */
+    height: 1px !important;
+    background: var(--line) !important;   /* dibuja la línea sí o sí */
+    margin: 6px -6px !important;          /* conserva tu "hasta el borde" */
+  }
+}
+
+/* ===== innerLine: impresión (como ya te funciona) ===== */
+@media print{
+  .innerLine{
+    background: transparent !important;
+    height: 0 !important;
+    border-top: 0.8pt solid var(--line) !important;
+    margin: 6px -6px !important;
+  }
+}
+
+/* ===== extTable2: solo línea central ===== */
+
+/* quitar todos los bordes */
+.extTable2 td{
+  border: none !important;
+}
+
+/* línea vertical central */
+.extTable2 td:first-child{
+  border-right: 1px solid var(--line) !important;
+}
+
+/* impresión */
+@media print{
+  .extTable2 td:first-child{
+    border-right: 0.8pt solid var(--line) !important;
+  }
+}
+/* Línea horizontal debajo de encabezados */
+.extTable2 tr:first-child td{
+  border-bottom: 1px solid var(--line) !important;
+}
+
+/* impresión */
+@media print{
+  .extTable2 tr:first-child td{
+    border-bottom: 0.8pt solid var(--line) !important;
+  }
+}
+
+
+/* Cuadro grande */
+.sketch .mini{
+  position:absolute;
+  inset:3mm;
+  border:0px dashed rgba(47,95,168,.6);
+  padding:3mm;
+  box-sizing:border-box;
+}
+
+/* Rejilla interna */
+.mini-grid{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap:6mm;
+}
+
+/* Cuadritos */
+.mini-grid span{
+  border:1px solid rgba(47,95,168,.8);
+  border-radius:2px;
+}
+
+
+</style>
+
+</head>
+
+<body>
+  <div class="toolbar">
+    <div class="left">📄 Formato de Visita a Domicilio</div>
+    <div class="right">
+      <button class="btn" type="button" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+    <button class="btn btn-outline" id="btnVolver">
+  ⬅️ Volver
+</button>
+
+  </div>
+
+  <div class="page">
+    <div class="sheet">
+
+      <!-- HEADER -->
+      <div class="header">
+        <div class="logoBox">
+          <div class="logoMark">
+  <img src="/img/logo.png" alt="CIP" class="logoImg">
+</div>
+        </div>
+        <div class="titleBar">FORMATO DE VISITA A DOMICILIO</div>
+      </div>
+
+      <!-- BLOQUE SUPERIOR -->
+
+      <table class="topTable topTable--mini">
+  <colgroup>
+    <col style="width:50%">
+    <col style="width:50%">
+  </colgroup>
+
+  <tr class="row-1">
+    <td>
+      <div class="label">FECHA</div>
+      <div class="value" contenteditable="true"></div>
+    </td>
+<td>
+  <div class="label">NO. DE SOLICITUD</div>
+  <div class="value" id="folioSolicitud" contenteditable="true"></div>
+</td>
+  </tr>
+</table>
+
+      <table>
+        <colgroup>
+          <col style="width: 50%" />
+          <col style="width: 50%" />
+
+        </colgroup>
+        <tr>
+<td colspan="1">
+  <div class="label">Nombre del solicitante</div>
+  <div class="value" id="nombreSolicitante" contenteditable="true"></div>
+</td>
+
+<td>
+<div class="label sep-top">Estado civil</div>
+<div class="value" id="estadoCivil" contenteditable="true"></div>
+<div class="innerLine"></div>
+  <div class="label">Nombre de cónyuge</div>
+  <div class="value" contenteditable="true"></div>
+</td>
+
+        </tr>
+
+        <tr>
+          <td>
+            <div class="label">No. Dependientes</div>
+            <div class="label">Económicos</div>
+            <div class="value small">(Obtener edades de Cónyuge e hijos)</div>
+            <div class="value" id="dependientes" contenteditable="true"></div>
+          </td>
+
+          <td>
+            <div class="label">Teléfono fijo</div>
+            <div class="value" id="telefono" contenteditable="true"></div>
+            <div class="innerLine"></div>
+            <div class="label" style="margin-top:6px;">Teléfono celular</div>
+            <div class="value" id="celular" contenteditable="true"></div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2">
+            <div class="label">Domicilio (calle/no./colonia/C.P.)</div>
+            <div class="value" id="domicilioCompleto" contenteditable="true" style="min-height:10mm;"></div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2">
+            <div class="label">Entre las calles</div>
+             <div class="value" id="entreCalles" contenteditable="true" style="min-height:10mm;"></div>
+          </td>
+        </tr>
+
+<tr>
+  <td colspan="2" class="sectionTitle sectionTitle--blue">
+    CROQUIS DE LA LOCALIZACIÓN
+  </td>
+</tr>
+
+      </table>
+
+      <!-- CROQUIS + OPCIONES -->
+      <div class="grid2">
+        <div class="box">
+          <div class="sketch">
+            <div class="mini">
+              <div class="mini-grid">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="sketchHint">Dibuja el croquis aquí (a mano al imprimir) o escribe indicaciones.</div>
+          </div>
+        </div>
+
+        <div class="box">
+          <table class="checks">
+            <tr>
+              <td style="width: 70%">
+                </span> En una casa sola</span>
+              </td>
+              <td style="width: 5%" class="center"><span class="check"><span class="boxCheck"></span></td>
+            </tr>
+            <tr>
+              <td> Condominio o departamento en un edificio</span></td>
+              <td class="center"><span class="check"><span class="boxCheck"></span></td>
+            </tr>
+            <tr>
+              <td></span> Hay varias viviendas de familiares en el mismo predio</span></td>
+              <td class="center"><span class="check"><span class="boxCheck"></span></td>
+            </tr>
+            <tr>
+              <td></span> Es una vecindad</span></td>
+              <td class="center"><span class="check"><span class="boxCheck"></span></td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="label">Comentarios</div>
+                <div class="value" contenteditable="true" style="min-height:18mm;"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- BLOQUES MEDIOS -->
+      <table class="tabla-vecinos">
+        <tr>
+          <td style="width: 28%">
+            <div class="label">Arraigo en domicilio</div>
+          </td>
+          <td style="width: 10%">
+            <div class="label">Años</div>
+             <div class="value"></div>
+          </td>
+          <td style="width: 20%">
+            <div class="label">Tipo de vivienda</div>
+            <div class="value"></div>
+          </td>
+<td style="width: 42%">
+  <div class="label">La zona es:</div>
+
+  <div class="zona-grid">
+    <div class="zona-item">
+      <span class="boxCheck"></span>
+      <span>Interés social</span>
+    </div>
+
+    <div class="zona-item">
+      <span class="boxCheck"></span>
+      <span>Tipo medio</span>
+    </div>
+
+    <div class="zona-item">
+      <span class="boxCheck"></span>
+      <span>Medio alto</span>
+    </div>
+
+    <div class="zona-item">
+      <span class="boxCheck"></span>
+      <span>Residencial</span>
+    </div>
+  </div>
+</td>
+
+        </tr>
+
+        <tr>
+          <td>
+            <div class="label">Monto de renta o hipoteca</div>
+            <div class="value" id="saldoHipoteca" contenteditable="true"></div>
+          </td>
+          <td colspan="2">
+            <div class="label">Nombre del propietario de la casa</div>
+            <div class="value" id="nombrePropietario" contenteditable="true"></div>
+          </td>
+          <td>
+            <div class="label">Parentesco con solicitante</div>
+            <div class="value" id="parentescoPropietario" contenteditable="true"></div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="label">¿Cuántas personas viven en el domicilio?</div>
+            <div class="value" contenteditable="true"></div>
+          </td>
+          <td>
+            <div class="label">Adultos</div>
+            <div class="value" contenteditable="true"></div>
+          </td>
+          <td>
+            <div class="label">Niños</div>
+            <div class="value" contenteditable="true"></div>
+          </td>
+          <td>
+            <div class="label">¿Cuántas personas aportan al gasto familiar?</div>
+            <div class="value" contenteditable="true"></div>
+          </td>
+        </tr>
+
+<tr>
+  <td colspan="4" style="padding:0;">
+    <div class="extGrid3">
+
+      <!-- Encabezados fila 1 -->
+      <div class="extHead">¿TIENE EXTERIOR?</div>
+      <div class="extHead">FACHADA</div>
+      <div class="extHead">NO. DE PISOS</div>
+
+      <!-- Contenido fila 2 -->
+      <div class="extCell">
+        <span class="check"><span class="boxCheck"></span> Sí</span>
+        <span class="check"><span class="boxCheck"></span> No</span>
+      </div>
+
+      <div class="extCell extList2">
+        <span class="check"><span class="boxCheck"></span> Colado/Loza</span>
+        <span class="check"><span class="boxCheck"></span> Lámina asbesto</span>
+        <span class="check"><span class="boxCheck"></span> Lámina metal</span>
+        <span class="check"><span class="boxCheck"></span> Lámina cartón</span>
+        <span class="check"><span class="boxCheck"></span> Otros materiales</span>
+      </div>
+
+      <div class="extCell extNums">
+        <span class="check"><span class="boxCheck"></span> 1</span>
+        <span class="check"><span class="boxCheck"></span> 2</span>
+        <span class="check"><span class="boxCheck"></span> Más</span>
+      </div>
+    </div>
+  </td>
+</tr>
+
+<tr>
+   <td colspan="4" class="fila-50-marco">
+<table class="extTable2">
+  <colgroup>
+    <col style="width:50%">
+    <col style="width:50%">
+  </colgroup>
+
+  <!-- Encabezados -->
+  <tr>
+    <td class="extHead">EL PISO ES DE</td>
+    <td class="extHead">NÚMERO DE HABITACIONES</td>
+  </tr>
+
+  <!-- Contenido -->
+  <tr>
+    <td>
+      <div class="extCell extList2">
+        <span class="check"><span class="boxCheck"></span> Madera</span>
+        <span class="check"><span class="boxCheck"></span> Loseta</span>
+        <span class="check"><span class="boxCheck"></span> Vinílico</span>
+        <span class="check"><span class="boxCheck"></span> Cemento</span>
+        <span class="check"><span class="boxCheck"></span> Tierra</span>
+      </div>
+    </td>
+
+    <td>
+      <div class="extCell extNums extRooms">
+        <span class="check"><span class="boxCheck"></span> 1</span>
+        <span class="check"><span class="boxCheck"></span> 2</span>
+        <span class="check"><span class="boxCheck"></span> 3</span>
+        <span class="check"><span class="boxCheck"></span> Más de 3</span>
+      </div>
+    </td>
+  </tr>
+</table>
+
+   </td>
+
+  
+</tr>
+
+
+        <tr>
+          <td class="sectionTitle" colspan="4">MARQUE CON UNA (X) LOS ENSERES DOMÉSTICOS EN EL DOMICILIO</td>
+        </tr>
+
+        <tr>
+          <td>TV</td>
+          <td>Estéreo</td>
+          <td>Comedor</td>
+          <td>Sala</td>
+        </tr>
+        <tr>
+          <td>Estufa</td>
+          <td>Refrigerador</td>
+          <td>Microondas</td>
+          <td>Lavadora</td>
+        </tr>
+        <tr>
+          <td>Equipo de Aire Acondicionado</td>
+          <td colspan="2">Computadora / Consola de videojuegos</td>
+          <td>Otro: <span contenteditable="true" style="display:inline-block; min-width:60mm;"></span></td>
+        </tr>
+
+            <tr>
+            <td colspan="4" class="sectionTitle sectionTitle--blue">
+                Descripción del exterior de la casa y de la calle / opinión de quien hizo la visita
+            </td>
+            </tr>
+
+            <tr>
+            <td colspan="4">
+                <div class="value descBox" contenteditable="true" style="min-height:22mm;"></div>
+            </td>
+            </tr>
+
+      </table>
+
+<table style="table-layout: fixed; width:100%;">
+  <colgroup>
+    <col style="width:6%">
+    <col style="width:32%">
+    <col style="width:31%">
+    <col style="width:31%">
+  </colgroup>
+
+<tr>
+  <td colspan="4" class="fila-50-marco">
+    <table class="fila-50">
+      <colgroup>
+        <col style="width:50%">
+        <col style="width:50%">
+      </colgroup>
+      <tr>
+        <td class="lado-izq">
+          <div class="label">Datos del informante</div>
+          <div class="value" contenteditable="true" style="min-height:12mm;"></div>
+        </td>
+        <td class="lado-der">
+          <div class="label">Relación con el solicitante</div>
+          <div class="value" contenteditable="true" style="min-height:12mm;"></div>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+  <tr>
+    <td colspan="4" class="sectionTitle sectionTitle--blue">Confirmación con vecinos</td>
+  </tr>
+
+  <tr>
+    <th>V</th>
+    <th>Nombre</th>
+    <th>Domicilio</th>
+    <th>Comentarios</th>
+  </tr>
+
+  <tr>
+    <td class="center">V1</td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+  </tr>
+
+  <tr>
+    <td class="center">V2</td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+    <td><div class="value" contenteditable="true" style="min-height:10mm;"></div></td>
+  </tr>
+
+<tr>
+  <td colspan="4" class="fila-50-marco firma-row">
+    <table class="fila-50">
+      <colgroup>
+        <col style="width:50%">
+        <col style="width:50%">
+      </colgroup>
+      <tr>
+        <td class="lado-izq firma-cell">
+          <div class="label">Nombre de quien hizo la verificación</div>
+          <div class="value" contenteditable="true"></div>
+        </td>
+        <td class="lado-der firma-cell">
+          <div class="label">Firma de quien hizo la verificación</div>
+          <div class="value" contenteditable="true"></div>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+</table>
+
+      <div class="note">
+        DECLARO QUE LA VERIFICACIÓN LA REALICÉ CON ESTRICTO APEGO A LAS POLÍTICAS DE INVESTIGACIÓN DE CRÉDITO ESTABLECIDAS POR CIP FINANCIAL GROUP Y QUE LOS DATOS E 
+        INFORMACIÓN REGISTRADA EN ESTE FORMATO ES VERÍDICA Y EXACTA SEGÚN LOS DATOS QUE OBTUVE COMO RESULTADO DE MI INVESTIGACIÓN FÍSICA CONFORME A LOS DOCUMENTOS 
+        QUE SIRVEN DE SOPORTE. POR LO QUE ENTIENDO Y ACEPTO RESPONDER POR CUALQUIER TIPO DE RESPONSABILIDAD QUE IMPLIQUE LA FALSEDAD DE LA INFORMACIÓN. 
+        <br><br>
+<strong>Nota:</strong> Puedes registrar comentarios de cómo llegar al domicilio y notas adicionales al reverso de este formato.
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* ================== CONFIG BASE_URL ================== */
+const BASE_URL = (() => {
+  const path = window.location.pathname;
+  if (path.includes('/sempiternal/public/')) return '/sempiternal/public/';
+  return '/';
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  const elFolio  = document.getElementById('folioSolicitud');
+  const elNombre = document.getElementById('nombreSolicitante');
+  const elEstadoCivil = document.getElementById('estadoCivil');
+  const elDependientes = document.getElementById('dependientes');
+  const elTelefono = document.getElementById('telefono');
+  const elCelular  = document.getElementById('celular');
+  const elDomicilio = document.getElementById('domicilioCompleto');
+  const elEntre     = document.getElementById('entreCalles');
+  const elTiempoDom = document.getElementById('tiempoDomicilio');
+  const tipovivienda = document.getElementById('tipovivienda');
+  const saldoHipoteca = document.getElementById('saldoHipoteca');
+  const nombrePropietario = document.getElementById('nombrePropietario');
+  const parentescoPropietario = document.getElementById('parentescoPropietario');
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const folio = params.get('folio');
+
+  if (!id && !folio) return;
+
+  const endpointBase = '/app/controllers/visita/get_vista.php';
+  const endpoint = id
+    ? `${endpointBase}?id=${encodeURIComponent(id)}`
+    : `${endpointBase}?folio=${encodeURIComponent(folio)}`;
+
+  try {
+    const res = await fetch(endpoint, { cache: 'no-store' });
+    if (!res.ok) {
+      console.error('HTTP error', res.status);
+      return;
+    }
+
+    const json = await res.json();
+    if (!json.ok) {
+      console.error(json.error);
+      return;
+    }
+
+    // Pintar datos
+    if (elFolio)  elFolio.textContent  = json.data.folio ?? '';
+    if (elNombre) elNombre.textContent = json.data.nombre_solicitante ?? '';
+    if (elEstadoCivil) elEstadoCivil.textContent = json.data.estado_civil ?? '';
+    if (elDependientes) {
+    elDependientes.textContent = json.data.dependientes ?? '';
+     }
+    if (elTelefono) elTelefono.textContent = json.data.telefono ?? '';
+    if (elCelular)  elCelular.textContent  = json.data.celular ?? '';
+    if (elDomicilio) elDomicilio.textContent = json.data.domicilio_completo ?? '';
+    if (elEntre)     elEntre.textContent     = json.data.entre_calles ?? '';
+    if (elTiempoDom) elTiempoDom.textContent = json.data.tiempo_domicilio ?? '';
+    if (tipovivienda) tipovivienda.textContent = json.data.tipo_vivienda ?? '';
+    if (saldoHipoteca) {
+      const saldo = parseFloat(json.data.saldo_hipoteca);
+      saldoHipoteca.textContent = (saldo && saldo > 0) ? saldo.toFixed(2) : '';
+    }
+    if (nombrePropietario) {
+        const nombre = (json.data.nombre_propietario || '').trim();
+        nombrePropietario.textContent =
+          (nombre && nombre.toUpperCase() !== 'N/A') ? nombre : '';
+      }
+
+    if (parentescoPropietario) {
+      const parentesco = (json.data.parentesco_propietario || '').trim();
+      parentescoPropietario.textContent =
+        (parentesco && parentesco.toUpperCase() !== 'N/A') ? parentesco : '';
+    }
+
+    // Guardar id para siguientes llamadas
+    if (json.data.id) {
+      sessionStorage.setItem('id_solicitud', json.data.id);
+    }
+
+  } catch (err) {
+    console.error('Fetch error:', err);
+  }
+});
+
+
+
+document.getElementById('btnVolver')?.addEventListener('click', () => {
+  try {
+    // Marca que debe reabrir documentos
+    sessionStorage.setItem('reabrir_docs', '1');
+    sessionStorage.setItem('reabrir_docs_folio', sessionStorage.getItem('solicitud_id') || '');
+  } catch(e){}
+
+  window.location.href = `${BASE_URL}index.php`;
+});
+
+</script>
+
+
+</body>
+</html>

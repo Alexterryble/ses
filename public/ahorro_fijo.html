@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CIP Financial Group - Asesoría en Pensiones y Finanzas</title>
+  <meta name="description" content="CIP Financial Group brinda asesoría profesional en pensiones, ahorro e inversión. Planea tu retiro con estrategias financieras personalizadas.">
+  <meta name="keywords" content="pensiones, retiro, afore, inversión, ahorro, asesoría financiera, IMSS, CIP Financial Group, consultoría financiera">
+  <meta name="author" content="CIP Financial Group">
+  <link rel="canonical" href="https://cipmexico.com.mx/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://cipmexico.com.mx/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://cipmexico.com.mx/favicon.ico" type="image/x-icon">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CIP Financial Group - Expertos en Pensiones y Finanzas">
+  <meta property="og:description" content="Descubre cómo mejorar tu retiro con asesoría financiera experta en CIP Financial Group.">
+  <meta property="og:image" content="https://cipmexico.com.mx/images/logo1.png">
+  <meta property="og:url" content="https://cipmexico.com.mx/">
+  <meta property="og:type" content="website">
+
+  <!-- Estilos / iconos -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- ChartJS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+:root {
+    --primary: #0056b3;
+    --primary-light: #e6f0fa;
+    --primary-dark: #003d82;
+    --secondary: #00a8e8;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+    --success: #28a745;
+    --success-light: #e8f5e9;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --warning-light: #fff8e1;
+    --border-radius: 10px;
+    --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --box-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --accent-color: #0044ff;
+    --hero-text: #22a9c8;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Contenedor centrado */
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* CABECERA */
+.simulador-header {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 40px 20px 20px 20px;
+    text-align: center;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.simulador-logo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+.simulador-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #052F5F;
+    margin-bottom: 12px;
+}
+.simulador-subtitle {
+    font-size: 1rem;
+    color: #6C757D;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Inputs */
+.cip-input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+.cip-input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 15px;
+}
+.cip-input-wrapper {
+    position: relative;
+}
+.cip-input-wrapper::before {
+    content: '$';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 500;
+    color: var(--gray);
+    z-index: 1;
+}
+input {
+    appearance: textfield;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    width: 100%;
+    padding: 14px 14px 14px 35px;
+    border: 1px solid #d1d5db;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 500;
+    transition: var(--transition);
+    background-color: white;
+}
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.cip-info-text {
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 8px;
+}
+.cip-error-text {
+    font-size: 14px;
+    color: var(--danger);
+    margin-top: 8px;
+    display: none;
+}
+
+/* Tabs */
+.tab-container {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-light);
+    position: relative;
+}
+.tab-button {
+    padding: 12px 24px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--gray);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition);
+    position: relative;
+    margin-right: 5px;
+}
+.tab-button.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    font-weight: 600;
+}
+.tab-button:hover {
+    color: var(--primary-dark);
+    background-color: rgba(0, 86, 179, 0.05);
+    border-radius: 5px 5px 0 0;
+}
+.tab-content {
+    display: none;
+    padding-top: 20px;
+    animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+.tab-content.active { display: block; }
+
+/* Detalles */
+.detail-section ul {
+    list-style: none;
+    padding-left: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.detail-section li {
+    padding: 25px;
+    border-radius: var(--border-radius);
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border: 1px solid #eee;
+    font-size: 15px;
+    transition: var(--transition);
+}
+.detail-section li:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow-hover);
+}
+.detail-section li strong {
+    font-weight: 600;
+    color: var(--dark);
+    display: block;
+    margin-bottom: 15px;
+    font-size: 18px;
+    position: relative;
+    padding-bottom: 10px;
+}
+.detail-section li strong::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
+}
+.detail-section li ul { display: block; }
+.detail-section li li {
+    padding: 0;
+    margin-bottom: 10px;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+}
+.detail-section li li:last-child { margin-bottom: 0; }
+
+.feature-icon { color: var(--primary); margin-right: 8px; font-size: 16px; }
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.badge-primary { background-color: var(--primary-light); color: var(--primary); }
+.badge-success { background-color: var(--success-light); color: var(--success); }
+.badge-warning { background-color: var(--warning-light); color: #b38700; }
+
+/* Chart */
+.chart-container {
+    margin-top: 30px;
+    position: relative;
+    height: 400px;
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #eee;
+    transition: var(--transition);
+}
+
+/* Bank Comparison */
+.bank-comparison { margin: 30px 0; }
+.bank-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+    border-left: 4px solid var(--primary);
+}
+.bank-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+.bank-logo {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: white; margin-right: 15px;
+    font-size: 1.1rem;
+}
+.bank-info { flex: 1; }
+.bank-name { font-weight: 600; margin-bottom: 5px; }
+.bank-rate { font-size: 14px; color: var(--gray); }
+.bank-amount { font-weight: 700; color: var(--danger); font-size: 18px; min-width: 100px; text-align: right; }
+
+.bank-return-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 300px;
+}
+.bank-return-row > div { flex: 1; text-align: center; }
+.bank-return-row strong {
+  display: block;
+  font-size: 0.85rem;
+  color: #495057;
+  margin-bottom: 4px;
+}
+.bank-return-row div > div {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #d63333;
+}
+
+/* Cuadro azul */
+.highlight-card {
+    background: linear-gradient(90deg, #003d82, #007bb5);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.highlight-card h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.highlight-card .result-amount {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.cip-ganancias p {
+  font-size: 1.1rem;
+  margin: 6px 0;
+  color: #ffffff;
+}
+.cip-ganancias span {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Botón */
+.action-section { text-align: center; margin-top: 40px; }
+.btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: 0 6px 15px rgba(0, 86, 179, 0.2);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 86, 179, 0.3);
+}
+.info-text {
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-container { padding: 0 10px; }
+    .tab-container { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; }
+    .tab-button { padding: 10px 15px; font-size: 14px; }
+    .chart-container { padding: 15px; height: 300px; }
+    .btn { width: 100%; justify-content: center; }
+    .detail-section ul { grid-template-columns: 1fr; }
+    .bank-card { flex-direction: column; align-items: flex-start; }
+    .bank-amount { text-align: left; width: 100%; margin-top: 10px; }
+    .bank-return-row { width: 100%; justify-content: space-between; }
+}
+
+
+/* Botón flotante: inferior derecho */
+.fab-volver{
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 24px !important;
+  left: auto !important;
+  top: auto !important;
+
+  z-index: 99999 !important;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 18px;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #fff;
+  border: none;
+
+  font-weight: 800;
+  cursor: pointer;
+
+  width: auto !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.fab-volver:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.22);
+  filter: brightness(1.03);
+}
+
+@media (max-width: 480px){
+  .fab-volver{
+    right: 14px !important;
+    bottom: 14px !important;
+    padding: 12px 14px;
+  }
+  .fab-volver span{ display:none; }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- CABECERA -->
+  <div class="simulador-header">
+    <div class="simulador-logo">CIP <span>FINANCIAL GROUP</span></div>
+    <h1 class="simulador-title">SIMULADOR PLAN 40</h1>
+    <p class="simulador-subtitle">
+      Simula tu inversión y descubre los rendimientos garantizados que puedes obtener con nuestro exclusivo plan de inversión
+    </p>
+  </div>
+<button class="fab-volver" type="button" onclick="volver()" aria-label="Volver">
+  <i class="fas fa-arrow-left"></i>
+  <span>VOLVER</span>
+</button>
+
+
+  <!-- MONTO -->
+  <div class="content-container">
+    <div id="simulador" class="cip-input-group">
+      <label for="monto">MONTO A INVERTIR (MXN)</label>
+      <div class="cip-input-wrapper">
+        <input type="number" id="monto" placeholder="Ej. 50,000" oninput="validarMonto(this); calcularInversion()">
+      </div>
+      <p class="cip-info-text">Monto mínimo: $10,000 | Monto máximo: $200,000</p>
+      <p class="cip-error-text" id="error-monto">El monto debe estar entre $10,000 y $200,000</p>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="content-container">
+    <div class="tab-container">
+      <button class="tab-button active" onclick="openTab(event, 'detalles')">
+        <i class="fas fa-info-circle feature-icon"></i> Detalles
+      </button>
+      <button class="tab-button" onclick="openTab(event, 'proyeccion')">
+        <i class="fas fa-chart-line feature-icon"></i> Proyección
+      </button>
+      <button class="tab-button" onclick="openTab(event, 'comparativa')">
+        <i class="fas fa-balance-scale feature-icon"></i> Comparativa
+      </button>
+    </div>
+  </div>
+
+  <!-- DETALLES -->
+  <div id="detalles" class="tab-content active detail-section">
+    <div class="content-container">
+      <h2>Detalles de los Planes</h2>
+
+      <ul>
+        <li>
+          <strong class="plan-title">Tradicional <span class="badge badge-primary">Rendimiento: 20%</span></strong>
+          <ul>
+            <li><i class="fas fa-calendar-alt feature-icon"></i> <strong>Plazo:</strong> 12 meses</li>
+            <li><i class="fas fa-coins feature-icon"></i> <strong id="label-ganancia-12">Ganancia Estimada con $10,000:</strong> <span id="ganancia-detalle-12"></span></li>
+            <li><i class="fas fa-piggy-bank feature-icon"></i> <strong>Total Estimado:</strong> <span id="total-detalle-12"></span></li>
+            <li><i class="fas fa-clock feature-icon"></i> <strong>Fecha de Retorno:</strong> <span id="fecha-retorno-12"></span></li>
+          </ul>
+        </li>
+
+        <li>
+          <strong class="plan-title">Moderado <span class="badge badge-success">Rendimiento: 44%</span></strong>
+          <ul>
+            <li><i class="fas fa-calendar-alt feature-icon"></i> <strong>Plazo:</strong> 24 meses</li>
+            <li><i class="fas fa-coins feature-icon"></i> <strong id="label-ganancia-24">Ganancia Estimada con $10,000:</strong> <span id="ganancia-detalle-24"></span></li>
+            <li><i class="fas fa-piggy-bank feature-icon"></i> <strong>Total Estimado:</strong> <span id="total-detalle-24"></span></li>
+            <li><i class="fas fa-clock feature-icon"></i> <strong>Fecha de Retorno:</strong> <span id="fecha-retorno-24"></span></li>
+          </ul>
+        </li>
+
+        <li>
+          <strong class="plan-title">Alto Rendimiento <span class="badge badge-warning">Rendimiento: 148%</span></strong>
+          <ul>
+            <li><i class="fas fa-calendar-alt feature-icon"></i> <strong>Plazo:</strong> 60 meses</li>
+            <li><i class="fas fa-coins feature-icon"></i> <strong id="label-ganancia-60">Ganancia Estimada con $10,000:</strong> <span id="ganancia-detalle-60"></span></li>
+            <li><i class="fas fa-piggy-bank feature-icon"></i> <strong>Total Estimado:</strong> <span id="total-detalle-60"></span></li>
+            <li><i class="fas fa-clock feature-icon"></i> <strong>Fecha de Retorno:</strong> <span id="fecha-retorno-60"></span></li>
+          </ul>
+        </li>
+      </ul>
+
+      <p class="info-text"><i class="fas fa-info-circle"></i> Las fechas de retorno estimadas se calculan según la fecha actual.</p>
+    </div>
+  </div>
+
+  <!-- PROYECCIÓN -->
+  <div id="proyeccion" class="tab-content chart-section">
+    <div class="content-container">
+      <h2>Proyección de tu Inversión</h2>
+      <p>Visualiza cómo crecería tu inversión a lo largo del tiempo:</p>
+
+      <div class="chart-container">
+        <canvas id="growthChart"></canvas>
+      </div>
+
+      <div class="info-text">
+        <i class="fas fa-chart-pie"></i> La gráfica muestra la proyección de crecimiento mes a mes de tu inversión inicial.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARATIVA -->
+  <div id="comparativa" class="tab-content">
+    <div class="content-container">
+      <div class="bank-comparison">
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #072146;">B</div>
+          <div class="bank-info">
+            <div class="bank-name">Cuenta de ahorro estándar</div>
+            <div class="bank-rate">Tasa: 2.5% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="bbva-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="bbva-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="bbva-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #ed0000;">S</div>
+          <div class="bank-info">
+            <div class="bank-name">Cuenta básica</div>
+            <div class="bank-rate">Tasa: 1.8% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="santander-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="santander-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="santander-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #0a2240;">C</div>
+          <div class="bank-info">
+            <div class="bank-name">Ahorro tradicional</div>
+            <div class="bank-rate">Tasa: 1.2% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="banamex-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="banamex-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="banamex-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #00a6e0;">MP</div>
+          <div class="bank-info">
+            <div class="bank-name">Fondo de inversión digital</div>
+            <div class="bank-rate">Tasa: 4.5% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="mercadopago-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="mercadopago-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="mercadopago-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #8200e6;">N</div>
+          <div class="bank-info">
+            <div class="bank-name">Cuenta digital premium</div>
+            <div class="bank-rate">Tasa: 5.0% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="nu-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="nu-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="nu-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-card">
+          <div class="bank-logo" style="background-color: #7a2e8a;">G</div>
+          <div class="bank-info">
+            <div class="bank-name">Instrumento de inversión</div>
+            <div class="bank-rate">Tasa: 5.3% anual</div>
+          </div>
+          <div class="bank-amount">
+            <div class="bank-return-row">
+              <div><strong>12 meses</strong><div id="gbm-12-g" class="bank-gain">$0</div></div>
+              <div><strong>24 meses</strong><div id="gbm-24-g" class="bank-gain">$0</div></div>
+              <div><strong>60 meses</strong><div id="gbm-60-g" class="bank-gain">$0</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Cuadro azul CIP -->
+      <div class="result-card highlight-card">
+        <h1>Ganancias estimadas con CIP</h1>
+        <div class="cip-ganancias">
+          <p><strong>Tradicional (12 meses):</strong> <span id="ganancia-cip-12">+$0</span></p>
+          <p><strong>Moderado (24 meses):</strong> <span id="ganancia-cip-24">+$0</span></p>
+          <p><strong>Alto Rendimiento (60 meses):</strong> <span id="ganancia-cip-60">+$0</span></p>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <a href="Contacto.html" class="btn">
+          <i class="fas fa-hand-holding-usd"></i> INVERTIR AHORA
+        </a>
+        <p class="info-text">
+          <i class="fas fa-shield-alt"></i> Rendimientos garantizados •
+          <i class="fas fa-ban"></i> Sin comisiones ocultas •
+          <i class="fas fa-headset"></i> Asesoría personalizada
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =======================
+    // CHART + LÓGICA CIP
+    // =======================
+    const ctx = document.getElementById('growthChart').getContext('2d');
+
+    let totalCIP12 = 0;
+    let totalCIP24 = 0;
+    let totalCIP60 = 0;
+
+    let growthChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Proyección de tu inversión',
+          data: [],
+          borderColor: (context) => {
+            const index = context.dataIndex;
+            if (index <= 12) return '#0056b3';
+            if (index <= 24) return '#28a745';
+            return '#ffc107';
+          },
+          backgroundColor: 'rgba(0, 86, 179, 0.1)',
+          fill: false,
+          tension: 0.1,
+          borderWidth: 3,
+          pointRadius: 3,
+          segment: {
+            borderColor: (context) => {
+              const index = context.p0DataIndex;
+              if (index <= 11) return '#0056b3';
+              if (index <= 23) return '#28a745';
+              return '#ffc107';
+            }
+          }
+        }]
+      },
+      plugins: [{
+        beforeDraw: (chart) => {
+          const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+
+          function drawBackground(color, startMonth, endMonth) {
+            const startX = x.getPixelForValue(startMonth === 0 ? chart.data.labels[0] : `Mes ${startMonth}`);
+            const endX = x.getPixelForValue(`Mes ${endMonth}`);
+            const width = endX - startX;
+            ctx.save();
+            ctx.fillStyle = color;
+            ctx.fillRect(startX, top, width, bottom - top);
+            ctx.restore();
+          }
+
+          drawBackground('rgba(0, 86, 179, 0.05)', 0, 12);
+          drawBackground('rgba(40, 167, 69, 0.05)', 12, 24);
+          drawBackground('rgba(255, 193, 7, 0.05)', 24, 60);
+        }
+      }],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Proyección de crecimiento de tu inversión',
+            font: { size: 16, weight: '600' },
+            padding: { bottom: 20 }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) label += ': ';
+                if (context.parsed.y !== null) label += '$' + context.parsed.y.toLocaleString('es-MX');
+                return label;
+              },
+              title: function(context) { return context[0].label; }
+            },
+            displayColors: false,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: { size: 14, weight: 'bold' },
+            bodyFont: { size: 14 },
+            padding: 12,
+            cornerRadius: 8
+          },
+          legend: { display: false }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Meses', font: { weight: '600' } }, grid: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { callback: (value) => '$' + value.toLocaleString('es-MX'), font: { weight: '500' } },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+          }
+        },
+        interaction: { intersect: false, mode: 'index' }
+      }
+    });
+
+    const tasa12Meses = 0.20;
+    const tasa24MesesTotal = 0.44;
+    const tasa60MesesTotal = 1.48;
+
+    function validarMonto(input) {
+      const errorElement = document.getElementById('error-monto');
+      let monto = parseFloat(input.value) || 0;
+      if (monto > 0 && (monto < 10000 || monto > 200000)) {
+        errorElement.style.display = 'block';
+        input.style.borderColor = 'var(--danger)';
+        input.style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.1)';
+      } else {
+        errorElement.style.display = 'none';
+        input.style.borderColor = '#d1d5db';
+        input.style.boxShadow = 'none';
+      }
+    }
+
+    function formatCurrency(amount) {
+      return isNaN(amount) ? '$0' : '$' + amount.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function calcularInversion() {
+      const montoInput = document.getElementById('monto');
+      let montoInicial = parseFloat(montoInput.value) || 0;
+
+      if (montoInicial >= 10000 && montoInicial <= 200000) {
+        const labels = ['Inicio'];
+        const data = [montoInicial];
+        const inversionDetalle = montoInicial;
+
+        for (let i = 1; i <= 60; i++) {
+          labels.push(`Mes ${i}`);
+          let incremento = 0;
+
+          if (i <= 12) incremento = inversionDetalle * tasa12Meses * (i / 12);
+          else if (i <= 24) incremento = inversionDetalle * tasa24MesesTotal * (i / 24);
+          else incremento = inversionDetalle * tasa60MesesTotal * (i / 60);
+
+          data.push(inversionDetalle + incremento);
+        }
+
+        growthChart.data.labels = labels;
+        growthChart.data.datasets[0].data = data;
+        growthChart.update();
+
+        totalCIP12 = inversionDetalle * (1 + tasa12Meses);
+        totalCIP24 = inversionDetalle * (1 + tasa24MesesTotal);
+        totalCIP60 = inversionDetalle * (1 + tasa60MesesTotal);
+
+        const ganancia12 = totalCIP12 - inversionDetalle;
+        const ganancia24 = totalCIP24 - inversionDetalle;
+        const ganancia60 = totalCIP60 - inversionDetalle;
+        document.getElementById('label-ganancia-12').textContent = `Ganancia Estimada con ${formatCurrency(inversionDetalle)}:`;
+document.getElementById('label-ganancia-24').textContent = `Ganancia Estimada con ${formatCurrency(inversionDetalle)}:`;
+document.getElementById('label-ganancia-60').textContent = `Ganancia Estimada con ${formatCurrency(inversionDetalle)}:`;
+
+
+        document.getElementById('ganancia-cip-12').textContent = '+' + formatCurrency(ganancia12);
+        document.getElementById('ganancia-cip-24').textContent = '+' + formatCurrency(ganancia24);
+        document.getElementById('ganancia-cip-60').textContent = '+' + formatCurrency(ganancia60);
+
+        document.getElementById('ganancia-detalle-12').textContent = formatCurrency(ganancia12);
+        document.getElementById('total-detalle-12').textContent = formatCurrency(totalCIP12);
+
+        document.getElementById('ganancia-detalle-24').textContent = formatCurrency(ganancia24);
+        document.getElementById('total-detalle-24').textContent = formatCurrency(totalCIP24);
+
+        document.getElementById('ganancia-detalle-60').textContent = formatCurrency(ganancia60);
+        document.getElementById('total-detalle-60').textContent = formatCurrency(totalCIP60);
+
+        const hoy = new Date();
+        function formatDate(date) {
+          const options = { year: 'numeric', month: 'long', day: 'numeric' };
+          return date.toLocaleDateString('es-MX', options);
+        }
+
+        document.getElementById('fecha-retorno-12').textContent = formatDate(new Date(hoy.getFullYear(), hoy.getMonth() + 12, hoy.getDate()));
+        document.getElementById('fecha-retorno-24').textContent = formatDate(new Date(hoy.getFullYear(), hoy.getMonth() + 24, hoy.getDate()));
+        document.getElementById('fecha-retorno-60').textContent = formatDate(new Date(hoy.getFullYear(), hoy.getMonth() + 60, hoy.getDate()));
+      } else {
+        growthChart.data.labels = [];
+        growthChart.data.datasets[0].data = [];
+        growthChart.update();
+      }
+
+    }
+
+    function openTab(evt, tabName) {
+      var i, tabcontent, tabbuttons;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
+
+      tabbuttons = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabbuttons.length; i++) tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+
+      if (tabName === 'proyeccion') {
+        setTimeout(() => { growthChart.resize(); }, 10);
+      }
+    }
+
+    // Inicializar
+    calcularInversion();
+    window.addEventListener('resize', function() { growthChart.resize(); });
+  </script>
+
+  <script>
+    // =======================
+    // CÁLCULO BANCOS (GANANCIAS)
+    // =======================
+    document.addEventListener("DOMContentLoaded", function () {
+      const input = document.getElementById("monto");
+
+      const tasas = {
+        bbva: 0.025,
+        santander: 0.018,
+        banamex: 0.012,
+        mercadopago: 0.045,
+        nu: 0.05,
+        gbm: 0.053
+      };
+
+      const plazos = [12, 24, 60];
+
+      const formatMoney = (amount) =>
+        amount.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+      function calcularGanancias() {
+        const monto = parseFloat(input.value);
+
+        if (isNaN(monto) || monto <= 0) {
+          // No alert aquí para que no moleste al escribir
+          plazos.forEach(meses => {
+            Object.keys(tasas).forEach(banco => {
+              const el = document.getElementById(`${banco}-${meses}-g`);
+              if (el) el.textContent = '$0';
+            });
+          });
+          return;
+        }
+
+        for (const banco in tasas) {
+          const tasaAnual = tasas[banco];
+          plazos.forEach((meses) => {
+            const años = meses / 12;
+            const ganancia = monto * tasaAnual * años;
+
+            const idGanancia = `${banco}-${meses}-g`;
+            const el = document.getElementById(idGanancia);
+            if (el) el.textContent = formatMoney(ganancia);
+          });
+        }
+      }
+
+      input.addEventListener("input", calcularGanancias);
+    });
+  </script>
+
+
+<script>
+  function volver(){
+    // Opción A: regresar a la página anterior
+    if (history.length > 1) return history.back();
+
+    // Opción B: si no hay historial, manda a tu página principal
+    window.location.href = 'index.php'; // cámbialo si tu ruta es otra
+  }
+</script>
+
+
+</body>
+</html>

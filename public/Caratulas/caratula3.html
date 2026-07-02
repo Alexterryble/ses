@@ -1,0 +1,3562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Carátula de Crédito</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+:root{
+  --azul:#0a567d;
+  --azul-2:#0e6a98;
+  --azul-3:#eaf5fb;
+  --azul-4:#083e5b;
+
+  --dorado:#b8a06a;
+  --dorado-2:#e6dcc4;
+  --dorado-3:#f8f4ea;
+
+  --gris:#1f2937;
+  --gris-2:#5f6b7a;
+  --gris-3:#edf2f7;
+  --gris-4:#f8fafc;
+  --blanco:#ffffff;
+
+  --borde:#cdbb93;
+  --sombra:0 14px 40px rgba(10,86,125,.10);
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0;
+  padding:0;
+  font-family:"Segoe UI", Arial, Helvetica, sans-serif;
+  color:var(--gris);
+  background:linear-gradient(180deg,#eef2f6 0%, #e8edf3 100%);
+}
+
+/* ===== Toolbar ===== */
+.caratula-toolbar{
+  width:min(1100px, calc(100vw - 32px));
+  margin:14px auto 14px;
+  display:grid;
+  grid-template-columns:minmax(260px, 1.45fr) minmax(220px, 1fr) auto auto auto;
+  gap:14px;
+  align-items:end;
+  padding:14px 16px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #d8dfe6;
+  border-radius:18px;
+  box-shadow:0 8px 18px rgba(0,0,0,.05);
+}
+
+.caratula-toolbar .field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+
+.caratula-toolbar label{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  color:var(--azul-4);
+}
+.caratula-toolbar select,
+.caratula-toolbar input[type="date"]{
+  width:100%;
+  min-height:44px;
+  border:1px solid #cfd9e2;
+  border-radius:12px;
+  background:#fcfeff;
+  padding:10px 14px;
+  font-size:16px;
+  outline:none;
+}
+.caratula-toolbar select:focus,
+.caratula-toolbar input[type="date"]:focus{
+  border-color:var(--dorado);
+  box-shadow:0 0 0 3px rgba(200,154,43,.16);
+}
+
+.caratula-toolbar .spacer{
+  display:none;
+}
+
+.btn,
+.btn-regresar{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  min-height:44px;
+  padding:0 18px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:15px;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition:.18s ease;
+}
+
+.btn{
+  background:#f3f8fc;
+  border:1px solid #bdd0df;
+  color:var(--azul-4);
+}
+
+.btn-print{
+  background:linear-gradient(180deg,var(--azul-2) 0%, var(--azul) 100%);
+  border:1px solid #0a5a84;
+  color:#fff;
+}
+
+.btn-regresar{
+  background:#fff;
+  border:1px solid #cfd9e2;
+  color:var(--azul-4);
+}
+
+.btn:hover,
+.btn-regresar:hover{
+  transform:translateY(-1px);
+}
+
+/* ===== Documento ===== */
+.caratula{
+  width:7.75in;
+  max-width:calc(100vw - 20px);
+  margin:0 auto 18px;
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  box-shadow:var(--sombra);
+  overflow:hidden;
+}
+
+/* ===== Sin barra lateral ===== */
+.doc-shell{
+  display:block;
+  min-height:auto;
+}
+
+/* ===== Contenido ===== */
+.doc-main{
+  padding:10px 10px 8px;
+  background:
+    radial-gradient(circle at top right, rgba(200,154,43,.08) 0%, transparent 26%),
+    linear-gradient(180deg,#ffffff 0%, #fffdfa 100%);
+}
+
+/* ===== Header moderno ===== */
+.hero{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:stretch;
+  margin-bottom:8px;
+}
+
+.hero-left{
+  background:linear-gradient(135deg,#f5fbff 0%, #eaf5fb 100%);
+  border:1px solid #c7d9e6;
+  border-radius:16px;
+  padding:10px 12px;
+}
+
+.hero-topline{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:6px;
+}
+
+.hero-folio{
+  font-size:11px;
+  color:#d62828;
+  font-weight:800;
+}
+
+.hero-date{
+  font-size:11px;
+  color:var(--gris-2);
+  text-align:right;
+}
+
+.hero-title{
+  font-size:18px;
+  font-weight:900;
+  color:var(--azul);
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  margin:2px 0 2px;
+}
+
+.hero-subtitle{
+  font-size:11px;
+  color:var(--gris-2);
+  font-weight:600;
+}
+
+.hero-right{
+  min-width:2.05in;
+  background:linear-gradient(180deg,#f8fcff 0%, #eef7fd 100%);
+  border:1px solid #c7d9e6;
+  border-radius:16px;
+  padding:10px 12px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.hero-right .mini{
+  font-size:10px;
+  font-weight:900;
+  color:var(--azul-4);
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.monto-valor-editable{
+  display:inline-block;
+  min-width:10ch;
+  margin-top:4px;
+  padding:2px 6px;
+  font-size:28px;
+  line-height:1.12;
+  font-weight:900;
+  color:#0a66c2;
+  outline:none;
+  border-radius:8px;
+  text-align:center;
+}
+
+.monto-valor-editable:focus{
+  box-shadow:0 0 0 3px rgba(10,102,194,.12) inset;
+  background:#fff;
+}
+
+/* ===== Bloques ===== */
+.block{
+  border:1px solid #e6d8ab;
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:8px;
+  background:#fff;
+}
+
+.block-title{
+  padding:7px 10px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  color:#fff;
+  background:linear-gradient(90deg,var(--azul-4),var(--azul),var(--azul-2));
+}
+
+.block-body{
+  padding:8px 10px;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:1.15fr 1fr 1fr;
+  gap:8px;
+}
+
+.coverage-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.coverage-full{
+  grid-column:1 / -1;
+}
+
+
+.info-card{
+  border:1px solid #e8edf3;
+  background:#fcfdff;
+  border-radius:12px;
+  padding:8px 10px;
+}
+
+.label{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  font-weight:900;
+  color:#7a6021;
+  margin-bottom:3px;
+}
+
+.value{
+  font-size:11px;
+  font-weight:700;
+  color:var(--gris);
+  line-height:1.35;
+}
+
+.value.big{
+  font-size:16px;
+  color:var(--azul);
+  font-weight:900;
+}
+
+.value.right{ text-align:right; }
+
+.editable-num{
+  display:inline-block;
+  min-width:40px;
+  padding:2px 6px;
+  border-radius:6px;
+  outline:none;
+  font-weight:900;
+  color:var(--azul);
+}
+
+.editable-num:focus{
+  box-shadow:0 0 0 2px rgba(18,91,135,.12) inset;
+  background:#f5fbff;
+}
+
+/* ===== Tabla resumen ===== */
+.summary-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border:1px solid #e3d1a0;
+  border-radius:12px;
+}
+
+.summary-table th,
+.summary-table td{
+  padding:7px 8px;
+  font-size:10px;
+  border-right:1px solid #e3d1a0;
+  border-bottom:1px solid #e3d1a0;
+  vertical-align:middle;
+  line-height:1.25;
+}
+
+.summary-table tr:last-child td,
+.summary-table tr:last-child th{ border-bottom:0; }
+
+.summary-table th:last-child,
+.summary-table td:last-child{ border-right:0; }
+
+.summary-table th{
+  background:linear-gradient(180deg,#fff7df 0%, #f4e7bc 100%);
+  color:#4e3a11;
+  font-weight:900;
+}
+
+.summary-table td{
+  background:#fff;
+}
+
+.small{ font-size:9px; }
+.center{ text-align:center; }
+.right{ text-align:right; }
+.nowrap{ white-space:nowrap; }
+
+.big-money{
+  font-size:14px;
+  font-weight:900;
+  color:var(--azul);
+}
+
+/* ===== Firma ===== */
+.firma{
+  border:1px solid #e8d39a;
+  border-radius:16px;
+  background:linear-gradient(180deg,#fffefb 0%, #fff8ea 100%);
+  padding:10px;
+  text-align:center;
+}
+
+.firma .nombre{
+  font-size:12px;
+  font-weight:900;
+  color:var(--azul);
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.sigpad{
+  max-width:460px;
+  margin:0 auto 6px;
+  padding:8px;
+  border:1px solid #efd790;
+  border-radius:12px;
+  background:#fffdfa;
+}
+
+#sigCanvas{
+  width:100%;
+  height:110px;
+  display:block;
+  background:#fff;
+  border:2px dashed #c79a2b;
+  border-radius:10px;
+  touch-action:none;
+}
+
+.sig-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.sig-actions button{
+  padding:7px 12px;
+  border-radius:10px;
+  border:1px solid #d6b159;
+  background:linear-gradient(180deg,#fff0c9 0%, #efd47d 100%);
+  color:#654a0b;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.linea{
+  width:100%;
+  max-width:460px;
+  height:1px;
+  margin:8px auto 6px;
+  background:linear-gradient(90deg,transparent,var(--azul),transparent);
+}
+
+.pie{
+  margin-top:8px;
+  text-align:center;
+  color:var(--azul-4);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+#sigPrintImage{
+  display:block;
+  max-width:100%;
+  margin:0 auto;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  .caratula-toolbar{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .caratula-toolbar .field{
+    min-width:0;
+  }
+
+  #btnGuardar,
+  #btnImprimir,
+  #btn-regresar{
+    width:100%;
+  }
+}
+
+@media (max-width: 760px){
+  .caratula{
+    max-width:calc(100vw - 16px);
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+  }
+
+  .grid-2,
+  .grid-3{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 640px){
+  .caratula-toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .caratula-toolbar select,
+  .caratula-toolbar input[type="date"],
+  #btnGuardar,
+  #btnImprimir,
+  #btn-regresar{
+    width:100%;
+  }
+}
+
+/* ===== Impresión ===== */
+@media print{
+  @page{
+    size: Letter portrait;
+    margin:4mm;
+  }
+
+  html, body{
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .caratula-toolbar{
+    display:none !important;
+  }
+
+  .caratula{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    border:1pt solid var(--borde) !important;
+    box-shadow:none !important;
+    background:#fff !important;
+  }
+
+  .doc-shell{
+    display:block !important;
+  }
+
+  .doc-main{
+    width:100% !important;
+    padding:6px 6px 4px !important;
+    background:#fff !important;
+  }
+
+  .hero{
+    display:grid !important;
+    grid-template-columns:1.3fr .9fr !important;
+    gap:5px !important;
+    margin-bottom:5px !important;
+  }
+
+  .hero-left,
+  .hero-right{
+    padding:7px 8px !important;
+    border-radius:9px !important;
+    box-shadow:none !important;
+  }
+
+  .hero-topline{
+    margin-bottom:4px !important;
+  }
+
+  .hero-title{
+    font-size:13px !important;
+    margin:1px 0 !important;
+    line-height:1.1 !important;
+  }
+
+  .hero-subtitle,
+  .hero-folio,
+  .hero-date{
+    font-size:8px !important;
+    line-height:1.15 !important;
+  }
+
+  .hero-right .mini{
+    font-size:8px !important;
+  }
+
+  .monto-valor-editable{
+    font-size:18px !important;
+    line-height:1.05 !important;
+    padding:0 !important;
+    margin-top:2px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  .block{
+    margin-bottom:5px !important;
+    border-radius:9px !important;
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  .block-title{
+    padding:4px 7px !important;
+    font-size:8.5px !important;
+    line-height:1.1 !important;
+  }
+
+  .block-body{
+    padding:5px 7px !important;
+  }
+
+  .grid-2{
+    grid-template-columns:1fr 1fr !important;
+    gap:5px !important;
+  }
+
+  .grid-3{
+    grid-template-columns:1fr 1fr 1fr !important;
+    gap:5px !important;
+  }
+
+  .coverage-grid{
+  grid-template-columns:1fr 1fr !important;
+  gap:5px !important;
+}
+
+.coverage-full{
+  grid-column:1 / -1 !important;
+}
+
+  .info-card{
+    padding:5px 7px !important;
+    border-radius:7px !important;
+    min-height:auto !important;
+  }
+
+  .label{
+    font-size:7.5px !important;
+    margin-bottom:2px !important;
+    line-height:1.05 !important;
+  }
+
+  .value{
+    font-size:8.7px !important;
+    line-height:1.18 !important;
+  }
+
+  .value.big{
+    font-size:11px !important;
+  }
+
+  .editable-num{
+    padding:0 !important;
+  }
+
+  .summary-table{
+    border-radius:7px !important;
+  }
+
+  .summary-table th,
+  .summary-table td{
+    padding:4px 5px !important;
+    font-size:8px !important;
+    line-height:1.12 !important;
+  }
+
+  .small{
+    font-size:7.3px !important;
+  }
+
+  .big-money{
+    font-size:10px !important;
+  }
+
+  .firma{
+    padding:7px !important;
+    border-radius:9px !important;
+    margin-top:4px !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .firma .nombre{
+    font-size:9.5px !important;
+    margin-bottom:3px !important;
+    line-height:1.1 !important;
+  }
+
+  .sigpad{
+    border:0 !important;
+    background:transparent !important;
+    padding:0 !important;
+    margin:0 auto 3px !important;
+    min-height:0 !important;
+  }
+
+  #sigCanvas,
+  .sig-actions{
+    display:none !important;
+  }
+
+  .sig-print{
+    display:block !important;
+    width:100% !important;
+    max-width:340px !important;
+    height:52px !important;
+    object-fit:contain !important;
+    margin:0 auto 2px !important;
+  }
+
+  .linea{
+    margin:3px auto 2px !important;
+    max-width:340px !important;
+  }
+
+  .nota{
+    font-size:7px !important;
+    line-height:1 !important;
+  }
+
+  .pie{
+    margin-top:4px !important;
+    font-size:7px !important;
+    line-height:1 !important;
+  }
+  .top-logo{
+  margin:0 0 6px !important;
+}
+
+.top-logo-img{
+  max-width:120px !important;
+  max-height:42px !important;
+}
+}
+
+
+.top-logo{
+  display:flex;
+  justify-content:left;
+  align-items:center;
+  margin:0 0 2px;
+  padding:0;
+  overflow:hidden;
+}
+
+.top-logo-img{
+  display:block;
+  object-fit:contain;
+  width:auto;
+  max-width:260px;
+  height:190px;
+  margin-top:-16px;
+  margin-bottom:-60px; /* este quita el blanco de abajo */
+}
+/* ===== IMPRESIÓN ===== */
+@media print{
+  .top-logo{
+    display:flex !important;
+    justify-content: left !important;
+    align-items:flex-end !important;
+    margin:0 0 2px !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+
+  .top-logo-img{
+    display:block !important;
+    object-fit:contain !important;
+    width:auto !important;
+    max-width:180px !important;
+    max-height:none !important;
+    height:120px !important;
+    margin-top:-20px !important;
+    margin-bottom:-37px !important;
+    
+  }
+}
+
+.thumbs-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:28px;
+  margin:8px 0 14px;
+}
+
+.thumb-slot{
+  position:relative;
+  width:220px;
+}
+
+.thumb-label{
+  position:absolute;
+  top:-12px;
+  left:18px;
+  padding:2px 10px;
+  background:#fff;
+  border:1px solid #b7ccdd;
+  border-radius:18px;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.05;
+  text-align:center;
+  color:var(--azul-4);
+  text-transform:uppercase;
+  letter-spacing:.3px;
+  z-index:2;
+}
+
+.thumb-box{
+  width:100%;
+  height:110px;
+  border:1.5px solid #b7ccdd;
+  border-radius:14px;
+  background:linear-gradient(180deg,#ffffff 0%, #f6fbff 100%);
+}
+
+
+
+
+</style>
+
+<style>
+/* ===== CONTENEDOR GENERAL ===== */
+.caratula-wrap{
+  width:min(1400px, calc(100vw - 24px));
+  margin:0 auto 18px;
+  display:grid;
+  grid-template-columns:minmax(780px, 1fr) 360px;
+  gap:14px;
+  align-items:start;
+}
+
+/* ===== DOCUMENTO IZQUIERDO ===== */
+.caratula{
+  width:100%;
+  max-width:none;
+  margin:0;
+  background:#fff;
+  border:1px solid #cdbb93;
+  box-shadow:0 14px 40px rgba(10,86,125,.10);
+  overflow:hidden;
+}
+
+/* ===== PANEL DERECHO ===== */
+.caratula-right{
+  width:100%;
+  min-width:0;
+  background:#fff;
+  border:1px solid #d9c9a1;
+  box-shadow:0 14px 40px rgba(10,86,125,.10);
+  border-radius:16px;
+  overflow:hidden;
+  position:sticky;
+  top:12px;
+}
+
+/* ===== TITULO ===== */
+.right-title{
+  padding:10px 12px;
+  background:linear-gradient(90deg,#083e5b,#0a567d,#0e6a98);
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  text-align:center;
+}
+
+.right-body{
+  padding:10px;
+  background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+}
+
+/* ===== FILAS ===== */
+.plazos-panel{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.plazo-row{
+  border:1px solid #d7e1ea;
+  border-radius:12px;
+  background:#fbfdff;
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-size:12px;
+}
+
+.plazo-row b{
+  font-weight:900;
+  color:#083e5b;
+  line-height:1.1;
+}
+
+.plazo-val{
+  min-width:120px;
+  text-align:right;
+  padding-left:10px;
+  font-variant-numeric:tabular-nums;
+  color:#1f2937;
+  font-weight:800;
+}
+
+.plazo-total{
+  background:linear-gradient(180deg,#fff8ea 0%, #f8f2df 100%);
+  border:1px solid #d9c9a1;
+  flex-direction:column;
+  align-items:stretch;
+}
+
+.plazo-total-main{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+
+.total-val{
+  color:#083e5b;
+  font-weight:900;
+}
+
+.plazo-total-final{
+  margin-top:6px;
+  text-align:right;
+  font-size:12px;
+  font-weight:900;
+  color:#4e3a11;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1150px){
+  .caratula-wrap{
+    grid-template-columns:1fr;
+  }
+
+  .caratula-right{
+    position:static;
+  }
+}
+
+
+/* ===== INPUTS VISIBLES EN PAGOS ORDINARIOS ===== */
+.plazo-input{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-width:110px;
+  height:30px;
+  padding:4px 10px;
+  border:1.5px solid #b8cad8;
+  border-radius:10px;
+  background:#ffffff;
+  color:#083e5b;
+  font-weight:900;
+  font-size:13px;
+  line-height:1;
+  text-align:right;
+  outline:none;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.04);
+  font-variant-numeric:tabular-nums;
+}
+
+.plazo-input:focus{
+  border-color:#0a567d;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(10,86,125,.12);
+}
+
+.plazo-input[contenteditable="true"]:empty::before{
+  content:"0";
+  color:#7f93a3;
+  font-weight:800;
+}
+
+.plazo-input:empty::before{
+  content:"0";
+  color:#7f93a3;
+  font-weight:800;
+}
+
+#sigPrintImage,
+.sig-print{
+  display:none;
+  max-width:100%;
+  margin:0 auto;
+}
+
+#sigPrintImage[src]:not([src=""]),
+.sig-print[src]:not([src=""]){
+  display:block;
+}
+
+@media print{
+  #sigPrintImage,
+  .sig-print{
+    display:block !important;
+    width:100% !important;
+    max-width:360px !important;
+    height:50px !important;
+    object-fit:contain !important;
+    margin:0 auto 4px !important;
+    visibility:hidden !important;
+  }
+
+  #sigPrintImage[src]:not([src=""]),
+  .sig-print[src]:not([src=""]){
+    visibility:visible !important;
+  }
+}
+#opMes1,
+#opMes1a,
+#opMes1b,
+#opMes1c,
+#opMes1d,
+#opMes1e,
+#opMes1f{
+  display:none !important;
+}
+
+@media print{
+  #opMes1,
+  #opMes1a,
+  #opMes1b,
+  #opMes1c,
+  #opMes1d,
+  #opMes1e,
+  #opMes1f{
+    display:none !important;
+  }
+}
+
+
+/* ===== PLAZO EDITABLE MÁS VISIBLE ===== */
+.editable-plazo{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:64px;
+  height:36px;
+  margin-right:6px;
+  padding:0 12px;
+  border:1.8px dashed #0a567d;
+  border-radius:10px;
+  background:linear-gradient(180deg, #ffffff 0%, #f2f8fc 100%);
+  color:#083e5b;
+  font-weight:900;
+  font-size:15px;
+  line-height:1;
+  text-align:center;
+  outline:none;
+  cursor:text;
+  box-shadow:0 2px 8px rgba(8, 62, 91, 0.08);
+  transition:.22s ease;
+  position:relative;
+}
+
+.editable-plazo:hover{
+  border-color:#0e6a98;
+  background:linear-gradient(180deg, #ffffff 0%, #eaf5fb 100%);
+  box-shadow:0 4px 12px rgba(8, 62, 91, 0.14);
+}
+
+.editable-plazo:focus{
+  border-style:solid;
+  border-color:#0a567d;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(10, 86, 125, 0.16);
+}
+
+.editable-plazo[contenteditable="true"]:empty::before{
+  content:"10";
+  color:#8aa1b2;
+}
+
+.editable-plazo::after{
+  content:"✎";
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#0a567d;
+  color:#fff;
+  font-size:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.18);
+}
+
+/* para impresión, que regrese al estilo original */
+@media print{
+  .editable-plazo{
+    border:none !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    min-width:auto !important;
+    height:auto !important;
+    padding:0 !important;
+    margin-right:0 !important;
+    border-radius:0 !important;
+    font-size:inherit !important;
+    font-weight:inherit !important;
+    color:inherit !important;
+    display:inline !important;
+  }
+
+  .editable-plazo::after{
+    display:none !important;
+    content:none !important;
+  }
+}
+
+
+
+
+.value[contenteditable="true"]{
+  min-height: 10px;
+  padding: 0px 10px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: text;
+}
+
+.value[contenteditable="true"]:focus{
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+}
+
+
+.top-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  width:100%;
+  margin-bottom:0px;
+}
+
+.top-logo{
+  flex:0 0 auto;
+}
+
+.top-logo-img{
+  display:block;
+  max-width:220px;
+  height:auto;
+}
+
+.top-contacto{
+  flex:1;
+  text-align:right;
+  color:#1f2d3d;
+  line-height:1.35;
+}
+
+.top-frase{
+  font-weight:700;
+  font-size:10px;
+  color:#0d5c86;
+  margin-bottom:4px;
+}
+
+.top-direccion,
+.top-correo{
+  font-size:10px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:8px;
+}
+
+/* ===== PANEL PLAZOS NORMAL ===== */
+.plazos-panel{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.plazo-row{
+  border:1px solid #d7e1ea;
+  border-radius:12px;
+  background:#fbfdff;
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-size:12px;
+}
+
+.plazo-row b{
+  font-weight:900;
+  color:#083e5b;
+  line-height:1.1;
+}
+
+.plazo-val{
+  min-width:120px;
+  text-align:right;
+  padding-left:10px;
+  font-variant-numeric:tabular-nums;
+  color:#1f2937;
+  font-weight:800;
+}
+
+/* ===== CUANDO HAYA MUCHOS MESES ===== */
+.plazos-panel.compact{
+  gap:6px;
+}
+
+.plazos-panel.compact .plazo-row{
+  padding:6px 8px;
+  border-radius:10px;
+  font-size:11px;
+}
+
+.plazos-panel.compact .plazo-row b{
+  font-size:11px;
+  line-height:1.05;
+}
+
+.plazos-panel.compact .plazo-val{
+  min-width:108px;
+  font-size:11px;
+}
+
+.plazos-panel.compact .plazo-meta{
+  font-size:10px !important;
+  margin-top:2px !important;
+}
+
+/* ===== MÁS COMPACTO TODAVÍA ===== */
+.plazos-panel.xcompact{
+  gap:4px;
+}
+
+.plazos-panel.xcompact .plazo-row{
+  padding:5px 7px;
+  border-radius:9px;
+  font-size:10px;
+}
+
+.plazos-panel.xcompact .plazo-row b{
+  font-size:10px;
+  line-height:1;
+}
+
+.plazos-panel.xcompact .plazo-val{
+  min-width:98px;
+  font-size:10px;
+}
+
+.plazos-panel.xcompact .plazo-meta{
+  font-size:9px !important;
+  margin-top:1px !important;
+}
+
+.plazos-panel.xcompact .plazo-total-final{
+  font-size:10px;
+}
+
+
+
+/* =========================
+   BOTONES FLOTANTES CARÁTULA
+========================== */
+.caratula-actions{
+  position:fixed;
+  right:24px;
+  bottom:22px;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(148,163,184,.35);
+  box-shadow:0 18px 45px rgba(15,23,42,.22);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.caratula-actions .btn,
+.caratula-actions .btn-regresar{
+  min-height:42px;
+  border-radius:999px;
+  box-shadow:none;
+}
+
+.caratula-actions #btnGuardar{
+  background:linear-gradient(135deg,#eaf5fb,#ffffff);
+  border:1px solid #bdd0df;
+  color:#083e5b;
+}
+
+.caratula-actions #btnImprimir{
+  background:linear-gradient(135deg,#0e6a98,#083e5b);
+  border:1px solid #0a567d;
+  color:#fff;
+}
+
+.caratula-actions #btn-regresar{
+  background:#ffffff;
+  border:1px solid #cfd9e2;
+  color:#083e5b;
+}
+
+.caratula-actions .btn:hover,
+.caratula-actions .btn-regresar:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(15,23,42,.18);
+}
+
+@media (max-width:680px){
+  .caratula-actions{
+    left:12px;
+    right:12px;
+    bottom:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-radius:18px;
+  }
+
+  .caratula-actions .btn,
+  .caratula-actions .btn-regresar{
+    flex:1 1 auto;
+    min-width:130px;
+  }
+}
+
+@media print{
+  .caratula-actions{
+    display:none !important;
+  }
+}
+
+/* =========================
+   SWEETALERT CIP
+========================== */
+.swal-cip-popup{
+  border-radius:22px !important;
+  background:#0b1220 !important;
+  color:#e5e7eb !important;
+  border:1px solid rgba(148,163,184,.28) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.45) !important;
+}
+
+.swal-cip-title{
+  color:#ffffff !important;
+  font-weight:900 !important;
+}
+
+.swal-cip-html{
+  color:#cbd5e1 !important;
+  font-size:.95rem !important;
+}
+
+.swal2-confirm,
+.swal2-deny,
+.swal2-cancel{
+  border-radius:999px !important;
+  font-weight:800 !important;
+  padding:.72rem 1.2rem !important;
+}
+
+/* ===== IMPRESIÓN ===== */
+@media print{
+  .caratula-wrap{
+    display:block !important;
+  }
+
+  .caratula-right{
+    width:100% !important;
+    max-width:none !important;
+    margin-top:6px !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    position:static !important;
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  .right-title{
+    padding:6px 8px !important;
+    font-size:9px !important;
+  }
+
+  .right-body{
+    padding:6px !important;
+  }
+
+  .plazos-panel{
+    gap:4px !important;
+  }
+
+  .plazo-row{
+    padding:5px 7px !important;
+    border-radius:8px !important;
+    font-size:10px !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .plazo-row b{
+    font-size:10px !important;
+    line-height:1 !important;
+  }
+
+  .plazo-val{
+    min-width:95px !important;
+    font-size:10px !important;
+  }
+
+  .plazo-meta{
+    font-size:8.5px !important;
+    margin-top:1px !important;
+    line-height:1 !important;
+  }
+
+  .plazo-total{
+    padding:6px 8px !important;
+  }
+
+  .plazo-total-final{
+    margin-top:4px !important;
+    font-size:9px !important;
+  }
+
+  /* cuando sean muchos meses */
+  .plazos-panel.compact .plazo-row{
+    padding:4px 6px !important;
+    font-size:9px !important;
+  }
+
+  .plazos-panel.compact .plazo-row b,
+  .plazos-panel.compact .plazo-val{
+    font-size:9px !important;
+  }
+
+  .plazos-panel.compact .plazo-meta{
+    font-size:8px !important;
+  }
+
+  .plazos-panel.xcompact .plazo-row{
+    padding:3px 5px !important;
+    font-size:8.5px !important;
+  }
+
+  .plazos-panel.xcompact .plazo-row b,
+  .plazos-panel.xcompact .plazo-val{
+    font-size:8.5px !important;
+  }
+
+  .plazos-panel.xcompact .plazo-meta{
+    font-size:7.5px !important;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<div class="caratula-toolbar">
+  <div class="field">
+    <label for="zonaSelect">Zona (investigación)</label>
+    <select id="zonaSelect">
+      <option value="">Cargando zonas…</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="fechaBase">Fecha base</label>
+    <input type="date" id="fechaBase" />
+  </div>
+
+
+
+  <div class="spacer"></div>
+
+<div class="caratula-actions">
+  <button type="button" id="btnGuardar" class="btn">💾 Guardar</button>
+  <button type="button" id="btnImprimir" class="btn btn-print">🖨️ Imprimir</button>
+  <button type="button" id="btn-regresar" class="btn-regresar">🔙 Regresar</button>
+</div>
+
+    <div class="info-card">
+  <div class="label">Costo SDI X DÍA</div>
+  <div class="value big">
+    <span id="costoSDI"
+          class="editable-num editable-plazo"
+          contenteditable="true"
+          role="textbox"
+          aria-label="Costo SDI por día">0</span>
+  </div>
+</div>
+</div>
+
+<div class="caratula-wrap">
+  <div class="caratula">
+    <div class="doc-shell">
+      <main class="doc-main">
+
+        <div class="top-head">
+          <div class="top-logo">
+            <img src="../img/logo.png" alt="CIP Logo" class="top-logo-img">
+          </div>
+
+          <div class="top-contacto">
+            <div class="top-frase">Seguridad para tu retiro, confianza para tu futuro.</div>
+            <div class="top-direccion">📍 Jose Maria Pino Suarez 119, Santa Ana Tlapaltitlán, 52160 Toluca de Lerdo, Méx.</div>
+            <div class="top-correo">✉️ contacto@cipmexico.com.mx</div>
+          </div>
+        </div>
+
+        <section class="hero">
+          <div class="hero-left">
+            <div class="hero-topline">
+              <div class="hero-folio">Folio: <span id="folio">CIP-2026-00013</span></div>
+              <div class="hero-date">
+                <span id="fechaLarga">sábado, 27 de septiembre de 2025</span><br>
+                <span style="color:#0d5c86;font-weight:800;">Anexo A</span>
+              </div>
+            </div>
+
+            <div class="hero-title">Carátula de Crédito</div>
+            <div class="hero-subtitle">Resumen ejecutivo del producto financiero solicitado</div>
+          </div>
+
+          <div class="hero-right">
+            <div class="mini">Monto solicitado</div>
+            <span id="montoSolicitado"
+                  class="monto-valor-editable"
+                  contenteditable="true"
+                  role="textbox"
+                  aria-label="Monto solicitado"></span>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Identificación del crédito</div>
+          <div class="block-body">
+            <div class="grid-2">
+              <div class="info-card">
+                <div class="label">Nombre comercial del producto</div>
+                <div class="value" id="nombreProducto">Personal 10 Ordinario</div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Tipo de crédito</div>
+                <div class="value">Simple</div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">CURP</div>
+                <div class="value nowrap" id="ctlCURP" contenteditable="true"></div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">RFC</div>
+                <div class="value nowrap" id="ctlRFC" contenteditable="true"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Indicadores principales</div>
+          <div class="block-body">
+            <table class="summary-table">
+              <tr>
+                <th class="center">CAT<br><span class="small">Costo Anual Total</span></th>
+                <th class="center">Tasa de interés mensual<br><span class="small">Ordinaria y moratoria</span></th>
+                <th class="center">Monto o línea de crédito</th>
+                <th class="center">Monto total a pagar<br><span class="small">o mínimo a pagar</span></th>
+              </tr>
+              <tr>
+                <td class="small">
+                  116.90% SIN IVA para fines informativos y de comparación.
+                </td>
+                <td class="small">
+                  Tasa ordinaria <strong>9.74%</strong> SIN IVA<br>
+                  Tasa moratoria <strong>2.58%</strong> SIN IVA
+                </td>
+                <td id="montoTotalPagar" class="center big-money" data-base-source="montoMasComisiones"></td>
+                <td id="montoLineaCredito" class="center big-money"></td>
+              </tr>
+            </table>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Plazo y fechas</div>
+          <div class="block-body">
+            <div class="grid-3">
+              <div class="info-card">
+                <div class="label">Plazo del crédito</div>
+                <div class="value big">
+<span id="plazo"
+      class="editable-num editable-plazo"
+      contenteditable="true"
+      role="spinbutton"
+      aria-label="Plazo en meses"
+      aria-valuemin="1"
+      aria-valuemax="120"
+      aria-valuenow="10">10</span>
+                  meses
+                </div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Fecha límite de pago</div>
+                <div class="value" id="fechaMasUnAnio">Lunes, 17 de Mayo de 2027</div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Fecha de corte</div>
+                <div class="value" id="fechaMenosOcho">Lunes, 10 de Mayo de 2027</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Comisiones relevantes</div>
+          <div class="block-body">
+            <div class="grid-2">
+              <div class="info-card">
+                <div class="label">Apertura de crédito</div>
+                <div class="value">6.5% &nbsp; | &nbsp; <span id="costo65">$37,700.00</span></div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Seguro</div>
+                <div class="value right" id="costoSeguro">$10,725.00</div>
+              </div>
+
+              <div class="info-card" style="grid-column:1 / -1;">
+                <div class="label">Investigación (dependiendo la zona geográfica)</div>
+                <div class="value right" id="costoInvestigacion">$8,000.00</div>
+              </div>
+
+              <div class="info-card" style="grid-column:1 / -1; background:#fffaf2; border-color:#eddcab;">
+                <div class="label">Advertencias</div>
+                <div class="value" style="font-weight:600; line-height:1.5;">
+                  “Incumplir tus obligaciones te puede generar comisiones e intereses moratorios”.<br>
+                  “Contratar créditos por arriba de tu capacidad de pago puede afectar tu historial crediticio”.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Cobertura</div>
+          <div class="block-body">
+            <div class="coverage-grid">
+              <div class="info-card">
+                <div class="label">Seguro</div>
+                <div class="value">VIDA TEMPORAL 1 AÑO</div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Aseguradora</div>
+                <div class="value">INSIGNIA LIFE</div>
+              </div>
+
+              <div class="info-card coverage-full">
+                <div class="label">Cláusula</div>
+                <div class="value">DÉCIMA OCTAVA DEL CONTRATO</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Aclaraciones y reclamaciones</div>
+          <div class="block-body">
+            <div class="grid-2">
+              <div class="info-card">
+                <div class="label">Unidad Especializada de Atención a Usuarios</div>
+                <div class="value" style="line-height:1.55;">
+                  José Ma. Pino Suárez 119 Pte. Col. Santa Ana Tlapaltitlán, C.P. 50160,
+                  Toluca, Estado de México.
+                </div>
+              </div>
+
+              <div class="info-card">
+                <div class="label">Contacto</div>
+                <div class="value" style="line-height:1.6;">
+                  <strong>Tel:</strong> (722) 181 45 43<br>
+                  <strong>Correo:</strong> contacto@cipmexico.com.mx<br>
+                  <strong>Web:</strong> www.cipmexico.com.mx
+                </div>
+              </div>
+
+              <div class="info-card" style="grid-column:1 / -1;">
+                <div class="label">CONDUSEF</div>
+                <div class="value">
+                  Teléfonos 55-53-40-09-99. Página de Internet: www.condusef.gob.mx
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="firma">
+          <div class="thumbs-row">
+            <div class="thumb-slot">
+              <div class="thumb-label">PULGAR IZQUIERDO</div>
+              <div class="thumb-box"></div>
+            </div>
+
+            <div class="thumb-slot">
+              <div class="thumb-label">PULGAR DERECHO</div>
+              <div class="thumb-box"></div>
+            </div>
+          </div>
+
+          <div class="nombre" id="ctlNombre">-</div>
+
+          <div class="sigpad">
+            <canvas id="sigCanvas" aria-label="Firma del cliente"></canvas>
+
+            <div class="sig-actions">
+              <button type="button" id="sigUndo">Deshacer</button>
+              <button type="button" id="sigClear">Limpiar</button>
+              <button type="button" id="sigSave">Guardar</button>
+            </div>
+
+            <input type="hidden" id="firmaDataURL" name="firma_png">
+          </div>
+
+          <img id="sigPrintImage" class="sig-print" alt="" aria-hidden="true" src="" onerror="this.style.display='none'">
+
+          <div class="linea"></div>
+          <div class="nota">NOMBRE Y FIRMA DEL CLIENTE</div>
+        </section>
+
+        <div class="pie">Consultoría Integral de Pensiones México.</div>
+      </main>
+    </div>
+  </div>
+
+  <aside class="caratula-right">
+    <div class="right-title">PAGOS ORDINARIOS</div>
+    <div class="right-body">
+      <div id="plazosPanel" class="plazos-panel">
+
+        <div class="plazo-row">
+          <b>Mes <br>1</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>2</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>3</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>4</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>5</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>6</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>7</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>8</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>9</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>10</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row">
+          <b>Mes <br>11</b>
+          <div class="plazo-val">$11,111.00</div>
+        </div>
+
+        <div class="plazo-row plazo-total">
+          <div class="plazo-total-main">
+            <b>TOTAL</b>
+            <div class="plazo-val total-val">$122,221.00</div>
+          </div>
+          <div class="plazo-total-final">TOTAL FINAL = $252,045.25</div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- (Opcional) Auto-fecha larga de hoy -->
+<script>
+/* ============================================================
+   CARÁTULA + PANEL PLAZOS — JS ÚNICO (corregido)
+   - 1 sola BASE_URL (window.BASE_URL)
+   - 1 solo parse/format de dinero
+   - Seguro SIEMPRE desde PHP: app/controllers/concredito/get_seguro_costo.php
+   - Investigación desde zonas: app/controllers/concredito/listar.php
+   - Mantiene tus operaciones:
+     (A) TOTAL panel = suma meses (1..plazo-1) => montoSolicitado
+     (B) Apertura = 6.5% del TOTAL
+     (C) Seguro = PHP(monto total)
+     (D) Investigación = zona (fijo + % + min/max)
+     (E) TOTAL MES 1 = mes1 + apertura + seguro + investigación
+     (F) MENSUALIDAD = TOTAL MES 1 * (0.113 * meses)
+     (G) BASE = TOTAL MES 1 + MENSUALIDAD
+     (H) Recargos meses 2..(último-2): monto + (monto * 0.113 * (plazo - mes + 1))
+     (I) Últimos 2 meses: (penúltimo x3) y (último x2) => monto + recargo
+     (J) TOTAL FINAL = BASE + sumaRecargos(2..último-2) + total(últimos 2)
+
+   + NUEVO:
+     (K) costoSDI X DÍA
+     (L) Mes 1 inicia en el mes siguiente a fechaBase/hoy
+     (M) monto mensual = costoDia * días del mes
+     (N) si el mes cae en año posterior al de inicio => * 1.09
+   ============================================================ */
+(() => {
+  /* =================== Helpers =================== */
+  const $ = (s) => document.querySelector(s);
+
+function getPublicBase(){
+  const { origin, pathname } = window.location;
+  const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+  // Local XAMPP: /hp/public/
+  if (p.includes('/hp/public/')) {
+    return `${origin}/hp/public/`;
+  }
+
+  // Local XAMPP: /sempiternal/public/
+  if (p.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public/`;
+  }
+
+  // Render / Railway
+  return `${origin}/`;
+}
+
+  const BASE_URL = getPublicBase();
+  window.BASE_URL = BASE_URL;
+
+  const qs = new URLSearchParams(location.search);
+  window.SOLICITUD_ID = qs.get('solicitud_id') || qs.get('id') || '';
+
+  const fmtMXN = (v) =>
+    new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN' })
+      .format(Number(v ?? 0));
+
+  function parseMoney(s){
+    if (s == null) return 0;
+
+    let t = String(s)
+      .replace(/\u00A0/g,'')
+      .replace(/\s+/g,'')
+      .replace(/[^\d.,-]/g,'');
+
+    if (!t) return 0;
+
+    const lastDot = t.lastIndexOf('.');
+    const lastComma = t.lastIndexOf(',');
+
+    let dec = null;
+    if (lastDot === -1 && lastComma === -1) {
+      dec = null;
+    } else if (lastDot > lastComma) {
+      dec = '.';
+    } else {
+      dec = ',';
+    }
+
+    if (dec){
+      const parts = t.split(dec);
+      const intPart = parts.slice(0, -1).join(dec);
+      const decPart = parts[parts.length - 1];
+      const intClean = intPart.replace(/[.,]/g,'');
+      t = intClean + '.' + decPart;
+    } else {
+      t = t.replace(/[.,]/g,'');
+    }
+
+    const n = Number(t);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+
+  function qp(name){
+    const m = new RegExp('[?&]'+name+'=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : null;
+  }
+
+  async function safeJSON(res){
+    const t = await res.text();
+    try { return JSON.parse(t); }
+    catch { throw new Error('Respuesta no válida del servidor'); }
+  }
+
+  function setText(id, val){
+    const el = document.getElementById(id);
+    if (el) el.textContent = (val ?? '').toString();
+  }
+
+  function observarTexto(el, cb){
+    if (!el) return;
+    new MutationObserver(() => cb()).observe(el, {
+      childList:true,
+      characterData:true,
+      subtree:true
+    });
+  }
+
+  function clampInt(n, min, max){
+    n = parseInt(String(n || '').replace(/[^\d]/g,''), 10) || 0;
+    return Math.max(min, Math.min(max, n));
+  }
+
+  /* =================== Constantes =================== */
+  const FACTOR_APERTURA = 0.065; // 6.5%
+  const TASA_113 = 0.113;        // 11.3%
+  const TASA_MENSUAL_INTERES = 0.105;
+  const URL_ZONAS  = `${BASE_URL}app/controllers/concredito/listar.php`;
+  const URL_SEGURO = `${BASE_URL}app/controllers/concredito/get_seguro_costo.php`;
+
+
+// =================== TASAS ANUALES DESDE BD ===================
+const API_VALORES = `${BASE_URL}app/controllers/Calculadora/valores.php`;
+
+const CACHE_TASAS = {
+  years: {}
+};
+
+function normalizePercent(p){
+  let v = Number(p);
+
+  if (!Number.isFinite(v)) return null;
+
+  if (v < 1) v = v * 100;
+
+  return v;
+}
+
+async function fetchTasaAnual(year){
+  year = Number(year);
+
+  if (!year) return null;
+
+  if (CACHE_TASAS.years[year] != null) {
+    return CACHE_TASAS.years[year];
+  }
+
+  const r = await fetch(`${API_VALORES}?action=catalogos&year=${year}`, {
+    cache: 'no-store',
+    credentials: 'same-origin'
+  });
+
+  const j = await safeJSON(r);
+
+  if (!r.ok || !j?.ok) {
+    console.warn('No se pudo cargar tasa anual:', year, j);
+    CACHE_TASAS.years[year] = null;
+    return null;
+  }
+
+  const tasa = j.data?.porcentaje != null
+    ? normalizePercent(j.data.porcentaje)
+    : null;
+
+  CACHE_TASAS.years[year] = tasa;
+
+  console.log('✅ Tasa anual cargada:', {
+    year,
+    tasa
+  });
+
+  return tasa;
+}
+
+
+  /* =================== Estado =================== */
+  let _seguroCache = { monto: null, costo: 0 };
+  let _scheduled = false;
+
+  /* =================== Lecturas / Escrituras base =================== */
+  function leerPlazoMeses(){
+    const el = document.getElementById('plazo');
+    return clampInt(el?.textContent, 0, 9999);
+  }
+
+  function leerMontoSolicitado(){
+    const inp  = $('#montoSolicitadoInput');
+    const span = $('#montoSolicitado');
+    if (inp)  return parseMoney(inp.dataset?.raw ?? inp.value);
+    if (span) return parseMoney(span.dataset?.raw ?? span.textContent);
+    return 0;
+  }
+
+  function setMontoSolicitado(sum){
+    const el = document.getElementById('montoSolicitado');
+    if (el){
+      el.textContent = fmtMXN(sum);
+      el.dataset.raw = String(sum);
+      el.dispatchEvent(new Event('input', { bubbles:true }));
+      el.dispatchEvent(new Event('blur',  { bubbles:true }));
+    }
+
+    let hid = document.getElementById('montoSolicitadoInput');
+    if (!hid){
+      hid = document.createElement('input');
+      hid.type = 'hidden';
+      hid.id = 'montoSolicitadoInput';
+      (el?.parentNode || document.body).appendChild(hid);
+    }
+
+    hid.value = String(sum);
+    hid.dataset.raw = String(sum);
+    hid.dispatchEvent(new Event('input',  { bubbles:true }));
+    hid.dispatchEvent(new Event('change', { bubbles:true }));
+  }
+
+  function setAperturaFromTotal(total){
+    const apertura = round2(Number(total || 0) * FACTOR_APERTURA);
+    const td = document.getElementById('costo65');
+    if (td){
+      td.textContent = fmtMXN(apertura);
+      td.dataset.raw = String(apertura);
+    }
+    const a = document.getElementById('opMes1a');
+    if (a) a.textContent = `6.5% de TOTAL = ${fmtMXN(apertura)}`;
+    return apertura;
+  }
+
+  function setSeguroUI(costo){
+    const td = document.getElementById('costoSeguro');
+    if (td){
+      td.textContent = fmtMXN(costo);
+      td.dataset.raw = String(costo);
+    }
+    const b = document.getElementById('opMes1b');
+    if (b) b.textContent = `SEGURO = ${fmtMXN(costo)}`;
+  }
+
+  function setInvestigacionUI(extra, etiqueta){
+    const celda = document.getElementById('costoInvestigacion');
+    if (celda){
+      celda.textContent = fmtMXN(extra);
+      celda.dataset.raw = String(extra);
+    }
+
+    const c = document.getElementById('opMes1c');
+    if (c) c.textContent = `Investigación = ${fmtMXN(extra)}`;
+
+    const lblTar = document.getElementById('lblInvestigacionTarifa');
+    const lblImp = document.getElementById('lblInvestigacionImporte');
+    const lblTot = document.getElementById('lblTotalConInvestigacion');
+
+    if (lblTar) lblTar.textContent = etiqueta || '—';
+    if (lblImp) lblImp.textContent = fmtMXN(extra);
+
+    const monto = leerMontoSolicitado();
+    if (lblTot) lblTot.textContent = fmtMXN(round2(monto + extra));
+  }
+
+  function leerApertura(){
+    const td = document.getElementById('costo65');
+    return parseMoney(td?.dataset?.raw ?? td?.textContent);
+  }
+
+  function leerSeguro(){
+    const td = document.getElementById('costoSeguro');
+    return parseMoney(td?.dataset?.raw ?? td?.textContent);
+  }
+
+  function leerInvestigacion(){
+    const td = document.getElementById('costoInvestigacion');
+    return parseMoney(td?.dataset?.raw ?? td?.textContent);
+  }
+
+  /* =================== Seguro (PHP) =================== */
+  async function obtenerSeguroCosto(monto){
+    monto = Number(monto || 0);
+    if (!Number.isFinite(monto) || monto <= 0) return 0;
+
+    if (_seguroCache.monto === monto) return _seguroCache.costo;
+
+    const url = `${URL_SEGURO}?monto=${encodeURIComponent(monto)}`;
+    const r = await fetch(url, { credentials:'same-origin', cache:'no-store' });
+    const j = await safeJSON(r);
+
+    if (!r.ok || !j?.ok) throw new Error(j?.error || 'No se pudo obtener seguro');
+
+    const costo = Number(j.costo || 0) || 0;
+    _seguroCache = { monto, costo };
+    return costo;
+  }
+
+  /* =================== Investigación por zona =================== */
+  function pctToFactor(pct){
+    const n = Number(pct || 0);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return n >= 1 ? (n / 100) : n;
+  }
+
+  function calcExtraDesdeOption(opt, monto){
+    if (!opt) return { extra:0, etiqueta:null };
+
+    const fijo = Number(opt.dataset.cuota) || 0;
+    const pctFactor = pctToFactor(opt.dataset.pct);
+    const min = opt.dataset.min != null ? Number(opt.dataset.min) : null;
+    const max = opt.dataset.max != null ? Number(opt.dataset.max) : null;
+
+    let extra = fijo + (monto * pctFactor);
+    if (min != null) extra = Math.max(extra, min);
+    if (max != null) extra = Math.min(extra, max);
+
+    extra = round2(extra);
+    return { extra, etiqueta: opt.textContent || '' };
+  }
+
+  async function cargarZonas(){
+    const sel = $('#zonaSelect');
+    if (!sel) return;
+
+    try {
+      const r = await fetch(URL_ZONAS, { cache:'no-store', credentials:'same-origin' });
+      const j = await safeJSON(r);
+      if (!j?.ok) throw new Error(j?.msg || 'Error al cargar zonas');
+
+      sel.innerHTML = '<option value="">Selecciona zona…</option>';
+      (j.items || []).forEach(z => {
+        const op = document.createElement('option');
+        op.value = z.id;
+        op.textContent = z.etiqueta;
+        op.dataset.cuota = z.cuota_fija ?? 0;
+        op.dataset.pct   = z.pct_monto ?? 0;
+        if (z.minimo != null) op.dataset.min = z.minimo;
+        if (z.maximo != null) op.dataset.max = z.maximo;
+        sel.appendChild(op);
+      });
+
+      if (!sel.value && sel.options.length > 1) sel.selectedIndex = 1;
+    } catch {
+      sel.innerHTML = '<option value="">(sin zonas)</option>';
+    }
+  }
+
+  function recalcularInvestigacion(){
+    const sel = $('#zonaSelect');
+    const opt = sel ? sel.selectedOptions[0] : null;
+    const monto = leerMontoSolicitado();
+
+    if (!opt || !opt.value){
+      setInvestigacionUI(0, null);
+      return 0;
+    }
+
+    const { extra, etiqueta } = calcExtraDesdeOption(opt, monto);
+    setInvestigacionUI(extra, etiqueta);
+    return extra;
+  }
+
+  /* =================== Carátula =================== */
+  function actualizarTotal1(){
+    const total1 = leerApertura() + leerInvestigacion() + leerSeguro();
+    window.total1 = total1;
+    return total1;
+  }
+
+  function actualizarTotalCaratula(){
+    const monto = leerMontoSolicitado();
+    const total1 = actualizarTotal1();
+    const totalFinal = monto + total1;
+
+    const celda = document.getElementById('montoTotalPagar');
+    if (celda) celda.textContent = fmtMXN(totalFinal);
+
+    window.monto_con_total1 = totalFinal;
+    return totalFinal;
+  }
+
+  function recalcularInteresDesdeTotalPagar(){
+    const td = document.getElementById('montoTotalPagar');
+    const base = parseMoney(td?.textContent);
+    const meses = leerPlazoMeses();
+
+    const interes = base * TASA_MENSUAL_INTERES * meses;
+    const total = base + interes;
+
+    const destino = document.getElementById('montoTotalPagarConInteres');
+    if (destino) destino.textContent = fmtMXN(total);
+
+    const mlc = document.getElementById('montoLineaCredito');
+    if (mlc && !mlc.dataset.locked) {
+      mlc.textContent = fmtMXN(total);
+      mlc.dataset.raw = String(total);
+    }
+
+    return total;
+  }
+
+  /* =================== PANEL: helpers =================== */
+  function getPanelInputs(){
+    return Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+  }
+
+  function getUltimoMesRealDesdeInputs(inputs){
+    const meses = inputs
+      .map(el => parseInt(el.dataset.mes || '0', 10))
+      .filter(n => Number.isFinite(n) && n > 0);
+
+    return meses.length ? Math.max(...meses) : inputs.length;
+  }
+
+  function leerMontoMes(mes){
+    const el = document.querySelector(`#plazosPanel .plazo-input[data-mes="${mes}"]`);
+    if (!el) return 0;
+
+    const raw = (el.dataset?.raw != null && el.dataset.raw !== '') ? Number(el.dataset.raw) : NaN;
+    const n = Number.isFinite(raw) ? raw : parseMoney(el.textContent);
+    el.dataset.raw = String(n);
+    return n;
+  }
+
+  function pintarPanelTotales(sum){
+    const totalEl = document.getElementById('plazosTotal');
+    if (totalEl){
+      totalEl.textContent = fmtMXN(sum);
+      totalEl.dataset.raw = String(sum);
+    }
+  }
+
+  function pintarTotalMes1YMensualidad(){
+    const elTotal = document.getElementById('opMes1d');
+    const elMens  = document.getElementById('opMes1e');
+    const elFinal = document.getElementById('opMes1f');
+
+    const mes1 = leerMontoMes(1);
+    const apertura = leerApertura();
+    const seguro   = leerSeguro();
+    const invest   = leerInvestigacion();
+
+    const totalMes1 = (mes1 || 0) + (apertura || 0) + (seguro || 0) + (invest || 0);
+    if (elTotal) elTotal.textContent = `TOTAL MES 1 = ${fmtMXN(totalMes1)}`;
+
+    const meses = leerPlazoMeses();
+    const mensualidad = totalMes1 * (TASA_113 * meses);
+    if (elMens) elMens.textContent = `MENSUALIDAD (11.3% × meses) = ${fmtMXN(mensualidad)}`;
+
+    const base = totalMes1 + mensualidad;
+    if (elFinal) elFinal.textContent = `TOTAL (MES 1 + MENSUALIDAD) = ${fmtMXN(base)}`;
+
+    return base;
+  }
+
+  function calcularSumaMeses2aHasta(ultimoMes, plazo){
+    const HASTA = Math.max(2, ultimoMes - 2);
+    let suma = 0;
+
+    for (let mes = 2; mes <= HASTA; mes++){
+      const monto = leerMontoMes(mes);
+      const mult = (plazo - mes + 1);
+      const recargo = (monto || 0) * TASA_113 * mult;
+      suma += (monto || 0) + recargo;
+    }
+
+    return suma;
+  }
+
+  function calcularUltimos2(ultimoMes){
+    const mesPenult = Math.max(1, ultimoMes - 1);
+    const mesUlt = ultimoMes;
+
+    const monto11 = leerMontoMes(mesPenult);
+    const monto12 = leerMontoMes(mesUlt);
+
+    const totalPenult = monto11 + (monto11 * (TASA_113 * 3));
+    const totalUlt = monto12 + (monto12 * (TASA_113 * 2));
+
+    return totalPenult + totalUlt;
+  }
+
+  function pintarTotalFinal(valor){
+    const out = document.getElementById('totalFinalResultado');
+    if (out) out.textContent = fmtMXN(valor);
+
+    const mlc = document.getElementById('montoLineaCredito');
+    if (mlc){
+      mlc.dataset.locked = '1';
+      mlc.textContent = fmtMXN(valor);
+      mlc.dataset.raw = String(valor);
+    }
+  }
+
+  function calcularTotalPanel(){
+    const inputs = getPanelInputs();
+    let sum = 0;
+
+    inputs.forEach(el => {
+      const raw = (el.dataset && el.dataset.raw != null) ? Number(el.dataset.raw) : NaN;
+      const n = Number.isFinite(raw) ? raw : parseMoney(el.textContent);
+      el.dataset.raw = String(n);
+      sum += n;
+    });
+
+    pintarPanelTotales(sum);
+    setMontoSolicitado(sum);
+    setAperturaFromTotal(sum);
+    recalcularInvestigacion();
+
+    obtenerSeguroCosto(sum)
+      .then(costo => {
+        setSeguroUI(costo);
+        scheduleRecalc();
+      })
+      .catch(() => {
+        setSeguroUI(0);
+        scheduleRecalc();
+      });
+
+    scheduleRecalc();
+    return sum;
+  }
+
+  /* =================== NUEVO: SDI =================== */
+  function getFechaInicioSDI(){
+    const fechaBaseInput = document.getElementById('fechaBase');
+
+    let baseDate;
+    if (fechaBaseInput && fechaBaseInput.value) {
+      baseDate = new Date(fechaBaseInput.value + 'T12:00:00');
+    } else {
+      baseDate = new Date();
+    }
+
+    return new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 1, 12, 0, 0);
+  }
+
+
+function getNombreMesSDI(indiceMes){
+  const fechaInicio = getFechaInicioSDI();
+
+  const fechaMes = new Date(
+    fechaInicio.getFullYear(),
+    fechaInicio.getMonth() + indiceMes,
+    1,
+    12, 0, 0
+  );
+
+  const nombre = fechaMes.toLocaleDateString('es-MX', {
+    month: 'long',
+    year: 'numeric'
+  });
+
+  return nombre.charAt(0).toUpperCase() + nombre.slice(1);
+}
+
+  function diasDelMes(year, monthIndex){
+    return new Date(year, monthIndex + 1, 0).getDate();
+  }
+
+function obtenerFactorAnualSDI(fechaMes, fechaInicio){
+  return 1;
+}
+
+async function calcularMontoSDIPorMes(costoDia, indiceMes){
+  const fechaInicio = getFechaInicioSDI();
+
+  const fechaMes = new Date(
+    fechaInicio.getFullYear(),
+    fechaInicio.getMonth() + indiceMes,
+    1,
+    12, 0, 0
+  );
+
+  const yearBase = fechaInicio.getFullYear();
+  const yearMes = fechaMes.getFullYear();
+
+  const dias = diasDelMes(yearMes, fechaMes.getMonth());
+
+  const tasaBase = await fetchTasaAnual(yearBase);
+  const tasaMes = await fetchTasaAnual(yearMes);
+
+  let factor = 1;
+
+  if (
+    Number.isFinite(tasaBase) && tasaBase > 0 &&
+    Number.isFinite(tasaMes) && tasaMes > 0
+  ) {
+    factor = tasaMes / tasaBase;
+  }
+
+  const monto = round2(Number(costoDia || 0) * dias * factor);
+
+  return {
+    monto,
+    dias,
+    factor,
+    tasaBase,
+    tasaMes,
+    year: yearMes,
+    month: fechaMes.getMonth() + 1,
+    fechaMes
+  };
+}
+
+async function poblarMesesDesdeSDI(){
+  const sdiEl = document.getElementById('costoSDI');
+
+  if (!sdiEl) return;
+
+  if (window.__PLAZOS_GUARDADOS_BD) {
+    return;
+  }
+
+  const costoDia = parseMoney(sdiEl.dataset?.raw ?? sdiEl.textContent);
+  const inputs = getPanelInputs();
+
+  for (let idx = 0; idx < inputs.length; idx++) {
+    const el = inputs[idx];
+    const calc = await calcularMontoSDIPorMes(costoDia, idx);
+
+    el.textContent = fmtMXN(calc.monto);
+    el.dataset.raw = String(calc.monto);
+    el.dataset.dias = String(calc.dias);
+    el.dataset.factor = String(calc.factor);
+    el.dataset.tasaBase = String(calc.tasaBase ?? '');
+    el.dataset.tasaMes = String(calc.tasaMes ?? '');
+    el.dataset.year = String(calc.year);
+    el.dataset.month = String(calc.month);
+  }
+}
+
+async function pintarMetaMesesSDI(){
+  const sdiEl = document.getElementById('costoSDI');
+  if (!sdiEl) return;
+
+  const costoDia = parseMoney(sdiEl.dataset?.raw ?? sdiEl.textContent);
+  const inputs = getPanelInputs();
+
+  for (let idx = 0; idx < inputs.length; idx++) {
+    const calc = await calcularMontoSDIPorMes(costoDia, idx);
+    const meta = document.getElementById(`metaMes${idx + 1}`);
+
+    if (!meta) continue;
+
+    const tasaTxt = Number.isFinite(calc.tasaMes)
+      ? ` · tasa ${calc.tasaMes.toFixed(3)}%`
+      : '';
+
+    meta.textContent = `${calc.dias} día(s)${tasaTxt}`;
+  }
+}
+
+  function normalizarEditableMoney(el){
+    if (!el) return;
+    const raw = parseMoney(el.textContent);
+    el.dataset.raw = String(raw);
+    el.textContent = raw ? fmtMXN(raw) : '0';
+  }
+
+  function initCostoSDI(){
+    const sdiEl = document.getElementById('costoSDI');
+    if (!sdiEl) return;
+
+const recalcSDI = async () => {
+  normalizarEditableMoney(sdiEl);
+  await poblarMesesDesdeSDI();
+  await pintarMetaMesesSDI();
+  calcularTotalPanel();
+};
+sdiEl.addEventListener('input', () => {
+  // Si el usuario edita el SDI manualmente, entonces sí permitimos recalcular desde SDI
+  window.__PLAZOS_GUARDADOS_BD = false;
+  sdiEl.dataset.raw = String(parseMoney(sdiEl.textContent));
+});
+    sdiEl.addEventListener('blur', recalcSDI);
+
+    const fechaBase = document.getElementById('fechaBase');
+    if (fechaBase){
+      fechaBase.addEventListener('change', recalcSDI);
+    }
+
+    const plazo = document.getElementById('plazo');
+    if (plazo){
+      plazo.addEventListener('blur', () => {
+        renderPlazos();
+        recalcSDI();
+      });
+    }
+  }
+
+function ajustarDensidadPlazos(cantidadFilas){
+  const panel = document.getElementById('plazosPanel');
+  if (!panel) return;
+
+  panel.classList.remove('compact', 'xcompact');
+
+  // puedes mover estos límites
+  if (cantidadFilas >= 15) {
+    panel.classList.add('xcompact');
+  } else if (cantidadFilas >= 11) {
+    panel.classList.add('compact');
+  }
+}
+
+
+  /* =================== render panel =================== */
+  function renderPlazos(){
+    const panel = document.getElementById('plazosPanel');
+    const plazoEl = document.getElementById('plazo');
+    if (!panel || !plazoEl) return;
+
+    const plazo = clampInt(plazoEl.textContent, 1, 120);
+    const campos = Math.max(0, plazo - 1);
+
+    panel.innerHTML = '';
+    ajustarDensidadPlazos(campos);
+
+    for (let i = 1; i <= campos; i++){
+      const row = document.createElement('div');
+      row.className = 'plazo-row';
+
+      row.innerHTML = `
+          <b>${getNombreMesSDI(i - 1)}</b>
+        <div class="plazo-box">
+          <span class="plazo-val plazo-input"
+                contenteditable="true"
+                inputmode="decimal"
+                data-mes="${i}"
+                data-raw="0"
+                aria-label="Cantidad del mes ${i}">0</span>
+
+          <div class="plazo-meta" id="metaMes${i}" style="font-size:11px;color:#5f6b7a;margin-top:4px;">
+            —
+          </div>
+
+          ${i === 1 ? `
+            <div class="plazo-sub" id="opMes1">
+              <div id="opMes1a">—</div>
+              <div id="opMes1b" style="margin-top:2px;">—</div>
+              <div id="opMes1c" style="margin-top:2px;">—</div>
+              <div id="opMes1d" style="margin-top:6px; font-weight:800;">—</div>
+              <div id="opMes1e" style="margin-top:6px; font-weight:800;">—</div>
+              <div id="opMes1f" style="margin-top:6px; font-weight:900;">—</div>
+            </div>
+          ` : ``}
+        </div>
+      `;
+      panel.appendChild(row);
+    }
+
+    const totalRow = document.createElement('div');
+    totalRow.className = 'plazo-row plazo-total';
+    totalRow.innerHTML = `
+      <div class="plazo-total-main">
+        <b>TOTAL</b>
+        <span id="plazosTotal" class="plazo-val total-val" data-raw="0">${fmtMXN(0)}</span>
+      </div>
+
+      <div class="plazo-total-final">
+        TOTAL FINAL =
+        <span id="totalFinalResultado">${fmtMXN(0)}</span>
+      </div>
+    `;
+    panel.appendChild(totalRow);
+
+Promise.resolve()
+  .then(() => poblarMesesDesdeSDI())
+  .then(() => pintarMetaMesesSDI())
+  .then(() => calcularTotalPanel())
+  .catch(console.error);
+  }
+
+  /* =================== Firma / Fechas / Meta =================== */
+  function isCanvasBlank(cv){
+    if (!cv) return true;
+    if (!cv.width || !cv.height){
+      const r = cv.getBoundingClientRect();
+      cv.width  = Math.max(1, Math.floor(r.width  * (window.devicePixelRatio || 1)));
+      cv.height = Math.max(1, Math.floor(r.height * (window.devicePixelRatio || 1)));
+    }
+    const ctx = cv.getContext('2d');
+    const data = ctx.getImageData(0, 0, cv.width, cv.height).data;
+    for (let i = 3; i < data.length; i += 4) if (data[i] !== 0) return false;
+    return true;
+  }
+
+  function setSignatureSrc(dataUrl){
+    if (!dataUrl) return;
+
+    const img = document.getElementById('sigPrintImage');
+    if (img){
+      img.src = dataUrl;
+      const cvRect = document.getElementById('sigCanvas')?.getBoundingClientRect();
+      if (cvRect){
+        img.style.width = cvRect.width + 'px';
+        img.style.height = cvRect.height + 'px';
+        img.style.objectFit = 'contain';
+      } else {
+        img.style.maxWidth = '100%';
+      }
+    }
+
+    const cv = document.getElementById('sigCanvas');
+    if (cv){
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const r = cv.getBoundingClientRect();
+      cv.width  = Math.max(1, Math.floor(r.width * ratio));
+      cv.height = Math.max(1, Math.floor(r.height * ratio));
+      const ctx = cv.getContext('2d');
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+
+      const im = new Image();
+      im.onload = () => {
+        const cw = r.width, ch = r.height;
+        ctx.clearRect(0,0,cw,ch);
+        const s = Math.min(cw/im.width, ch/im.height);
+        const w = im.width * s, h = im.height * s;
+        const x = (cw - w)/2, y = (ch - h)/2;
+        ctx.drawImage(im, x, y, w, h);
+        const hidden = document.getElementById('firmaDataURL');
+        if (hidden) hidden.value = cv.toDataURL('image/png');
+      };
+      im.src = dataUrl;
+    } else {
+      const hidden = document.getElementById('firmaDataURL');
+      if (hidden) hidden.value = dataUrl;
+    }
+  }
+
+  function initSignaturePad(){
+    const canvas  = document.getElementById('sigCanvas');
+    const undoBtn = document.getElementById('sigUndo');
+    const clearBtn= document.getElementById('sigClear');
+    const saveBtn = document.getElementById('sigSave');
+    const hidden  = document.getElementById('firmaDataURL');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let strokes = [];
+    let current = [];
+
+    function style(){
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2.2;
+    }
+
+    function redraw(){
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      style();
+      for (const path of strokes){
+        if (path.length < 2) continue;
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i = 1; i < path.length; i++) ctx.lineTo(path[i].x, path[i].y);
+        ctx.stroke();
+      }
+    }
+
+    function syncSignatureToImage(){
+      const img = document.getElementById('sigPrintImage');
+      if (!img) return;
+      try {
+        img.src = canvas.toDataURL('image/png');
+        const rect = canvas.getBoundingClientRect();
+        img.style.width = rect.width + 'px';
+        img.style.height = rect.height + 'px';
+        img.style.objectFit = 'contain';
+      } catch {
+        img.removeAttribute('src');
+      }
+    }
+
+    function resize(){
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width  = Math.max(1, Math.floor(rect.width * ratio));
+      canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.clearRect(0,0,rect.width,rect.height);
+      style();
+      redraw();
+      syncSignatureToImage();
+    }
+
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      const p = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+      return { x: p.clientX - r.left, y: p.clientY - r.top };
+    }
+
+    function updateHidden(){
+      if (!hidden) return;
+      hidden.value = strokes.length ? canvas.toDataURL('image/png') : '';
+    }
+
+    function start(e){ e.preventDefault(); drawing = true; current = [pos(e)]; }
+    function move(e){
+      if (!drawing) return;
+      e.preventDefault();
+      const p = pos(e);
+      const last = current[current.length-1];
+      if (!last || p.x !== last.x || p.y !== last.y){
+        current.push(p);
+        if (current.length >= 2){
+          style();
+          const n = current.length;
+          ctx.beginPath();
+          ctx.moveTo(current[n-2].x, current[n-2].y);
+          ctx.lineTo(current[n-1].x, current[n-1].y);
+          ctx.stroke();
+        }
+      }
+    }
+    function end(){
+      if (!drawing) return;
+      drawing = false;
+      if (current.length > 1) strokes.push(current);
+      current = [];
+      updateHidden();
+      syncSignatureToImage();
+    }
+
+    canvas.addEventListener('pointerdown', start, {passive:false});
+    canvas.addEventListener('pointermove',  move,  {passive:false});
+    canvas.addEventListener('pointerup',    end,   {passive:false});
+    canvas.addEventListener('pointerleave', end,   {passive:false});
+    canvas.addEventListener('touchstart',   start, {passive:false});
+    canvas.addEventListener('touchmove',    move,  {passive:false});
+    canvas.addEventListener('touchend',     end,   {passive:false});
+
+    undoBtn?.addEventListener('click', () => { strokes.pop(); redraw(); updateHidden(); syncSignatureToImage(); });
+    clearBtn?.addEventListener('click', () => { strokes = []; redraw(); updateHidden(); syncSignatureToImage(); });
+    saveBtn?.addEventListener('click', () => { updateHidden(); syncSignatureToImage(); });
+
+    window.addEventListener('resize', () => setTimeout(resize, 0));
+    window.addEventListener('beforeprint', syncSignatureToImage);
+    setTimeout(resize, 0);
+  }
+
+  function fmtFechaLarga(d){
+    return d.toLocaleDateString('es-MX', {
+      weekday:'long',
+      day:'numeric',
+      month:'long',
+      year:'numeric'
+    });
+  }
+
+  function cap(s){
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+  }
+
+  function toISODate(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function sumarMeses(fecha, meses){
+    const f = new Date(fecha.getTime());
+    const d = f.getDate();
+    f.setMonth(f.getMonth() + meses);
+    if (f.getDate() < d) f.setDate(0);
+    return f;
+  }
+
+  function actualizarFechasDesde(base){
+    if (!(base instanceof Date) || isNaN(base)) return;
+
+    const elLarga = document.getElementById('fechaLarga');
+    if (elLarga) elLarga.textContent = cap(fmtFechaLarga(base));
+
+    const plazoMeses = leerPlazoMeses();
+    const limite = plazoMeses > 0 ? sumarMeses(base, plazoMeses) : base;
+
+    const elLimite = document.getElementById('fechaMasUnAnio');
+    if (elLimite) elLimite.textContent = cap(fmtFechaLarga(limite));
+
+    const h = document.getElementById('fechaLimitePagoISO');
+    if (h) h.value = toISODate(limite);
+
+    const corte = new Date(limite);
+    corte.setDate(corte.getDate() - 8);
+
+    const elCorte = document.getElementById('fechaMenosOcho');
+    if (elCorte) elCorte.textContent = cap(fmtFechaLarga(corte));
+  }
+  window.actualizarFechasDesde = actualizarFechasDesde;
+
+  function setDateInputTodayIfEmpty(inp){
+    if (!inp) return;
+    if (inp.dataset.locked === '1') return;
+    if (!inp.value) inp.value = toISODate(new Date());
+  }
+
+  /* =================== Recálculo general =================== */
+  function scheduleRecalc(){
+    if (_scheduled) return;
+    _scheduled = true;
+    requestAnimationFrame(() => {
+      _scheduled = false;
+      recalcChain();
+    });
+  }
+
+  function recalcChain(){
+    try { recalcularInvestigacion(); } catch {}
+    try { actualizarTotalCaratula(); } catch {}
+    try { recalcularInteresDesdeTotalPagar(); } catch {}
+
+    try {
+      const inputs = getPanelInputs();
+      if (inputs.length){
+        const plazo = leerPlazoMeses();
+        const ultimoMes = getUltimoMesRealDesdeInputs(inputs);
+
+        const base = pintarTotalMes1YMensualidad();
+        const suma2aHasta = calcularSumaMeses2aHasta(ultimoMes, plazo);
+        const ult2 = calcularUltimos2(ultimoMes);
+
+        const totalFinal = (base || 0) + (suma2aHasta || 0) + (ult2 || 0);
+        pintarTotalFinal(totalFinal);
+      }
+    } catch {}
+
+    const mlc = document.getElementById('montoLineaCredito');
+    if (mlc && !mlc.textContent.trim() && !mlc.dataset.locked){
+      mlc.textContent = fmtMXN(leerMontoSolicitado());
+    }
+  }
+
+  /* =================== API global =================== */
+  window.recalcularCosto65 = () => setAperturaFromTotal(leerMontoSolicitado());
+  window.recalcularInvestigacionZona = recalcularInvestigacion;
+  window.actualizarTotal1 = actualizarTotal1;
+  window.actualizarTotalCaratula = actualizarTotalCaratula;
+  window.recalcularInteresDesdeTotalPagar = recalcularInteresDesdeTotalPagar;
+  window.recalcularTotalPlazosPanel = calcularTotalPanel;
+  window.recalcularCaratulaLigero = scheduleRecalc;
+
+  /* =================== Panel input handlers =================== */
+  function onBeforeInput(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+    if (e.inputType === 'insertText' && e.data && !/^[0-9.,-]+$/.test(e.data)) e.preventDefault();
+  }
+
+  function onInput(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+    const n = parseMoney(el.textContent);
+    el.dataset.raw = String(n);
+    calcularTotalPanel();
+  }
+
+  function onBlur(e){
+    const el = e.target;
+    if (!el || !el.classList.contains('plazo-input')) return;
+    const n = parseMoney(el.textContent);
+    el.dataset.raw = String(n);
+    el.textContent = fmtMXN(n);
+    calcularTotalPanel();
+  }
+
+  /* =================== GUARDAR META =================== */
+  function moneyTextToNumber(text){
+    if (!text) return '';
+    const n = String(text).replace(/[^\d.]/g, '');
+    return (n && n !== '.') ? n : '';
+  }
+
+  function fechaLargaAToISO(fechaTexto){
+    if (!fechaTexto) return '';
+    const meses = {
+      enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6,
+      julio:7, agosto:8, septiembre:9, setiembre:9,
+      octubre:10, noviembre:11, diciembre:12
+    };
+    const m = fechaTexto.toLowerCase().match(/(\d{1,2})\s+de\s+([a-zñ]+)\s+de\s+(\d{4})/);
+    if (!m) return '';
+    const dia  = m[1].padStart(2,'0');
+    const mes  = String(meses[m[2]] || '').padStart(2,'0');
+    const anio = m[3];
+    if (!mes) return '';
+    return `${anio}-${mes}-${dia}`;
+  }
+
+  function setFechaBase(inp, isoDate){
+    if (!inp || !isoDate) return;
+
+    inp.dataset.locked = '1';
+
+    if (inp._flatpickr && typeof inp._flatpickr.setDate === 'function') {
+      inp._flatpickr.setDate(isoDate, true, 'Y-m-d');
+    } else if (window.jQuery && window.jQuery.fn && typeof window.jQuery(inp).datepicker === 'function') {
+      try { window.jQuery(inp).datepicker('setDate', new Date(isoDate + 'T00:00:00')); }
+      catch { inp.value = isoDate; }
+    } else {
+      inp.value = isoDate;
+    }
+
+    inp.dispatchEvent(new Event('input',  { bubbles:true }));
+    inp.dispatchEvent(new Event('change', { bubbles:true }));
+
+    if (typeof window.actualizarFechasDesde === 'function') {
+      window.actualizarFechasDesde(new Date(isoDate + 'T00:00:00'));
+    }
+
+    setTimeout(() => {
+      if (inp.dataset.locked === '1') {
+        inp.value = isoDate;
+        inp.dispatchEvent(new Event('input',  { bubbles:true }));
+        inp.dispatchEvent(new Event('change', { bubbles:true }));
+        if (typeof window.actualizarFechasDesde === 'function') {
+          window.actualizarFechasDesde(new Date(isoDate + 'T00:00:00'));
+        }
+      }
+    }, 120);
+
+    setTimeout(() => {
+      if (inp.dataset.locked === '1') {
+        inp.value = isoDate;
+        inp.dispatchEvent(new Event('input',  { bubbles:true }));
+        inp.dispatchEvent(new Event('change', { bubbles:true }));
+        if (typeof window.actualizarFechasDesde === 'function') {
+          window.actualizarFechasDesde(new Date(isoDate + 'T00:00:00'));
+        }
+      }
+    }, 600);
+  }
+
+  async function cargarMetaCaratula(){
+    const params = new URLSearchParams(location.search);
+    const sid = params.get('solicitud_id') || params.get('id') || window.SOLICITUD_ID || '';
+    if (!sid) return;
+
+    const inpFecha = document.getElementById('fechaBase');
+    const selZona  = document.getElementById('zonaSelect');
+
+    const url = `${window.BASE_URL || '/'}app/controllers/concredito/leer_meta.php?solicitud_id=${encodeURIComponent(sid)}`;
+    const r = await fetch(url, { credentials:'same-origin', cache:'no-store' });
+    const txt = await r.text();
+
+    let j = null;
+    try { j = JSON.parse(txt); }
+    catch {
+      alert('❌ leer_meta NO regresó JSON. Revisa sesión/login. Respuesta inicia con:\n' + txt.slice(0,120));
+      return;
+    }
+
+    if (!r.ok || !j?.ok || !j?.meta) {
+      alert('⚠️ leer_meta sin meta:\n' + JSON.stringify(j).slice(0,200));
+      return;
+    }
+
+    const { zona_id, zona_label, fecha_base, firma_dataurl } = j.meta;
+
+    if (inpFecha && fecha_base && /^\d{4}-\d{2}-\d{2}$/.test(fecha_base)) {
+      setFechaBase(inpFecha, fecha_base);
+    }
+
+    if (selZona) {
+      let ok = false;
+
+      if (zona_id != null && zona_id !== '') {
+        for (const op of selZona.options) {
+          if (String(op.value) === String(zona_id)) {
+            selZona.value = op.value;
+            ok = true;
+            break;
+          }
+        }
+      }
+
+      if (!ok && zona_label) {
+        const target = String(zona_label).trim().toLowerCase();
+        for (const op of selZona.options) {
+          if ((op.textContent || '').trim().toLowerCase() === target) {
+            selZona.value = op.value;
+            break;
+          }
+        }
+      }
+
+      selZona.dispatchEvent(new Event('input',  { bubbles:true }));
+      selZona.dispatchEvent(new Event('change', { bubbles:true }));
+    }
+
+    if (firma_dataurl) {
+      try { setSignatureSrc(firma_dataurl); } catch {}
+    }
+  }
+  window.cargarMetaCaratula = cargarMetaCaratula;
+
+  function fechaInputAToISO(v){
+    if (!v) return '';
+
+    const s = String(v).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+    const m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if (m){
+      const dd = String(m[1]).padStart(2,'0');
+      const mm = String(m[2]).padStart(2,'0');
+      const yy = String(m[3]);
+      return `${yy}-${mm}-${dd}`;
+    }
+
+    return '';
+  }
+
+  async function guardarMetaCaratula(){
+    const params = new URLSearchParams(location.search);
+    const sid = params.get('solicitud_id') || params.get('id') || window.SOLICITUD_ID || '';
+    if (!sid) throw new Error('Falta solicitud_id');
+
+    try { window.recalcularCaratulaLigero?.(); } catch {}
+    try { window.recalcularTotalPlazosPanel?.(); } catch {}
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const sel = document.getElementById('zonaSelect');
+    const zona_id    = sel?.value || '';
+    const zona_label = sel?.selectedOptions?.[0]?.textContent?.trim() || '';
+
+    const fecha_raw  = document.getElementById('fechaBase')?.value || '';
+    const fecha_base = fechaInputAToISO(fecha_raw);
+    if (fecha_raw && !fecha_base){
+      throw new Error('Selecciona una fecha base válida');
+    }
+
+    const fechaTexto = document.getElementById('fechaMasUnAnio')?.textContent?.trim() || '';
+    const fecha_limite_pago = fechaLargaAToISO(fechaTexto);
+
+    let firma_png = '';
+    const cv = document.getElementById('sigCanvas');
+    if (cv && !isCanvasBlank(cv)) {
+      try { firma_png = cv.toDataURL('image/png'); } catch {}
+    }
+    if (!firma_png) firma_png = document.getElementById('firmaDataURL')?.value || '';
+
+    const lineaTxt = document.getElementById('montoTotalPagar')?.textContent || '';
+    const totalTxt = document.getElementById('montoLineaCredito')?.textContent || '';
+
+    const monto_linea_credito = Number(moneyTextToNumber(lineaTxt) || 0);
+    const monto_total_pagar   = Number(moneyTextToNumber(totalTxt) || 0);
+
+    if (monto_linea_credito <= 0) {
+      throw new Error('No se pudo leer la LÍNEA DE CRÉDITO (#montoTotalPagar)');
+    }
+    if (monto_total_pagar <= 0) {
+      throw new Error('No se pudo leer el TOTAL/MÍNIMO (#montoLineaCredito)');
+    }
+
+    const payload = new URLSearchParams();
+    payload.set('solicitud_id', String(sid));
+
+    if (zona_id !== '')        payload.set('zona_id', String(zona_id));
+    if (zona_label)            payload.set('zona_label', zona_label);
+    if (fecha_base)            payload.set('fecha_base', fecha_base);
+    if (fecha_limite_pago)     payload.set('fecha_limite_pago', fecha_limite_pago);
+    if (firma_png)             payload.set('firma_png', firma_png);
+
+    payload.set('monto_linea_credito', String(monto_linea_credito));
+    payload.set('monto_total_pagar',   String(monto_total_pagar));
+
+    const resp = await fetch(`${window.BASE_URL || '/'}app/controllers/concredito/guardar_meta.php`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/x-www-form-urlencoded' },
+      credentials: 'same-origin',
+      body: payload.toString()
+    });
+
+    const txt = await resp.text();
+    let j;
+    try { j = JSON.parse(txt); }
+    catch { throw new Error('Respuesta no-JSON del servidor (meta)'); }
+
+    if (!resp.ok || !j?.ok) throw new Error(j?.message || 'No se pudo guardar meta');
+    return j;
+  }
+  window.guardarMetaCaratula = guardarMetaCaratula;
+
+  async function guardarTodoCaratula(){
+    const params = new URLSearchParams(location.search);
+    const sid = params.get('solicitud_id') || params.get('id') || window.SOLICITUD_ID || '';
+    if (!sid) throw new Error('Falta solicitud_id');
+
+    if (typeof window.guardarMetaCaratula !== 'function') {
+      throw new Error('No existe guardarMetaCaratula()');
+    }
+    await window.guardarMetaCaratula();
+
+    const inputs = Array.from(document.querySelectorAll('#plazosPanel .plazo-input'));
+    const plazos = inputs.map(el => ({
+      mes: Number(el.dataset.mes || 0),
+      monto: Number(el.dataset.raw || 0)
+    })).filter(x => x.mes > 0);
+
+    const r = await fetch(`${window.BASE_URL || '/'}app/controllers/concredito/guardar_plazos.php`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ solicitud_id: Number(sid), plazos })
+    });
+
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.message || 'No se pudieron guardar los plazos');
+
+    return { ok:true, meta:true, plazos:j };
+  }
+  window.guardarTodoCaratula = guardarTodoCaratula;
+
+async function cargarPlazosGuardados(){
+  const params = new URLSearchParams(location.search);
+  const sid = params.get('solicitud_id') || params.get('id') || window.SOLICITUD_ID || '';
+  if (!sid) return false;
+
+  const url = `${window.BASE_URL || '/'}app/controllers/concredito/leer_plazos.php?solicitud_id=${encodeURIComponent(sid)}&_=${Date.now()}`;
+
+  const r = await fetch(url, {
+    credentials: 'same-origin',
+    cache: 'no-store'
+  });
+
+  const j = await r.json().catch(() => ({}));
+
+  if (!r.ok || !j.ok) {
+    console.warn('[plazos] No se pudieron leer plazos guardados:', j);
+    return false;
+  }
+
+  const items = Array.isArray(j.items) ? j.items : [];
+
+  if (!items.length) {
+    console.warn('[plazos] No hay plazos guardados para esta solicitud.');
+    return false;
+  }
+
+  const hayMontos = items.some(x => Number(x.monto || 0) > 0);
+
+  if (!hayMontos) {
+    console.warn('[plazos] Los plazos guardados vienen en 0. Se permitirá cálculo por SDI.');
+    window.__PLAZOS_GUARDADOS_BD = false;
+    return false;
+  }
+
+  window.__PLAZOS_GUARDADOS_BD = true;
+
+  const pintar = () => {
+    items.forEach(x => {
+      const mes = Number(x.mes || x.mes_num || x.numero || 0);
+      const monto = Number(x.monto || 0);
+
+      if (!mes) return;
+
+      const el = document.querySelector(`#plazosPanel .plazo-input[data-mes="${mes}"]`);
+      if (!el) return;
+
+      el.dataset.raw = String(monto);
+      el.textContent = fmtMXN(monto);
+    });
+
+    calcularTotalPanel();
+    scheduleRecalc();
+  };
+
+  // Primera pintura
+  pintar();
+
+  // Segunda pintura: evita que algún recálculo inicial los vuelva a poner en 0
+  setTimeout(pintar, 150);
+  setTimeout(pintar, 400);
+
+  console.log('[plazos] Plazos cargados desde BD:', items);
+
+  return true;
+}
+  function initBtnRegresar(){
+    const btn = document.getElementById('btn-regresar');
+    if (!btn) return;
+
+    const FALLBACK_URL = (window.BASE_URL || '/') + 'index.php';
+
+    btn.addEventListener('click', () => {
+      const ref = document.referrer;
+      const hasHistory = history.length > 1;
+
+      let sameOrigin = false;
+      try {
+        sameOrigin = !!ref && (new URL(ref, location.href).origin === location.origin);
+      } catch {}
+
+      const ua = navigator.userAgent || '';
+      const isAndroidWebView = /Android/i.test(ua) && /wv|Version\/\d+\.\d+/i.test(ua);
+
+      if (!isAndroidWebView && hasHistory && sameOrigin) {
+        history.back();
+      } else {
+        window.location.href = FALLBACK_URL;
+      }
+    });
+
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  }
+
+  /* =================== INIT =================== */
+  document.addEventListener('DOMContentLoaded', async () => {
+    initSignaturePad();
+
+    await cargarZonas();
+    await new Promise(r => setTimeout(r, 50));
+
+    try { await cargarMetaCaratula(); } catch {}
+
+    const inpFecha = document.getElementById('fechaBase');
+    if (inpFecha){
+      setDateInputTodayIfEmpty(inpFecha);
+      if (inpFecha.value) actualizarFechasDesde(new Date(inpFecha.value + 'T00:00:00'));
+    }
+
+    const plazoEl = document.getElementById('plazo');
+    if (plazoEl){
+      const re = () => {
+        renderPlazos();
+        const base = inpFecha?.value ? new Date(inpFecha.value + 'T00:00:00') : new Date();
+        actualizarFechasDesde(base);
+        scheduleRecalc();
+      };
+
+      plazoEl.addEventListener('input', re);
+      plazoEl.addEventListener('keyup', re);
+      plazoEl.addEventListener('blur', () => {
+        let v = clampInt(plazoEl.textContent, 1, 120);
+        plazoEl.textContent = String(v);
+        plazoEl.setAttribute('aria-valuenow', String(v));
+        re();
+      });
+    }
+
+    document.addEventListener('beforeinput', onBeforeInput, true);
+    document.addEventListener('input', onInput, true);
+    document.addEventListener('blur', onBlur, true);
+
+    document.addEventListener('change', (e) => {
+      if (e.target?.id === 'zonaSelect'){
+        recalcularInvestigacion();
+        scheduleRecalc();
+      }
+    });
+
+    observarTexto($('#costo65'), scheduleRecalc);
+    observarTexto($('#costoSeguro'), scheduleRecalc);
+    observarTexto($('#costoInvestigacion'), scheduleRecalc);
+    observarTexto($('#montoSolicitado'), scheduleRecalc);
+    observarTexto($('#montoTotalPagar'), scheduleRecalc);
+
+    if (document.getElementById('plazosPanel')) renderPlazos();
+    initCostoSDI();
+
+    await cargarPlazosGuardados();
+    scheduleRecalc();
+
+    initBtnRegresar();
+
+    window.addEventListener('beforeprint', () => {
+      const cv  = document.getElementById('sigCanvas');
+      const img = document.getElementById('sigPrintImage');
+      if (cv && img && !isCanvasBlank(cv)) img.src = cv.toDataURL('image/png');
+    });
+
+document.getElementById('btnGuardar')?.addEventListener('click', async () => {
+  const sid = window.SOLICITUD_ID || new URLSearchParams(location.search).get('solicitud_id') || new URLSearchParams(location.search).get('id') || '';
+
+  if (!sid) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Falta la solicitud',
+      text: 'No encontré el ID de solicitud en la URL.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#dc2626',
+      customClass:{
+        popup:'swal-cip-popup',
+        title:'swal-cip-title',
+        htmlContainer:'swal-cip-html'
+      }
+    });
+    return;
+  }
+
+  try{
+    window.recalcularCaratulaLigero?.();
+
+    Swal.fire({
+      title: 'Guardando carátula…',
+      html: 'Estoy guardando la información y los pagos ordinarios.',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      customClass:{
+        popup:'swal-cip-popup',
+        title:'swal-cip-title',
+        htmlContainer:'swal-cip-html'
+      },
+      didOpen: () => Swal.showLoading()
+    });
+
+    await guardarTodoCaratula();
+
+    const contratoUrl = `${window.BASE_URL || '/'}contrato/contrato2.php?solicitud_id=${encodeURIComponent(String(sid))}`;
+
+    const result = await Swal.fire({
+      icon: 'success',
+      title: 'Carátula guardada',
+      html: 'La carátula se guardó correctamente.<br>¿Deseas avanzar al contrato?',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Avanzar',
+      denyButtonText: 'Salir',
+      confirmButtonColor: '#0a567d',
+      denyButtonColor: '#64748b',
+      reverseButtons: true,
+      customClass:{
+        popup:'swal-cip-popup',
+        title:'swal-cip-title',
+        htmlContainer:'swal-cip-html'
+      }
+    });
+
+    if (result.isConfirmed) {
+      window.location.href = contratoUrl;
+      return;
+    }
+
+    if (result.isDenied) {
+      window.location.href = `${window.BASE_URL || '/'}index.php`;
+    }
+
+  }catch(e){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al guardar',
+      text: e?.message || 'No se pudo guardar la carátula.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#dc2626',
+      customClass:{
+        popup:'swal-cip-popup',
+        title:'swal-cip-title',
+        htmlContainer:'swal-cip-html'
+      }
+    });
+  }
+});
+  });
+})();
+</script>
+
+<script>
+/* =================== IMPRESIÓN (2 hojas) =================== */
+function imprimirConPreparacion(){
+  try { window.recalcularCaratulaLigero?.(); } catch {}
+  try { window.recalcularTotalPlazosPanel?.(); } catch {}
+
+  try {
+    const cv  = document.getElementById('sigCanvas');
+    const img = document.getElementById('sigPrintImage');
+    if (cv && img) {
+      const ctx = cv.getContext('2d');
+      const d = ctx.getImageData(0,0,cv.width || 1,cv.height || 1).data;
+      let blank = true;
+      for (let i = 3; i < d.length; i += 4){
+        if (d[i] !== 0){ blank = false; break; }
+      }
+      if (!blank) img.src = cv.toDataURL('image/png');
+    }
+  } catch {}
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.print();
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btnImprimir');
+  if (btn) btn.addEventListener('click', imprimirConPreparacion);
+  window.imprimirConPreparacion = imprimirConPreparacion;
+});
+</script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+
+  function qp(name){
+    const m = new RegExp('[?&]'+name+'=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : null;
+  }
+
+function getPublicBase(){
+  const { origin, pathname } = window.location;
+  const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+  if (p.includes('/hp/public/')) {
+    return `${origin}/hp/public/`;
+  }
+
+  if (p.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public/`;
+  }
+
+  return `${origin}/`;
+}
+
+  const BASE = window.BASE_URL || getPublicBase();
+
+  const fmtMXN = (v) =>
+    new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN' })
+      .format(Number(v ?? 0));
+
+  async function getJSON(url){
+    const r = await fetch(url, { credentials:'same-origin', cache:'no-store' });
+    const t = await r.text();
+    return JSON.parse(t);
+  }
+
+  function normUpper(s){ return (s == null) ? '' : String(s).trim().toUpperCase(); }
+
+  function buildNombre(cli){
+    return [cli?.nombres, cli?.apellido_paterno, cli?.apellido_materno]
+      .filter(v => v && String(v).trim())
+      .map(v => String(v).trim())
+      .join(' ');
+  }
+
+function productoDesdeModalidad(mod){
+  const m = String(mod || '').replace(/\s+/g,'').toUpperCase();
+
+  switch (m) {
+    case 'P10_ORD': return 'Personal 10 Ordinario';
+    case 'P40_ORD': return 'Personal 40 Ordinario';
+    default:        return 'Préstamo Personal';
+  }
+}
+
+function tituloMontoDesdeModalidad(mod){
+  const m = String(mod || '').replace(/\s+/g,'').toUpperCase();
+
+  switch (m) {
+    case 'P10_ORD': return 'Capital para modalidad 10 Ordinario';
+    case 'P40_ORD': return 'Capital para modalidad 40 Ordinario';
+    default:        return 'MONTO SOLICITADO';
+  }
+}
+
+  async function cargarDatosCaratula(){
+    const sid = qp('solicitud_id') || qp('id');
+    if (!sid) return;
+
+    const url = `${BASE}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(sid)}`;
+    const j = await getJSON(url);
+
+    const cli = j?.cliente || {};
+    const sol = j?.solicitud || {};
+
+    // Nombre / RFC / CURP
+    const elNom  = $('#ctlNombre');
+    const elRFC  = $('#ctlRFC');
+    const elCURP = $('#ctlCURP');
+    if (elNom)  elNom.textContent  = buildNombre(cli) || '—';
+    if (elRFC)  elRFC.textContent  = normUpper(cli.rfc) || '—';
+    if (elCURP) elCURP.textContent = normUpper(cli.curp) || '—';
+
+    // Folio
+    const elFolio = $('#folio');
+    if (elFolio) elFolio.textContent = sol.folio || j?.folio || '—';
+
+    // Producto
+const modalidad = sol.contrato_modalidad || '';
+
+const elProd = $('#nombreProducto');
+if (elProd) elProd.textContent = productoDesdeModalidad(modalidad);
+
+const elTituloMonto = $('#tituloMontoProducto');
+if (elTituloMonto) elTituloMonto.textContent = tituloMontoDesdeModalidad(modalidad);
+
+    // ✅ PLAZO (meses)
+    const plazo = parseInt(sol.plazo_meses ?? sol.plazo ?? 0, 10) || 0;
+    const elPlazo = $('#plazo');
+    if (elPlazo && plazo > 0){
+      elPlazo.textContent = String(plazo);
+      elPlazo.setAttribute('aria-valuenow', String(plazo));
+      // dispara listeners de tu JS grande (para re-render de panel)
+      elPlazo.dispatchEvent(new Event('input', { bubbles:true }));
+      elPlazo.dispatchEvent(new Event('blur',  { bubbles:true }));
+    }
+
+
+
+
+    // (Opcional) si tu JS grande expone recalculo
+    try { window.recalcularCaratulaLigero?.(); } catch {}
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    cargarDatosCaratula().catch(() => {});
+  });
+})();
+</script>
+
+
+
+</body>
+</html>

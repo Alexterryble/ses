@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Carátula de Crédito</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+  --azul:#0a567d;
+  --azul-2:#0e6a98;
+  --azul-3:#eaf5fb;
+  --azul-4:#083e5b;
+
+  --dorado:#b8a06a;
+  --dorado-2:#e6dcc4;
+  --dorado-3:#f8f4ea;
+
+  --gris:#1f2937;
+  --gris-2:#5f6b7a;
+  --gris-3:#edf2f7;
+  --gris-4:#f8fafc;
+  --blanco:#ffffff;
+
+  --borde:#cdbb93;
+  --sombra:0 14px 40px rgba(10,86,125,.10);
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0;
+  padding:0;
+  font-family:"Segoe UI", Arial, Helvetica, sans-serif;
+  color:var(--gris);
+  background:linear-gradient(180deg,#eef2f6 0%, #e8edf3 100%);
+}
+
+/* ===== Toolbar ===== */
+.caratula-toolbar{
+  width:min(1100px, calc(100vw - 32px));
+  margin:14px auto 14px;
+  display:grid;
+  grid-template-columns:minmax(260px, 1.45fr) minmax(220px, 1fr) auto auto auto;
+  gap:14px;
+  align-items:end;
+  padding:14px 16px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #d8dfe6;
+  border-radius:18px;
+  box-shadow:0 8px 18px rgba(0,0,0,.05);
+}
+
+.caratula-toolbar .field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+
+.caratula-toolbar label{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  color:var(--azul-4);
+}
+.caratula-toolbar select,
+.caratula-toolbar input[type="date"]{
+  width:100%;
+  min-height:44px;
+  border:1px solid #cfd9e2;
+  border-radius:12px;
+  background:#fcfeff;
+  padding:10px 14px;
+  font-size:16px;
+  outline:none;
+}
+.caratula-toolbar select:focus,
+.caratula-toolbar input[type="date"]:focus{
+  border-color:var(--dorado);
+  box-shadow:0 0 0 3px rgba(200,154,43,.16);
+}
+
+.caratula-toolbar .spacer{
+  display:none;
+}
+
+.btn,
+.btn-regresar{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  min-height:44px;
+  padding:0 18px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:15px;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition:.18s ease;
+}
+
+.btn{
+  background:#f3f8fc;
+  border:1px solid #bdd0df;
+  color:var(--azul-4);
+}
+
+.btn-print{
+  background:linear-gradient(180deg,var(--azul-2) 0%, var(--azul) 100%);
+  border:1px solid #0a5a84;
+  color:#fff;
+}
+
+.btn-regresar{
+  background:#fff;
+  border:1px solid #cfd9e2;
+  color:var(--azul-4);
+}
+
+.btn:hover,
+.btn-regresar:hover{
+  transform:translateY(-1px);
+}
+
+/* ===== Documento ===== */
+.caratula{
+  width:7.75in;
+  max-width:calc(100vw - 20px);
+  margin:0 auto 18px;
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  box-shadow:var(--sombra);
+  overflow:hidden;
+}
+
+/* ===== Sin barra lateral ===== */
+.doc-shell{
+  display:block;
+  min-height:auto;
+}
+
+/* ===== Contenido ===== */
+.doc-main{
+  padding:10px 10px 8px;
+  background:
+    radial-gradient(circle at top right, rgba(200,154,43,.08) 0%, transparent 26%),
+    linear-gradient(180deg,#ffffff 0%, #fffdfa 100%);
+}
+
+/* ===== Header moderno ===== */
+.hero{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:stretch;
+  margin-bottom:8px;
+}
+
+.hero-left{
+  background:linear-gradient(135deg,#f5fbff 0%, #eaf5fb 100%);
+  border:1px solid #c7d9e6;
+  border-radius:16px;
+  padding:10px 12px;
+}
+
+.hero-topline{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:6px;
+}
+
+.hero-folio{
+  font-size:11px;
+  color:#d62828;
+  font-weight:800;
+}
+
+.hero-date{
+  font-size:11px;
+  color:var(--gris-2);
+  text-align:right;
+}
+
+.hero-title{
+  font-size:18px;
+  font-weight:900;
+  color:var(--azul);
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  margin:2px 0 2px;
+}
+
+.hero-subtitle{
+  font-size:11px;
+  color:var(--gris-2);
+  font-weight:600;
+}
+
+.hero-right{
+  min-width:2.05in;
+  background:linear-gradient(180deg,#f8fcff 0%, #eef7fd 100%);
+  border:1px solid #c7d9e6;
+  border-radius:16px;
+  padding:10px 12px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.hero-right .mini{
+  font-size:10px;
+  font-weight:900;
+  color:var(--azul-4);
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.monto-valor-editable{
+  display:inline-block;
+  min-width:10ch;
+  margin-top:4px;
+  padding:2px 6px;
+  font-size:28px;
+  line-height:1.12;
+  font-weight:900;
+  color:#0a66c2;
+  outline:none;
+  border-radius:8px;
+  text-align:center;
+}
+
+.monto-valor-editable:focus{
+  box-shadow:0 0 0 3px rgba(10,102,194,.12) inset;
+  background:#fff;
+}
+
+/* ===== Bloques ===== */
+.block{
+  border:1px solid #e6d8ab;
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:8px;
+  background:#fff;
+}
+
+.block-title{
+  padding:7px 10px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  color:#fff;
+  background:linear-gradient(90deg,var(--azul-4),var(--azul),var(--azul-2));
+}
+
+.block-body{
+  padding:8px 10px;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:1.15fr 1fr 1fr;
+  gap:8px;
+}
+
+.coverage-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.coverage-full{
+  grid-column:1 / -1;
+}
+
+
+.info-card{
+  border:1px solid #e8edf3;
+  background:#fcfdff;
+  border-radius:12px;
+  padding:8px 10px;
+}
+
+.label{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  font-weight:900;
+  color:#7a6021;
+  margin-bottom:3px;
+}
+
+.value{
+  font-size:11px;
+  font-weight:700;
+  color:var(--gris);
+  line-height:1.35;
+}
+
+.value.big{
+  font-size:16px;
+  color:var(--azul);
+  font-weight:900;
+}
+
+.value.right{ text-align:right; }
+
+.editable-num{
+  display:inline-block;
+  min-width:40px;
+  padding:2px 6px;
+  border-radius:6px;
+  outline:none;
+  font-weight:900;
+  color:var(--azul);
+}
+
+.editable-num:focus{
+  box-shadow:0 0 0 2px rgba(18,91,135,.12) inset;
+  background:#f5fbff;
+}
+
+/* ===== Tabla resumen ===== */
+.summary-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border:1px solid #e3d1a0;
+  border-radius:12px;
+}
+
+.summary-table th,
+.summary-table td{
+  padding:7px 8px;
+  font-size:10px;
+  border-right:1px solid #e3d1a0;
+  border-bottom:1px solid #e3d1a0;
+  vertical-align:middle;
+  line-height:1.25;
+}
+
+.summary-table tr:last-child td,
+.summary-table tr:last-child th{ border-bottom:0; }
+
+.summary-table th:last-child,
+.summary-table td:last-child{ border-right:0; }
+
+.summary-table th{
+  background:linear-gradient(180deg,#fff7df 0%, #f4e7bc 100%);
+  color:#4e3a11;
+  font-weight:900;
+}
+
+.summary-table td{
+  background:#fff;
+}
+
+.small{ font-size:9px; }
+.center{ text-align:center; }
+.right{ text-align:right; }
+.nowrap{ white-space:nowrap; }
+
+.big-money{
+  font-size:14px;
+  font-weight:900;
+  color:var(--azul);
+}
+
+/* ===== Firma ===== */
+.firma{
+  border:1px solid #e8d39a;
+  border-radius:16px;
+  background:linear-gradient(180deg,#fffefb 0%, #fff8ea 100%);
+  padding:10px;
+  text-align:center;
+}
+
+.firma .nombre{
+  font-size:12px;
+  font-weight:900;
+  color:var(--azul);
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.sigpad{
+  max-width:460px;
+  margin:0 auto 6px;
+  padding:8px;
+  border:1px solid #efd790;
+  border-radius:12px;
+  background:#fffdfa;
+}
+
+#sigCanvas{
+  width:100%;
+  height:110px;
+  display:block;
+  background:#fff;
+  border:2px dashed #c79a2b;
+  border-radius:10px;
+  touch-action:none;
+}
+
+.sig-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.sig-actions button{
+  padding:7px 12px;
+  border-radius:10px;
+  border:1px solid #d6b159;
+  background:linear-gradient(180deg,#fff0c9 0%, #efd47d 100%);
+  color:#654a0b;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.linea{
+  width:100%;
+  max-width:460px;
+  height:1px;
+  margin:8px auto 6px;
+  background:linear-gradient(90deg,transparent,var(--azul),transparent);
+}
+
+.pie{
+  margin-top:8px;
+  text-align:center;
+  color:var(--azul-4);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+#sigPrintImage{
+  display:block;
+  max-width:100%;
+  margin:0 auto;
+}
+
+
+/* =========================
+   BOTONES FLOTANTES CARÁTULA
+========================== */
+.caratula-actions{
+  position:fixed;
+  right:24px;
+  bottom:22px;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(148,163,184,.35);
+  box-shadow:0 18px 45px rgba(15,23,42,.22);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.caratula-actions .btn,
+.caratula-actions .btn-regresar{
+  min-height:42px;
+  border-radius:999px;
+  box-shadow:none;
+}
+
+.caratula-actions #btnGuardar{
+  background:linear-gradient(135deg,#eaf5fb,#ffffff);
+  border:1px solid #bdd0df;
+  color:#083e5b;
+}
+
+.caratula-actions #btnImprimir{
+  background:linear-gradient(135deg,#0e6a98,#083e5b);
+  border:1px solid #0a567d;
+  color:#fff;
+}
+
+.caratula-actions #btn-regresar{
+  background:#ffffff;
+  border:1px solid #cfd9e2;
+  color:#083e5b;
+}
+
+.caratula-actions .btn:hover,
+.caratula-actions .btn-regresar:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(15,23,42,.18);
+}
+
+@media (max-width:680px){
+  .caratula-actions{
+    left:12px;
+    right:12px;
+    bottom:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-radius:18px;
+  }
+
+  .caratula-actions .btn,
+  .caratula-actions .btn-regresar{
+    flex:1 1 auto;
+    min-width:130px;
+  }
+}
+
+@media print{
+  .caratula-actions{
+    display:none !important;
+  }
+}
+
+/* =========================
+   SWEETALERT CIP
+========================== */
+.swal-cip-popup{
+  border-radius:22px !important;
+  background:#0b1220 !important;
+  color:#e5e7eb !important;
+  border:1px solid rgba(148,163,184,.28) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.45) !important;
+}
+
+.swal-cip-title{
+  color:#ffffff !important;
+  font-weight:900 !important;
+}
+
+.swal-cip-html{
+  color:#cbd5e1 !important;
+  font-size:.95rem !important;
+}
+
+.swal2-confirm,
+.swal2-deny,
+.swal2-cancel{
+  border-radius:999px !important;
+  font-weight:800 !important;
+  padding:.72rem 1.2rem !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  .caratula-toolbar{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .caratula-toolbar .field{
+    min-width:0;
+  }
+
+  #btnGuardar,
+  #btnImprimir,
+  #btn-regresar{
+    width:100%;
+  }
+}
+
+@media (max-width: 760px){
+  .caratula{
+    max-width:calc(100vw - 16px);
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+  }
+
+  .grid-2,
+  .grid-3{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 640px){
+  .caratula-toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .caratula-toolbar select,
+  .caratula-toolbar input[type="date"],
+  #btnGuardar,
+  #btnImprimir,
+  #btn-regresar{
+    width:100%;
+  }
+}
+
+/* ===== Impresión ===== */
+@media print{
+  @page{
+    size: Letter portrait;
+    margin:4mm;
+  }
+
+  html, body{
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .caratula-toolbar{
+    display:none !important;
+  }
+
+  .caratula{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    border:1pt solid var(--borde) !important;
+    box-shadow:none !important;
+    background:#fff !important;
+  }
+
+  .doc-shell{
+    display:block !important;
+  }
+
+  .doc-main{
+    width:100% !important;
+    padding:6px 6px 4px !important;
+    background:#fff !important;
+  }
+
+  .hero{
+    display:grid !important;
+    grid-template-columns:1.3fr .9fr !important;
+    gap:5px !important;
+    margin-bottom:5px !important;
+  }
+
+  .hero-left,
+  .hero-right{
+    padding:7px 8px !important;
+    border-radius:9px !important;
+    box-shadow:none !important;
+  }
+
+  .hero-topline{
+    margin-bottom:4px !important;
+  }
+
+  .hero-title{
+    font-size:13px !important;
+    margin:1px 0 !important;
+    line-height:1.1 !important;
+  }
+
+  .hero-subtitle,
+  .hero-folio,
+  .hero-date{
+    font-size:8px !important;
+    line-height:1.15 !important;
+  }
+
+  .hero-right .mini{
+    font-size:8px !important;
+  }
+
+  .monto-valor-editable{
+    font-size:18px !important;
+    line-height:1.05 !important;
+    padding:0 !important;
+    margin-top:2px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  .block{
+    margin-bottom:5px !important;
+    border-radius:9px !important;
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  .block-title{
+    padding:4px 7px !important;
+    font-size:8.5px !important;
+    line-height:1.1 !important;
+  }
+
+  .block-body{
+    padding:5px 7px !important;
+  }
+
+  .grid-2{
+    grid-template-columns:1fr 1fr !important;
+    gap:5px !important;
+  }
+
+  .grid-3{
+    grid-template-columns:1fr 1fr 1fr !important;
+    gap:5px !important;
+  }
+
+  .coverage-grid{
+  grid-template-columns:1fr 1fr !important;
+  gap:5px !important;
+}
+
+.coverage-full{
+  grid-column:1 / -1 !important;
+}
+
+  .info-card{
+    padding:5px 7px !important;
+    border-radius:7px !important;
+    min-height:auto !important;
+  }
+
+  .label{
+    font-size:7.5px !important;
+    margin-bottom:2px !important;
+    line-height:1.05 !important;
+  }
+
+  .value{
+    font-size:8.7px !important;
+    line-height:1.18 !important;
+  }
+
+  .value.big{
+    font-size:11px !important;
+  }
+
+  .editable-num{
+    padding:0 !important;
+  }
+
+  .summary-table{
+    border-radius:7px !important;
+  }
+
+  .summary-table th,
+  .summary-table td{
+    padding:4px 5px !important;
+    font-size:8px !important;
+    line-height:1.12 !important;
+  }
+
+  .small{
+    font-size:7.3px !important;
+  }
+
+  .big-money{
+    font-size:10px !important;
+  }
+
+  .firma{
+    padding:7px !important;
+    border-radius:9px !important;
+    margin-top:4px !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .firma .nombre{
+    font-size:9.5px !important;
+    margin-bottom:3px !important;
+    line-height:1.1 !important;
+  }
+
+  .sigpad{
+    border:0 !important;
+    background:transparent !important;
+    padding:0 !important;
+    margin:0 auto 3px !important;
+    min-height:0 !important;
+  }
+
+  #sigCanvas,
+  .sig-actions{
+    display:none !important;
+  }
+
+  .sig-print{
+    display:block !important;
+    width:100% !important;
+    max-width:340px !important;
+    height:52px !important;
+    object-fit:contain !important;
+    margin:0 auto 2px !important;
+  }
+
+  .linea{
+    margin:3px auto 2px !important;
+    max-width:340px !important;
+  }
+
+  .nota{
+    font-size:7px !important;
+    line-height:1 !important;
+  }
+
+  .pie{
+    margin-top:4px !important;
+    font-size:7px !important;
+    line-height:1 !important;
+  }
+  .top-logo{
+  margin:0 0 6px !important;
+}
+
+.top-logo-img{
+  max-width:120px !important;
+  max-height:42px !important;
+}
+}
+
+
+/* ===== LOGO SUPERIOR ===== */
+.top-logo{
+  display:flex;
+  justify-content:left;
+  align-items:center;
+  margin:0 0 2px;
+  padding:0;
+  overflow:hidden;
+}
+
+.top-logo-img{
+  display:block;
+  object-fit:contain;
+  width:auto;
+  max-width:260px;
+  height:190px;
+  margin-top:-16px;
+  margin-bottom:-60px; /* este quita el blanco de abajo */
+}
+/* ===== IMPRESIÓN ===== */
+@media print{
+  .top-logo{
+    display:flex !important;
+    justify-content: left !important;
+    align-items:flex-end !important;
+    margin:0 0 2px !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+
+  .top-logo-img{
+    display:block !important;
+    object-fit:contain !important;
+    width:auto !important;
+    max-width:180px !important;
+    max-height:none !important;
+    height:120px !important;
+    margin-top:-20px !important;
+    margin-bottom:-37px !important;
+    
+  }
+}
+
+
+.thumbs-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:28px;
+  margin:8px 0 14px;
+}
+
+.thumb-slot{
+  position:relative;
+  width:220px;
+}
+
+.thumb-label{
+  position:absolute;
+  top:-12px;
+  left:18px;
+  padding:2px 10px;
+  background:#fff;
+  border:1px solid #b7ccdd;
+  border-radius:18px;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.05;
+  text-align:center;
+  color:var(--azul-4);
+  text-transform:uppercase;
+  letter-spacing:.3px;
+  z-index:2;
+}
+
+.thumb-box{
+  width:100%;
+  height:110px;
+  border:1.5px solid #b7ccdd;
+  border-radius:14px;
+  background:linear-gradient(180deg,#ffffff 0%, #f6fbff 100%);
+}
+.top-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  width:100%;
+  margin-bottom:2px;
+}
+
+.top-logo{
+  flex:0 0 auto;
+}
+
+.top-logo-img{
+  display:block;
+  max-width:220px;
+  height:auto;
+}
+
+.top-contacto{
+  flex:1;
+  text-align:right;
+  color:#1f2d3d;
+  line-height:1.35;
+}
+
+.top-frase{
+  font-weight:700;
+  font-size:10px;
+  color:#0d5c86;
+  margin-bottom:4px;
+}
+
+.top-direccion,
+.top-correo{
+  font-size:10px;
+}
+
+
+.editable-tasa{
+  display:inline-block;
+  min-width:38px;
+  padding:1px 5px;
+  border-radius:6px;
+  outline:none;
+  color:#0a567d;
+  background:#fffdf5;
+}
+
+.editable-tasa:focus{
+  background:#ffffff;
+  box-shadow:0 0 0 2px rgba(10,86,125,.18) inset;
+}
+
+
+.caratula-toolbar{
+  grid-template-columns:minmax(220px, 1.4fr) minmax(180px, .9fr) minmax(180px, .7fr) minmax(150px, .6fr) auto auto auto;
+}
+
+.caratula-toolbar input[type="number"]{
+  width:100%;
+  min-height:44px;
+  border:1px solid #cfd9e2;
+  border-radius:12px;
+  background:#fcfeff;
+  padding:10px 14px;
+  font-size:16px;
+  outline:none;
+}
+
+.caratula-toolbar input[type="number"]:focus{
+  border-color:var(--dorado);
+  box-shadow:0 0 0 3px rgba(200,154,43,.16);
+}
+
+.check-field{
+  justify-content:end;
+}
+
+.check-card{
+  min-height:44px;
+  display:flex !important;
+  align-items:center;
+  gap:9px;
+  padding:10px 12px;
+  border:1px solid #cfd9e2;
+  border-radius:12px;
+  background:#fcfeff;
+  color:var(--azul-4) !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  cursor:pointer;
+}
+
+.check-card input{
+  width:18px;
+  height:18px;
+  accent-color:#0a567d;
+}
+
+
+.check-field{
+  justify-content:end;
+}
+
+.check-card{
+  min-height:44px;
+  display:flex !important;
+  align-items:center;
+  gap:9px;
+  padding:10px 12px;
+  border:1px solid #cfd9e2;
+  border-radius:12px;
+  background:#fcfeff;
+  color:var(--azul-4) !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  cursor:pointer;
+}
+
+.check-card input{
+  width:18px;
+  height:18px;
+  accent-color:#0a567d;
+}
+
+#zonaSelect:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  background:#f1f5f9;
+}
+
+
+/* ========================
+   FIX IMPRESIÓN - SEGURO EDITABLE
+========================= */
+
+/* Pantalla normal */
+#costoSeguro{
+  width: 115px !important;
+  height: 24px !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-align: right !important;
+  border: 1px solid #d6e0e7 !important;
+  border-radius: 6px !important;
+  background: #fffdf5 !important;
+  color: #1f2937 !important;
+}
+
+/* =========================
+   FIX 1 HOJA - SEGURO INPUT + FIRMA
+========================= */
+
+@media print{
+
+  /* El input del seguro se ve como texto normal */
+  #costoSeguro{
+    width: 65px !important;
+    height: 10px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    font-size: 8px !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+    text-align: right !important;
+    color: #000 !important;
+  }
+
+  /* Reduce el alto de la sección firma */
+  .firma{
+    padding: 5px !important;
+    margin-top: 2px !important;
+  }
+
+  .thumbs-row{
+    margin: 4px 0 6px !important;
+    gap: 18px !important;
+  }
+
+  .thumb-slot{
+    width: 190px !important;
+  }
+
+  .thumb-box{
+    height: 72px !important;
+    border-radius: 10px !important;
+  }
+
+  .thumb-label{
+    top: -9px !important;
+    font-size: 8px !important;
+    padding: 1px 8px !important;
+  }
+
+  #sigPrintImage,
+  .sig-print{
+    height: 32px !important;
+    max-height: 32px !important;
+  }
+
+  .linea{
+    margin: 2px auto 1px !important;
+  }
+
+  .nota{
+    font-size: 6.5px !important;
+    line-height: 1 !important;
+  }
+
+  .pie{
+    margin-top: 2px !important;
+    font-size: 6.5px !important;
+    line-height: 1 !important;
+  }
+
+  .block{
+    margin-bottom: 4px !important;
+  }
+}
+
+/* =========================
+   AJUSTE IMPRESIÓN - BAJAR FIRMA / LLENAR HOJA
+========================= */
+@media print{
+
+  /* Empuja un poco la sección de firma hacia abajo */
+  .firma{
+    min-height: 150px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  /* Hace las huellas un poco más altas */
+  .thumb-box{
+    height: 88px !important;
+  }
+
+  /* Da más aire entre huellas y línea de firma */
+  .thumbs-row{
+    margin: 6px 0 12px !important;
+  }
+
+  /* Baja un poco la línea de firma */
+  .linea{
+    margin-top: 12px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .nota{
+    margin-top: 2px !important;
+  }
+
+  /* Pie más abajo, pero sin forzar segunda hoja */
+  .pie{
+    margin-top: 5px !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="caratula-toolbar">
+  <div class="field">
+    <label for="zonaSelect">Zona (investigación)</label>
+    <select id="zonaSelect">
+      <option value="">Cargando zonas…</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="fechaBase">Fecha base</label>
+    <input type="date" id="fechaBase" />
+  </div>
+
+  <div class="field">
+  <label for="tasaOrdinariaInput">Tasa ordinaria mensual (%)</label>
+  <input 
+    type="number" 
+    id="tasaOrdinariaInput" 
+    value="10.5" 
+    step="0.01" 
+    min="0"
+  />
+</div>
+
+<div class="field check-field">
+  <label for="incluirSeguro">Seguro</label>
+  <label class="check-card">
+    <input type="checkbox" id="incluirSeguro">
+    <span>Incluir seguro</span>
+  </label>
+</div>
+
+<div class="field check-field">
+  <label for="aplicarZona">Investigación</label>
+  <label class="check-card">
+    <input type="checkbox" id="aplicarZona">
+    <span>Aplicar zona</span>
+  </label>
+</div>
+
+  <div class="spacer"></div>
+
+<div class="caratula-actions">
+  <button type="button" id="btnGuardar" class="btn">💾 Guardar</button>
+  <button type="button" id="btnImprimir" class="btn btn-print">🖨️ Imprimir</button>
+  <button type="button" id="btn-regresar" class="btn-regresar">🔙 Regresar</button>
+</div>
+</div>
+
+<div class="caratula">
+  <div class="doc-shell">
+    <main class="doc-main">
+<div class="top-head">
+  <div class="top-logo">
+    <img src="img/logo.png" alt="CIP Logo" class="top-logo-img">
+  </div>
+
+  <div class="top-contacto">
+    <div class="top-frase">Seguridad para tu retiro, confianza para tu futuro.</div>
+    <div class="top-direccion">📍 Jose Maria Pino Suarez 119, Santa Ana Tlapaltitlán, 52160 Toluca de Lerdo, Méx.</div>
+    <div class="top-correo">✉️ contacto@cipmexico.com.mx</div>
+  </div>
+</div>
+      <section class="hero">
+        <div class="hero-left">
+          <div class="hero-topline">
+            <div class="hero-folio">Folio: <span id="folio">—</span></div>
+            <div class="hero-date">
+              <span id="fechaLarga">miércoles, 18 de febrero de 2026</span><br>
+              <span style="color:#0d5c86;font-weight:800;">Anexo A</span>
+            </div>
+          </div>
+
+          <div class="hero-title">Carátula de Crédito</div>
+          <div class="hero-subtitle">Resumen ejecutivo del producto financiero solicitado</div>
+        </div>
+
+        <div class="hero-right">
+          <div class="mini">Monto solicitado</div>
+          <span id="montoSolicitado"
+                class="monto-valor-editable"
+                contenteditable="true"
+                role="textbox"
+                aria-label="Monto solicitado"></span>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-title">Identificación del crédito</div>
+        <div class="block-body">
+          <div class="grid-2">
+            <div class="info-card">
+              <div class="label">Nombre comercial del producto</div>
+              <div class="value" id="nombreProducto">—</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Tipo de crédito</div>
+              <div class="value">Simple</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">CURP</div>
+              <div class="value nowrap" id="ctlCURP">—</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">RFC</div>
+              <div class="value nowrap" id="ctlRFC">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-title">Indicadores principales</div>
+        <div class="block-body">
+          <table class="summary-table">
+            <tr>
+              <th class="center">CAT<br><span class="small">Costo Anual Total</span></th>
+              <th class="center">Tasa de interés semestral<br><span class="small">Ordinaria y moratoria</span></th>
+              <th class="center">Monto o línea de crédito</th>
+              <th class="center">Monto total a pagar<br><span class="small">o mínimo a pagar</span></th>
+            </tr>
+            <tr>
+<td class="small">
+  <strong><span id="catTexto">103.62%</span></strong> SIN IVA para fines informativos y de comparación.
+</td>
+              <td class="small">
+Tasa ordinaria <strong><span id="tasaOrdinariaTexto">10.5%</span></strong> SIN IVA<br>
+Tasa moratoria <strong>2.58%</strong> SIN IVA
+              </td>
+              <td id="montoTotalPagar" class="center big-money" data-base-source="montoMasComisiones"></td>
+              <td id="montoLineaCredito" class="center big-money"></td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-title">Plazo y fechas</div>
+        <div class="block-body">
+          <div class="grid-3">
+            <div class="info-card">
+              <div class="label">Plazo del crédito</div>
+              <div class="value big">
+                <span id="plazo"
+                      class="editable-num"
+                      contenteditable="true"
+                      role="spinbutton"
+                      aria-label="Plazo en meses"
+                      aria-valuemin="1"
+                      aria-valuemax="120"
+                      aria-valuenow="10">10</span>
+                meses
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Fecha límite de pago</div>
+              <div class="value" id="fechaMasUnAnio">—</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Fecha de corte</div>
+              <div class="value" id="fechaMenosOcho">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-title">Comisiones relevantes</div>
+        <div class="block-body">
+          <div class="grid-2">
+            <div class="info-card">
+              <div class="label">Apertura de crédito</div>
+              <div class="value">6.5% &nbsp; | &nbsp; <span id="costo65">$975.00</span></div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Seguro</div>
+<div class="value right">
+  <input 
+    id="costoSeguro"
+    type="text"
+    value="$0.00"
+    data-raw="0"
+    data-manual="0"
+  >
+</div>
+            </div>
+
+            <div class="info-card" style="grid-column:1 / -1;">
+              <div class="label">Investigación (dependiendo la zona geográfica)</div>
+              <div class="value right" id="costoInvestigacion">$1,500.00</div>
+            </div>
+
+            <div class="info-card" style="grid-column:1 / -1; background:#fffaf2; border-color:#eddcab;">
+              <div class="label">Advertencias</div>
+              <div class="value" style="font-weight:600; line-height:1.5;">
+                “Incumplir tus obligaciones te puede generar comisiones e intereses moratorios”.<br>
+                “Contratar créditos por arriba de tu capacidad de pago puede afectar tu historial crediticio”.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<section class="block">
+  <div class="block-title">Cobertura</div>
+  <div class="block-body">
+    <div class="coverage-grid">
+      <div class="info-card">
+        <div class="label">Seguro</div>
+        <div class="value">VIDA TEMPORAL 1 AÑO</div>
+      </div>
+
+      <div class="info-card">
+        <div class="label">Aseguradora</div>
+        <div class="value">INSIGNIA LIFE</div>
+      </div>
+
+      <div class="info-card coverage-full">
+        <div class="label">Cláusula</div>
+        <div class="value">DÉCIMA OCTAVA DEL CONTRATO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section class="block">
+        <div class="block-title">Aclaraciones y reclamaciones</div>
+        <div class="block-body">
+          <div class="grid-2">
+            <div class="info-card">
+              <div class="label">Unidad Especializada de Atención a Usuarios</div>
+              <div class="value" style="line-height:1.55;">
+                José Ma. Pino Suárez 119 Pte. Col. Santa Ana Tlapaltitlán, C.P. 50160,
+                Toluca, Estado de México.
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Contacto</div>
+              <div class="value" style="line-height:1.6;">
+                <strong>Tel:</strong> (722) 181 45 43<br>
+                <strong>Correo:</strong> contacto@cipmexico.com.mx<br>
+                <strong>Web:</strong> www.cipmexico.com.mx
+              </div>
+            </div>
+
+            <div class="info-card" style="grid-column:1 / -1;">
+              <div class="label">CONDUSEF</div>
+              <div class="value">
+                Teléfonos 55-53-40-09-99. Página de Internet: www.condusef.gob.mx
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<section class="firma">
+  <div class="thumbs-row">
+    <div class="thumb-slot">
+      <div class="thumb-label">PULGAR IZQUIERDO</div>
+      <div class="thumb-box"></div>
+    </div>
+
+    <div class="thumb-slot">
+      <div class="thumb-label">PULGAR DERECHO</div>
+      <div class="thumb-box"></div>
+    </div>
+  </div>
+
+  <div class="nombre" id="ctlNombre">—</div>
+
+  <div class="sigpad">
+    <canvas id="sigCanvas" aria-label="Firma del cliente"></canvas>
+
+    <div class="sig-actions">
+      <button type="button" id="sigUndo">Deshacer</button>
+      <button type="button" id="sigClear">Limpiar</button>
+      <button type="button" id="sigSave">Guardar</button>
+    </div>
+
+    <input type="hidden" id="firmaDataURL" name="firma_png">
+  </div>
+
+  <img id="sigPrintImage" class="sig-print" alt="Firma para impresión" aria-hidden="true">
+
+  <div class="linea"></div>
+  <div class="nota">NOMBRE Y FIRMA DEL CLIENTE</div>
+</section>
+
+      <div class="pie">Consultoría Integral de Pensiones México.</div>
+    </main>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+/* ============================================================
+   CARÁTULA DE CRÉDITO - JS UNIFICADO
+   ------------------------------------------------------------
+   Este archivo controla en un solo lugar:
+   1. Carga de solicitud por ID
+   2. Nombre, RFC, CURP
+   3. Producto / modalidad
+   4. Monto solicitado
+   5. Plazo
+   6. Tasa mensual
+   7. CAT
+   8. Apertura 6.5%
+   9. Seguro
+   10. Investigación / zona
+   11. Base con comisiones
+   12. Interés
+   13. Total final
+   14. Fechas de límite y corte
+   ------------------------------------------------------------
+   IMPORTANTE:
+   - La tasa se usa directa.
+   - 18 significa 18%.
+   - NO se divide entre 1.16.
+============================================================ */
+
+(function () {
+  'use strict';
+
+  /* ============================================================
+     1. SELECTORES Y FORMATEADORES
+  ============================================================ */
+
+  const $ = selector => document.querySelector(selector);
+
+  const fmtMXN = valor =>
+    new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN'
+    }).format(Number(valor || 0));
+
+  const fmtFechaLarga = fecha =>
+    new Intl.DateTimeFormat('es-MX', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(fecha);
+
+  function redondear2(valor) {
+    return Math.round((Number(valor || 0) + Number.EPSILON) * 100) / 100;
+  }
+
+  function setText(id, valor) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = valor ?? '';
+  }
+
+  /* ============================================================
+     2. CONVERTIR TEXTO A NÚMERO
+     ------------------------------------------------------------
+     Acepta:
+     $100,000.00
+     100000
+     100,000.00
+     100000.00
+  ============================================================ */
+
+  function parseNumber(valor) {
+    if (valor == null) return 0;
+
+    let s = String(valor)
+      .replace(/\u00A0/g, '')
+      .replace(/\s+/g, '')
+      .replace(/[^\d.,-]/g, '');
+
+    if (!s) return 0;
+
+    const lastDot = s.lastIndexOf('.');
+    const lastComma = s.lastIndexOf(',');
+
+    let decimal = null;
+
+    if (lastDot !== -1 && lastComma !== -1) {
+      decimal = lastDot > lastComma ? '.' : ',';
+    } else if (lastDot !== -1) {
+      decimal = s.length - lastDot - 1 <= 2 ? '.' : null;
+    } else if (lastComma !== -1) {
+      decimal = s.length - lastComma - 1 <= 2 ? ',' : null;
+    }
+
+    if (decimal) {
+      const miles = decimal === '.' ? ',' : '.';
+      s = s.replace(new RegExp('\\' + miles, 'g'), '');
+
+      if (decimal === ',') {
+        s = s.replace(',', '.');
+      }
+
+      const partes = s.split('.');
+      if (partes.length > 2) {
+        const dec = partes.pop();
+        s = partes.join('') + '.' + dec;
+      }
+    } else {
+      s = s.replace(/[.,]/g, '');
+    }
+
+    const n = Number(s);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  /* ============================================================
+     3. URL BASE Y PARÁMETROS
+  ============================================================ */
+
+  function qp(name) {
+    const m = new RegExp('[?&]' + name + '=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : null;
+  }
+
+  function getPublicBase() {
+    const { origin, pathname } = window.location;
+    const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+    if (p.includes('/hp/public/')) {
+      return `${origin}/hp/public/`;
+    }
+
+    if (p.includes('/sempiternal/public/')) {
+      return `${origin}/sempiternal/public/`;
+    }
+
+    return `${origin}/`;
+  }
+
+  async function getJSON(url) {
+    const r = await fetch(url, {
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    return r.json();
+  }
+
+  const BASE_URL = getPublicBase();
+  const solicitudId = qp('solicitud_id') || qp('id');
+
+  /* ============================================================
+     4. CONFIGURACIÓN DE CÁLCULO
+  ============================================================ */
+
+  const PORCENTAJE_APERTURA = 0.065;
+
+  const TARIFAS_SEGURO = [
+    { base: 250000, pct: 0.0185 },
+    { base: 350000, pct: 0.0180 },
+    { base: 450000, pct: 0.0175 },
+    { base: 550000, pct: 0.0170 },
+    { base: 650000, pct: 0.0165 },
+    { base: 750000, pct: 0.0160 },
+    { base: 850000, pct: 0.0155 },
+    { base: 950000, pct: 0.0150 }
+  ];
+
+  let recalcTimer = null;
+
+  /* ============================================================
+     5. LECTURAS DE CAMPOS
+  ============================================================ */
+
+  function leerMontoSolicitado() {
+    const hidden = $('#montoSolicitadoInput');
+    const span = $('#montoSolicitado');
+
+    if (hidden) {
+      return parseNumber(hidden.dataset.raw ?? hidden.value);
+    }
+
+    if (span) {
+      return parseNumber(span.dataset.raw ?? span.textContent);
+    }
+
+    return 0;
+  }
+
+  function leerPlazoMeses() {
+    const plazoEl = $('#plazo');
+
+    return Math.max(
+      0,
+      parseInt(String(plazoEl?.textContent || '').replace(/[^\d]/g, ''), 10) || 0
+    );
+  }
+
+  function leerTasaMensualPorcentaje() {
+    const input = $('#tasaOrdinariaInput');
+    const tasa = Number(input?.value || 0);
+
+    if (!Number.isFinite(tasa) || tasa < 0) return 0;
+
+    return tasa;
+  }
+
+  function leerTasaMensualFactor() {
+    return leerTasaMensualPorcentaje() / 100;
+  }
+
+  function seguroActivado() {
+    return $('#incluirSeguro')?.checked === true;
+  }
+
+  function zonaActivada() {
+    return $('#aplicarZona')?.checked === true;
+  }
+
+  /* ============================================================
+     6. MONTO SOLICITADO + INPUT HIDDEN
+  ============================================================ */
+
+  function pintarMontoSolicitado(monto) {
+    const montoEl = $('#montoSolicitado');
+
+    if (montoEl) {
+      montoEl.dataset.raw = String(monto);
+      montoEl.textContent = fmtMXN(monto);
+    }
+
+    let hidden = $('#montoSolicitadoInput');
+
+    if (!hidden) {
+      hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = 'montoSolicitadoInput';
+
+      if (montoEl?.parentNode) {
+        montoEl.parentNode.appendChild(hidden);
+      } else {
+        document.body.appendChild(hidden);
+      }
+    }
+
+    hidden.value = String(monto);
+    hidden.dataset.raw = String(monto);
+  }
+
+  /* ============================================================
+     7. PRODUCTO / MODALIDAD
+  ============================================================ */
+
+  function productoDesdeModalidad(modalidad) {
+    const m = String(modalidad || '').replace(/\s+/g, '').toUpperCase();
+
+    if (m === 'SEM_P10') return 'SEM PERSONAL 10';
+    if (m === 'P10') return 'UNI PERSONAL 10';
+    if (m === 'P40') return 'PRÉSTAMO PERSONAL 40 RETRO';
+
+    return 'Préstamo Personal';
+  }
+
+  function tituloMontoDesdeModalidad(modalidad) {
+    const m = String(modalidad || '').replace(/\s+/g, '').toUpperCase();
+
+    if (m === 'SEM_P10') return 'CAPITAL PARA REINTEGRO';
+    if (m === 'P10') return 'CAPITAL PARA UNIFICACIÓN';
+    if (m === 'P40') return 'CAPITAL PARA RETROACTIVO';
+
+    return 'CAPITAL PARA RETROACTIVO';
+  }
+
+  /* ============================================================
+     8. APERTURA DE CRÉDITO 6.5%
+  ============================================================ */
+
+  function calcularApertura(monto) {
+    return redondear2(monto * PORCENTAJE_APERTURA);
+  }
+
+  function pintarApertura(apertura) {
+    const el = $('#costo65');
+
+    if (!el) return;
+
+    el.textContent = fmtMXN(apertura);
+    el.dataset.raw = String(apertura);
+  }
+
+  /* ============================================================
+     9. SEGURO
+     ------------------------------------------------------------
+     Si checkbox está apagado: $0.00
+     Si está prendido: calcula por tramo.
+  ============================================================ */
+
+  function obtenerTramoSeguro(monto) {
+    for (const tramo of TARIFAS_SEGURO) {
+      if (monto <= tramo.base) return tramo;
+    }
+
+    return TARIFAS_SEGURO[TARIFAS_SEGURO.length - 1];
+  }
+
+  function calcularSeguro(monto) {
+    const inputSeguro = $('#costoSeguro');
+
+    if (!seguroActivado()) return 0;
+
+    if (inputSeguro?.dataset.manual === '1') {
+      return redondear2(parseNumber(inputSeguro.value));
+    }
+
+    const tramo = obtenerTramoSeguro(monto);
+
+    return redondear2(tramo.base * tramo.pct);
+  }
+
+  function pintarSeguro(seguro, monto) {
+    const inputSeguro = $('#costoSeguro');
+
+    if (!inputSeguro) return;
+
+    inputSeguro.value = fmtMXN(seguro);
+    inputSeguro.dataset.raw = String(seguro);
+
+    if (!seguroActivado()) {
+      inputSeguro.dataset.manual = '0';
+      inputSeguro.title = 'Seguro no incluido';
+      return;
+    }
+
+    if (inputSeguro.dataset.manual === '1') {
+      inputSeguro.title = 'Seguro editado manualmente';
+      return;
+    }
+
+    const tramo = obtenerTramoSeguro(monto);
+
+    inputSeguro.title =
+      `Tramo ${tramo.base.toLocaleString('es-MX')} | ${(tramo.pct * 100).toFixed(2)}%`;
+  }
+
+  /* ============================================================
+     10. ZONA / INVESTIGACIÓN
+  ============================================================ */
+
+  function pctToFactor(pct) {
+    const n = Number(pct || 0);
+
+    if (!Number.isFinite(n) || n <= 0) return 0;
+
+    return n >= 1 ? n / 100 : n;
+  }
+
+  function actualizarEstadoZona() {
+    const sel = $('#zonaSelect');
+
+    if (!sel) return;
+
+    sel.disabled = !zonaActivada();
+
+    if (!zonaActivada()) {
+      sel.value = '';
+    } else if (!sel.value && sel.options.length > 1) {
+      sel.selectedIndex = 1;
+    }
+  }
+
+  function calcularInvestigacion(monto) {
+    const sel = $('#zonaSelect');
+
+    if (!zonaActivada()) return 0;
+    if (!sel) return 0;
+
+    const opt = sel.selectedOptions?.[0];
+
+    if (!opt || !opt.value) return 0;
+
+    const fijo = Number(opt.dataset.cuota) || 0;
+    const pctFactor = pctToFactor(opt.dataset.pct);
+
+    const min = opt.dataset.min != null ? Number(opt.dataset.min) : null;
+    const max = opt.dataset.max != null ? Number(opt.dataset.max) : null;
+
+    let extra = fijo + monto * pctFactor;
+
+    if (min != null && Number.isFinite(min)) {
+      extra = Math.max(extra, min);
+    }
+
+    if (max != null && Number.isFinite(max)) {
+      extra = Math.min(extra, max);
+    }
+
+    return redondear2(extra);
+  }
+
+  function pintarInvestigacion(investigacion) {
+    const el = $('#costoInvestigacion');
+
+    if (!el) return;
+
+    el.textContent = fmtMXN(investigacion);
+    el.dataset.raw = String(investigacion);
+
+    if (!zonaActivada()) {
+      el.title = 'Zona no aplicada';
+      return;
+    }
+
+    const sel = $('#zonaSelect');
+    const opt = sel?.selectedOptions?.[0];
+
+    el.title = opt?.textContent || 'Zona seleccionada';
+  }
+
+  async function cargarZonas() {
+    const sel = $('#zonaSelect');
+
+    if (!sel) return;
+
+    try {
+      const url = `${BASE_URL}app/controllers/concredito/listar.php`;
+
+      const r = await fetch(url, {
+        cache: 'no-store',
+        credentials: 'same-origin'
+      });
+
+      const j = await r.json();
+
+      if (!j?.ok) {
+        throw new Error(j?.msg || 'Error al cargar zonas');
+      }
+
+      sel.innerHTML = '<option value="">Selecciona zona…</option>';
+
+      (j.items || []).forEach(z => {
+        const op = document.createElement('option');
+
+        op.value = z.id;
+        op.textContent = z.etiqueta;
+
+        op.dataset.cuota = z.cuota_fija ?? 0;
+        op.dataset.pct = z.pct_monto ?? 0;
+
+        if (z.minimo != null) op.dataset.min = z.minimo;
+        if (z.maximo != null) op.dataset.max = z.maximo;
+
+        sel.appendChild(op);
+      });
+
+      actualizarEstadoZona();
+    } catch (err) {
+      console.error('Error cargando zonas:', err);
+
+      sel.innerHTML = '<option value="">Sin zonas cargadas</option>';
+      actualizarEstadoZona();
+    }
+  }
+
+  /* ============================================================
+     11. TASA Y CAT
+  ============================================================ */
+
+function pintarTasaYCat() {
+  const tasaMensualConIVA = leerTasaMensualPorcentaje();
+
+  /*
+    Ejemplo:
+    tasa mensual = 10.50%
+    tasa ordinaria SIN IVA = 10.50 / 1.16 = 9.05%
+    CAT SIN IVA = 9.05 * 12 = 108.62%
+  */
+
+  const tasaOrdinariaSinIVA = redondear2(tasaMensualConIVA / 1.16);
+  const catSinIVA = redondear2(tasaOrdinariaSinIVA * 12);
+
+  const tasaTexto = $('#tasaOrdinariaTexto');
+
+  if (tasaTexto) {
+    tasaTexto.textContent = `${tasaOrdinariaSinIVA.toFixed(2)}%`;
+  }
+
+  const catTexto = $('#catTexto');
+
+  if (catTexto) {
+    catTexto.textContent = `${catSinIVA.toFixed(2)}%`;
+  }
+}
+
+  /* ============================================================
+     12. FECHAS
+     ------------------------------------------------------------
+     Fecha límite = fecha base + plazo en meses.
+     Fecha corte = fecha límite - 8 días.
+  ============================================================ */
+
+  function parseFechaLocal(valor) {
+    if (!valor) return null;
+
+    const partes = String(valor).split('-');
+
+    if (partes.length !== 3) return null;
+
+    const y = Number(partes[0]);
+    const m = Number(partes[1]) - 1;
+    const d = Number(partes[2]);
+
+    const fecha = new Date(y, m, d);
+
+    return Number.isNaN(fecha.getTime()) ? null : fecha;
+  }
+
+  function sumarMeses(fecha, meses) {
+    const f = new Date(fecha.getTime());
+    const diaOriginal = f.getDate();
+
+    f.setMonth(f.getMonth() + meses);
+
+    if (f.getDate() !== diaOriginal) {
+      f.setDate(0);
+    }
+
+    return f;
+  }
+
+  function restarDias(fecha, dias) {
+    const f = new Date(fecha.getTime());
+    f.setDate(f.getDate() - dias);
+    return f;
+  }
+
+  function actualizarFechas() {
+    const fechaInput = $('#fechaBase');
+    const fechaBase = parseFechaLocal(fechaInput?.value);
+    const meses = leerPlazoMeses();
+
+    if (!fechaBase) return;
+
+    const fechaLarga = $('#fechaLarga');
+
+    if (fechaLarga) {
+      fechaLarga.textContent = fmtFechaLarga(fechaBase);
+    }
+
+    const limite = sumarMeses(fechaBase, meses);
+    const corte = restarDias(limite, 8);
+
+    setText('fechaMasUnAnio', fmtFechaLarga(limite));
+    setText('fechaMenosOcho', fmtFechaLarga(corte));
+  }
+
+  /* ============================================================
+     13. RECÁLCULO CENTRAL
+     ------------------------------------------------------------
+     Todo pasa por aquí:
+     monto -> apertura -> seguro -> zona -> base -> interés -> total.
+  ============================================================ */
+
+  function recalcularCaratula() {
+    const monto = leerMontoSolicitado();
+    const meses = leerPlazoMeses();
+    const tasaFactor = leerTasaMensualFactor();
+
+    actualizarEstadoZona();
+
+    const apertura = calcularApertura(monto);
+    const seguro = calcularSeguro(monto);
+    const investigacion = calcularInvestigacion(monto);
+
+    const baseConComisiones = redondear2(
+      monto + apertura + seguro + investigacion
+    );
+
+    const interes = redondear2(baseConComisiones * tasaFactor * meses);
+    const totalFinal = redondear2(baseConComisiones + interes);
+
+    pintarApertura(apertura);
+    pintarSeguro(seguro, monto);
+    pintarInvestigacion(investigacion);
+    pintarTasaYCat();
+    actualizarFechas();
+
+    /*
+      En tu HTML actual:
+      - #montoTotalPagar aparece bajo "Monto o línea de crédito".
+      - #montoLineaCredito aparece bajo "Monto total a pagar".
+    */
+
+    const montoTotalPagar = $('#montoTotalPagar');
+
+    if (montoTotalPagar) {
+      montoTotalPagar.textContent = fmtMXN(baseConComisiones);
+      montoTotalPagar.dataset.raw = String(baseConComisiones);
+    }
+
+    const montoLineaCredito = $('#montoLineaCredito');
+
+    if (montoLineaCredito) {
+      montoLineaCredito.textContent = fmtMXN(totalFinal);
+      montoLineaCredito.dataset.raw = String(totalFinal);
+    }
+
+    const destinoExtra = $('#montoTotalPagarConInteres');
+
+    if (destinoExtra) {
+      destinoExtra.textContent = fmtMXN(totalFinal);
+      destinoExtra.dataset.raw = String(totalFinal);
+    }
+
+    window.total1 = redondear2(apertura + seguro + investigacion);
+    window.monto_con_total1 = baseConComisiones;
+    window.total_final_caratula = totalFinal;
+
+    return {
+      monto,
+      apertura,
+      seguro,
+      investigacion,
+      baseConComisiones,
+      meses,
+      tasaPorcentaje: leerTasaMensualPorcentaje(),
+      interes,
+      totalFinal
+    };
+  }
+
+  function programarRecalculo(delay = 30) {
+    clearTimeout(recalcTimer);
+
+    recalcTimer = setTimeout(() => {
+      recalcularCaratula();
+    }, delay);
+  }
+
+  function recalcularDespuesDeCargar() {
+    programarRecalculo(40);
+    setTimeout(() => recalcularCaratula(), 150);
+    setTimeout(() => recalcularCaratula(), 300);
+  }
+
+  /* ============================================================
+     14. COMPATIBILIDAD CON FUNCIONES VIEJAS
+     ------------------------------------------------------------
+     Esto evita errores si otro botón o script viejo todavía llama
+     alguna de estas funciones.
+  ============================================================ */
+
+  window.recalcularCosto65 = function () {
+    programarRecalculo();
+  };
+
+  window.recalcularInvestigacionZona = function () {
+    programarRecalculo();
+  };
+
+  window.actualizarSeguro = function () {
+    programarRecalculo();
+  };
+
+  window.actualizarTotal1 = function () {
+    programarRecalculo();
+  };
+
+  window.actualizarTotalCaratula = function () {
+    programarRecalculo();
+  };
+
+  window.recalcularInteresDesdeTotalPagar = function () {
+    programarRecalculo();
+  };
+
+  window.recalcularCaratulaCompleta = recalcularCaratula;
+  window.recalcularCaratulaDespuesDeCargar = recalcularDespuesDeCargar;
+
+  /* ============================================================
+     15. BOTÓN GUARDAR
+  ============================================================ */
+
+  function controlarBotonGuardar() {
+    const btnGuardar = $('#btnGuardar');
+
+    if (!btnGuardar) return;
+
+    if (!solicitudId) {
+      btnGuardar.style.display = 'none';
+      btnGuardar.disabled = true;
+    } else {
+      btnGuardar.style.display = '';
+      btnGuardar.disabled = false;
+    }
+  }
+
+  /* ============================================================
+     16. CARGAR SOLICITUD
+  ============================================================ */
+
+  async function cargarSolicitud() {
+    if (!solicitudId) {
+      recalcularDespuesDeCargar();
+      return;
+    }
+
+    try {
+      const url =
+        `${BASE_URL}app/controllers/obtener_datos/get_solicitud_por_id.php?solicitud_id=${encodeURIComponent(solicitudId)}`;
+
+      const j = await getJSON(url);
+
+      const cli = j?.cliente || {};
+      const sol = j?.solicitud || {};
+
+      const nombre = cli.nombre && cli.nombre.trim()
+        ? cli.nombre
+        : [cli.nombres, cli.apellido_paterno, cli.apellido_materno]
+            .filter(Boolean)
+            .join(' ');
+
+      const rfc = String(cli.rfc || '').toUpperCase();
+      const curp = String(cli.curp || '').toUpperCase();
+
+      setText('ctlNombre', nombre || '—');
+      setText('ctlRFC', rfc || '—');
+      setText('ctlCURP', curp || '—');
+
+window.CONTRATO_MODALIDAD = String(sol.contrato_modalidad || '').trim().toUpperCase();
+
+const productoEl = $('#nombreProducto');
+
+if (productoEl) {
+  productoEl.textContent = productoDesdeModalidad(sol.contrato_modalidad);
+}
+
+      const tituloMontoEl = $('#montoTitulo');
+
+      if (tituloMontoEl) {
+        tituloMontoEl.textContent = tituloMontoDesdeModalidad(sol.contrato_modalidad);
+      }
+
+      const monto = Number(sol.monto || 0);
+      pintarMontoSolicitado(monto);
+
+      const meses = parseInt(sol.plazo_meses || sol.plazo || 0, 10) || 0;
+      const plazoEl = $('#plazo');
+
+      if (plazoEl) {
+        plazoEl.textContent = meses > 0 ? String(meses) : '';
+        plazoEl.setAttribute('aria-valuenow', meses > 0 ? String(meses) : '0');
+      }
+
+      const tasaInput = $('#tasaOrdinariaInput');
+
+      if (tasaInput) {
+        const tasaBD = Number(sol.tasa_mensual || tasaInput.value || 10.5);
+
+        tasaInput.value =
+          Number.isFinite(tasaBD) && tasaBD > 0
+            ? tasaBD.toFixed(2)
+            : '10.50';
+      }
+
+    } catch (err) {
+      console.error('Error cargando solicitud:', err);
+
+      setText('ctlNombre', '—');
+      setText('ctlRFC', '—');
+      setText('ctlCURP', '—');
+    } finally {
+      recalcularDespuesDeCargar();
+    }
+  }
+
+  /* ============================================================
+     17. EVENTOS DE USUARIO
+  ============================================================ */
+
+  function registrarEventos() {
+    const montoEl = $('#montoSolicitado');
+    const tasaInput = $('#tasaOrdinariaInput');
+    const plazoEl = $('#plazo');
+    const fechaBase = $('#fechaBase');
+    const checkSeguro = $('#incluirSeguro');
+    const checkZona = $('#aplicarZona');
+    const zonaSelect = $('#zonaSelect');
+    const inputSeguro = $('#costoSeguro');
+
+if (montoEl) {
+  montoEl.addEventListener('focus', () => {
+    const monto = parseNumber(montoEl.dataset.raw || montoEl.textContent);
+
+    // Al entrar, quitamos formato moneda para que puedas escribir fácil
+    montoEl.textContent = monto > 0 ? String(monto) : '';
+
+    // Coloca cursor al final
+    const range = document.createRange();
+    const sel = window.getSelection();
+
+    range.selectNodeContents(montoEl);
+    range.collapse(false);
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+
+  montoEl.addEventListener('input', () => {
+    const monto = parseNumber(montoEl.textContent);
+
+    // Solo actualizamos valores internos, NO formateamos mientras escribe
+    montoEl.dataset.raw = String(monto);
+
+    const hidden = $('#montoSolicitadoInput');
+    if (hidden) {
+      hidden.value = String(monto);
+      hidden.dataset.raw = String(monto);
+    }
+
+    programarRecalculo();
+  });
+
+  montoEl.addEventListener('keydown', (e) => {
+    const teclasPermitidas = [
+      'Backspace',
+      'Delete',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Tab',
+      'Home',
+      'End',
+      'Enter'
+    ];
+
+    if (teclasPermitidas.includes(e.key)) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        montoEl.blur();
+      }
+      return;
+    }
+
+    // Permite Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+    if (e.ctrlKey || e.metaKey) return;
+
+    // Solo números, punto y coma
+    if (!/^[0-9.,]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  montoEl.addEventListener('blur', () => {
+    const monto = parseNumber(montoEl.textContent);
+
+    // Aquí sí formateamos como moneda
+    pintarMontoSolicitado(monto);
+    programarRecalculo();
+  });
+
+  montoEl.addEventListener('paste', (e) => {
+    e.preventDefault();
+
+    const texto = (e.clipboardData || window.clipboardData).getData('text');
+    const monto = parseNumber(texto);
+
+    montoEl.textContent = monto > 0 ? String(monto) : '';
+    montoEl.dataset.raw = String(monto);
+
+    const hidden = $('#montoSolicitadoInput');
+    if (hidden) {
+      hidden.value = String(monto);
+      hidden.dataset.raw = String(monto);
+    }
+
+    programarRecalculo();
+  });
+}
+    if (tasaInput) {
+      tasaInput.addEventListener('input', () => programarRecalculo());
+      tasaInput.addEventListener('change', () => programarRecalculo());
+      tasaInput.addEventListener('blur', () => programarRecalculo());
+    }
+
+    if (plazoEl) {
+      plazoEl.addEventListener('input', () => programarRecalculo());
+      plazoEl.addEventListener('keyup', () => programarRecalculo());
+      plazoEl.addEventListener('blur', () => programarRecalculo());
+    }
+
+    if (fechaBase) {
+      fechaBase.addEventListener('input', () => programarRecalculo());
+      fechaBase.addEventListener('change', () => programarRecalculo());
+      fechaBase.addEventListener('blur', () => programarRecalculo());
+    }
+
+    if (checkSeguro) {
+      checkSeguro.addEventListener('change', () => {
+        const input = $('#costoSeguro');
+
+        if (input) {
+          input.dataset.manual = '0';
+
+          if (!checkSeguro.checked) {
+            input.dataset.raw = '0';
+            input.value = fmtMXN(0);
+          }
+        }
+
+        programarRecalculo();
+      });
+    }
+
+    if (checkZona) {
+      checkZona.addEventListener('change', () => {
+        actualizarEstadoZona();
+        programarRecalculo();
+      });
+    }
+
+    if (zonaSelect) {
+      zonaSelect.addEventListener('input', () => programarRecalculo());
+      zonaSelect.addEventListener('change', () => programarRecalculo());
+    }
+
+    if (inputSeguro) {
+      inputSeguro.addEventListener('input', () => {
+        inputSeguro.dataset.manual = '1';
+        inputSeguro.dataset.raw = String(parseNumber(inputSeguro.value));
+        programarRecalculo();
+      });
+
+      inputSeguro.addEventListener('blur', () => {
+        inputSeguro.dataset.manual = '1';
+
+        const valor = parseNumber(inputSeguro.value);
+
+        inputSeguro.dataset.raw = String(valor);
+        inputSeguro.value = fmtMXN(valor);
+
+        programarRecalculo();
+      });
+    }
+  }
+
+  /* ============================================================
+     18. INICIO GENERAL
+  ============================================================ */
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    controlarBotonGuardar();
+    registrarEventos();
+
+    await cargarZonas();
+    await cargarSolicitud();
+
+    recalcularDespuesDeCargar();
+  });
+
+})();
+</script>
+
+<script>
+/* ============================================================
+   GUARDAR / LEER META CARÁTULA
+   ------------------------------------------------------------
+   Este bloque restaura:
+   - window.guardarMetaCaratula()
+   - window.cargarMetaCaratula()
+
+   Guarda:
+   - solicitud_id
+   - aplicar_zona
+   - incluir_seguro
+   - zona_id
+   - zona_label
+   - fecha_base
+   - fecha_limite_pago
+   - firma_png
+   - monto_linea_credito
+   - monto_total_pagar
+   - tasa_mensual
+   - plazo_meses
+============================================================ */
+
+(function () {
+  'use strict';
+
+  /* =========================
+     1. Helpers generales
+  ========================= */
+
+  const $ = s => document.querySelector(s);
+
+  function qp(name) {
+    const m = new RegExp('[?&]' + name + '=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : null;
+  }
+
+  function getPublicBase() {
+    const { origin, pathname } = window.location;
+    const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+    if (p.includes('/hp/public/')) {
+      return `${origin}/hp/public/`;
+    }
+
+    if (p.includes('/sempiternal/public/')) {
+      return `${origin}/sempiternal/public/`;
+    }
+
+    return `${origin}/`;
+  }
+
+  function toNum(valor) {
+    return Number(
+      String(valor || '')
+        .replace(/\u00A0/g, '')
+        .replace(/\s+/g, '')
+        .replace(/\$/g, '')
+        .replace(/,/g, '')
+        .replace(/[^\d.-]/g, '')
+    ) || 0;
+  }
+
+  async function safeJSON(resp) {
+    const txt = await resp.text();
+
+    try {
+      return JSON.parse(txt);
+    } catch (e) {
+      console.error('Respuesta no JSON del servidor:\n', txt);
+      throw new Error('Respuesta no válida del servidor');
+    }
+  }
+
+  function swalOk(titulo, texto) {
+    if (window.Swal) {
+      return Swal.fire({
+        icon: 'success',
+        title: titulo || 'Guardado',
+        text: texto || 'La carátula se guardó correctamente.'
+      });
+    }
+
+    alert(texto || 'Guardado correctamente.');
+    return Promise.resolve();
+  }
+
+  function swalErrorGuardar(msg) {
+    if (window.Swal) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'No se pudo guardar',
+        text: msg || 'Ocurrió un error al guardar la carátula.'
+      });
+    }
+
+    alert(msg || 'No se pudo guardar.');
+    return Promise.resolve();
+  }
+
+  /* =========================
+     2. Rutas y solicitud
+  ========================= */
+
+  const BASE_URL = getPublicBase();
+
+  const RUTAS = {
+    leer: `${BASE_URL}app/controllers/concredito/leer_meta.php`,
+    guardar: `${BASE_URL}app/controllers/concredito/guardar_meta.php`
+  };
+
+  const SOLICITUD_ID = qp('solicitud_id') || qp('id');
+
+  window.SOLICITUD_ID = SOLICITUD_ID;
+
+  /* =========================
+     3. Leer valores actuales
+  ========================= */
+
+  function leerMontoLineaCredito() {
+    /*
+      En tu HTML actual:
+      #montoTotalPagar = columna "Monto o línea de crédito"
+      #montoLineaCredito = columna "Monto total a pagar"
+    */
+    return toNum($('#montoTotalPagar')?.dataset.raw || $('#montoTotalPagar')?.textContent);
+  }
+
+  function leerMontoTotalPagar() {
+    return toNum($('#montoLineaCredito')?.dataset.raw || $('#montoLineaCredito')?.textContent);
+  }
+
+function leerFechaBaseRaw() {
+  const fechaBase = parseFechaBaseInput();
+  return fechaToYMD(fechaBase);
+}
+
+/* =========================
+   Fecha en formato YYYY-MM-DD
+   Para que PHP pueda guardar sin error
+========================= */
+
+function fechaToYMD(fecha) {
+  if (!(fecha instanceof Date) || Number.isNaN(fecha.getTime())) {
+    return '';
+  }
+
+  const y = fecha.getFullYear();
+  const m = String(fecha.getMonth() + 1).padStart(2, '0');
+  const d = String(fecha.getDate()).padStart(2, '0');
+
+  return `${y}-${m}-${d}`;
+}
+
+function parseFechaBaseInput() {
+  const valor = $('#fechaBase')?.value || '';
+
+  // Si el input date está bien, vendrá así: 2026-05-11
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+    const [y, m, d] = valor.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  // Por si el navegador lo muestra o captura como 11/05/2026
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
+    const [d, m, y] = valor.split('/').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  return null;
+}
+
+function leerFechaLimitePago() {
+  const fechaBase = parseFechaBaseInput();
+
+  if (!fechaBase) return '';
+
+  const meses = parseInt(
+    String($('#plazo')?.textContent || '').replace(/[^\d]/g, ''),
+    10
+  ) || 0;
+
+  const fechaLimite = new Date(fechaBase.getTime());
+  fechaLimite.setMonth(fechaLimite.getMonth() + meses);
+
+  return fechaToYMD(fechaLimite);
+}
+
+  function leerTasaMensual() {
+    return toNum($('#tasaOrdinariaInput')?.value);
+  }
+
+  function leerPlazoMeses() {
+    return parseInt(String($('#plazo')?.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+  }
+
+  function leerFirmaPNG() {
+    const hidden = $('#firmaDataURL');
+    if (hidden?.value) return hidden.value;
+
+    const canvas = $('#sigCanvas');
+
+    if (!canvas) return '';
+
+    try {
+      return canvas.toDataURL('image/png');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function leerZona() {
+    const sel = $('#zonaSelect');
+    const opt = sel?.selectedOptions?.[0];
+
+    return {
+      zona_id: sel?.value || '',
+      zona_label: opt?.textContent?.trim() || ''
+    };
+  }
+
+
+/* =========================
+   SweetAlert después de guardar
+   Opciones:
+   - Avanzar
+   - Quedarme
+   - Salir
+========================= */
+
+/* =========================
+   SweetAlert después de guardar
+   Detecta a qué contrato avanzar
+========================= */
+
+window.swalGuardadoAvanzar = function (solicitudId) {
+  return Swal.fire({
+    icon: 'success',
+    title: 'Carátula guardada',
+    html: 'La información se guardó correctamente.<br>¿Qué deseas hacer ahora?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Avanzar',
+    denyButtonText: 'Quedarme',
+    cancelButtonText: 'Salir',
+    reverseButtons: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const urlContrato = obtenerRutaContratoPorModalidad(solicitudId);
+      window.location.href = urlContrato;
+      return;
+    }
+
+    if (result.isDenied) {
+      return;
+    }
+
+    if (result.dismiss === Swal.DismissReason.cancel) {
+      window.location.href = obtenerBasePublica() + 'index.php';
+    }
+  });
+};
+
+
+/* =========================
+   Base pública del sistema
+   Ejemplo Railway:
+   https://hp-v1-production.up.railway.app/
+========================= */
+
+function obtenerBasePublica() {
+  const { origin, pathname } = window.location;
+  const p = pathname.replace(/\/+$/, '/').toLowerCase();
+
+  if (p.includes('/hp/public/')) {
+    return `${origin}/hp/public/`;
+  }
+
+  if (p.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public/`;
+  }
+
+  return `${origin}/`;
+}
+
+
+/* =========================
+   Detectar modalidad actual
+   Busca primero en variable global.
+   Si no existe, usa el texto del producto.
+========================= */
+
+function obtenerModalidadActual() {
+  // Si al cargar solicitud guardas la modalidad aquí, esta será la mejor opción.
+  if (window.CONTRATO_MODALIDAD) {
+    return String(window.CONTRATO_MODALIDAD).trim().toUpperCase();
+  }
+
+  // Respaldo: leer el nombre comercial visible en carátula.
+  const productoTexto = document.getElementById('nombreProducto')?.textContent || '';
+
+  return String(productoTexto)
+    .trim()
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+
+/* =========================
+   Ruta según modalidad
+   Regla:
+   - Ordinario => contrato2.php
+   - Los demás => contrato.php
+========================= */
+
+function obtenerRutaContratoPorModalidad(solicitudId) {
+  const base = obtenerBasePublica();
+  const modalidad = obtenerModalidadActual();
+
+  let archivoContrato = 'contrato/contrato.php';
+
+  if (
+    modalidad.includes('ORDINARIO') ||
+    modalidad === 'P10_ORDINARIO' ||
+    modalidad === 'P40_ORDINARIO'
+  ) {
+    archivoContrato = 'contrato/contrato2.php';
+  }
+
+  return `${base}${archivoContrato}?solicitud_id=${encodeURIComponent(solicitudId)}`;
+}
+
+
+  /* =========================
+     4. Guardar carátula
+  ========================= */
+
+async function guardarMetaCaratula() {
+  try {
+    if (!window.SOLICITUD_ID) {
+      throw new Error('Falta solicitud_id en la URL.');
+    }
+
+    // Recalcula antes de guardar para mandar datos actualizados.
+    if (typeof window.recalcularCaratulaCompleta === 'function') {
+      window.recalcularCaratulaCompleta();
+    }
+
+    const aplicar_zona = $('#aplicarZona')?.checked ? 1 : 0;
+    const incluir_seguro = $('#incluirSeguro')?.checked ? 1 : 0;
+
+    const { zona_id, zona_label } = leerZona();
+
+    const fecha_base_raw = leerFechaBaseRaw();
+    const fecha_limite_pago = leerFechaLimitePago();
+
+    const firma_png = leerFirmaPNG();
+
+    let monto_linea_credito = leerMontoLineaCredito();
+    let monto_total_pagar = leerMontoTotalPagar();
+
+    /*
+      Salvavidas:
+      La línea/base debe ser menor que el total final.
+      Si por el orden de IDs se invierten, los acomodamos.
+    */
+    if (
+      monto_total_pagar > 0 &&
+      monto_linea_credito > 0 &&
+      monto_total_pagar < monto_linea_credito
+    ) {
+      const tmp = monto_linea_credito;
+      monto_linea_credito = monto_total_pagar;
+      monto_total_pagar = tmp;
+    }
+
+    const payload = new URLSearchParams();
+
+    payload.set('solicitud_id', String(window.SOLICITUD_ID));
+
+    payload.set('aplicar_zona', String(aplicar_zona));
+    payload.set('incluir_seguro', String(incluir_seguro));
+
+    payload.set('zona_id', String(zona_id));
+    payload.set('zona_label', zona_label);
+
+    payload.set('monto_linea_credito', String(monto_linea_credito));
+    payload.set('monto_total_pagar', String(monto_total_pagar));
+
+    payload.set('tasa_mensual', String(leerTasaMensual()));
+    payload.set('plazo_meses', String(leerPlazoMeses()));
+
+    if (fecha_base_raw) {
+      payload.set('fecha_base', fecha_base_raw);
+    }
+
+    if (fecha_limite_pago) {
+      payload.set('fecha_limite_pago', fecha_limite_pago);
+    }
+
+    if (firma_png) {
+      payload.set('firma_png', firma_png);
+    }
+
+    const resp = await fetch(RUTAS.guardar, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: payload.toString(),
+      credentials: 'same-origin'
+    });
+
+    const json = await safeJSON(resp);
+
+    if (!resp.ok || !json?.ok) {
+      throw new Error(json?.message || json?.error || 'No se pudo guardar');
+    }
+
+    // SweetAlert con opciones: Avanzar / Quedarme / Salir
+    await window.swalGuardadoAvanzar(window.SOLICITUD_ID);
+
+  } catch (e) {
+    console.error('Guardar meta carátula:', e);
+    await swalErrorGuardar(e.message || 'Error al guardar');
+  }
+}
+
+  /* =========================
+     5. Leer meta guardada
+     ------------------------------------------------------------
+     Esto intenta recuperar zona, seguro, fecha y firma si ya estaban guardados.
+  ========================= */
+
+  async function cargarMetaCaratula() {
+    if (!window.SOLICITUD_ID) return;
+
+    try {
+      const url = `${RUTAS.leer}?solicitud_id=${encodeURIComponent(window.SOLICITUD_ID)}`;
+
+      const resp = await fetch(url, {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      const json = await safeJSON(resp);
+
+      if (!json?.ok) return;
+
+      const meta = json.meta || json.data || {};
+
+      const checkZona = $('#aplicarZona');
+      const checkSeguro = $('#incluirSeguro');
+      const zonaSelect = $('#zonaSelect');
+      const fechaBase = $('#fechaBase');
+      const hiddenFirma = $('#firmaDataURL');
+      const imgFirma = $('#sigPrintImage');
+
+      if (checkZona && meta.aplicar_zona != null) {
+        checkZona.checked = String(meta.aplicar_zona) === '1' || meta.aplicar_zona === true;
+      }
+
+      if (checkSeguro && meta.incluir_seguro != null) {
+        checkSeguro.checked = String(meta.incluir_seguro) === '1' || meta.incluir_seguro === true;
+      }
+
+      if (fechaBase && meta.fecha_base) {
+        fechaBase.value = meta.fecha_base;
+        fechaBase.dataset.locked = '1';
+      }
+
+      if (zonaSelect && meta.zona_id) {
+        const intentarZona = () => {
+          zonaSelect.value = String(meta.zona_id || '');
+          zonaSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        intentarZona();
+        setTimeout(intentarZona, 250);
+        setTimeout(intentarZona, 700);
+      }
+
+      if (meta.firma_png) {
+        if (hiddenFirma) hiddenFirma.value = meta.firma_png;
+        if (imgFirma) imgFirma.src = meta.firma_png;
+      }
+
+      if (typeof window.recalcularCaratulaDespuesDeCargar === 'function') {
+        window.recalcularCaratulaDespuesDeCargar();
+      } else if (typeof window.recalcularCaratulaCompleta === 'function') {
+        window.recalcularCaratulaCompleta();
+      }
+
+    } catch (e) {
+      console.warn('No se pudo cargar meta carátula:', e);
+    }
+  }
+
+  /* =========================
+     6. Exponer funciones globales
+  ========================= */
+
+  window.cargarMetaCaratula = cargarMetaCaratula;
+  window.guardarMetaCaratula = guardarMetaCaratula;
+
+  /* =========================
+     7. Inicializar lectura
+  ========================= */
+
+  document.addEventListener('DOMContentLoaded', () => {
+    cargarMetaCaratula();
+  });
+
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   BOTONES CARÁTULA
+   ------------------------------------------------------------
+   Este bloque reactiva:
+   1. Guardar
+   2. Imprimir
+   3. Regresar
+
+   PÉGALO después del JS unificado de cálculo.
+============================================================ */
+
+(function () {
+  'use strict';
+
+  /* ============================================================
+     1. BOTÓN GUARDAR
+     ------------------------------------------------------------
+     Si ya existe window.guardarMetaCaratula, lo usa.
+     Si no existe, muestra error claro.
+  ============================================================ */
+
+  function activarBotonGuardar() {
+    const btnGuardar = document.getElementById('btnGuardar');
+
+    if (!btnGuardar) return;
+
+    btnGuardar.disabled = false;
+    btnGuardar.style.pointerEvents = 'auto';
+
+    btnGuardar.addEventListener('click', async function () {
+      try {
+        // Primero recalcula para guardar datos actualizados.
+        if (typeof window.recalcularCaratulaCompleta === 'function') {
+          window.recalcularCaratulaCompleta();
+        }
+
+        if (typeof window.guardarMetaCaratula === 'function') {
+          await window.guardarMetaCaratula();
+          return;
+        }
+
+        console.error('No existe window.guardarMetaCaratula');
+
+        if (window.Swal) {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo guardar',
+            text: 'No está cargada la función guardarMetaCaratula(). Revisa que no hayas borrado el script de guardar.'
+          });
+        } else {
+          alert('No está cargada la función guardarMetaCaratula().');
+        }
+
+      } catch (error) {
+        console.error('Error al guardar:', error);
+
+        if (window.Swal) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar',
+            text: error.message || 'Ocurrió un error inesperado.'
+          });
+        } else {
+          alert(error.message || 'Error al guardar.');
+        }
+      }
+    });
+  }
+
+  /* ============================================================
+     2. BOTÓN IMPRIMIR
+     ------------------------------------------------------------
+     Sincroniza la firma si existe y abre window.print().
+  ============================================================ */
+
+  function activarBotonImprimir() {
+    const btnImprimir = document.getElementById('btnImprimir');
+
+    if (!btnImprimir) return;
+
+    btnImprimir.disabled = false;
+    btnImprimir.style.pointerEvents = 'auto';
+
+    btnImprimir.addEventListener('click', function () {
+      try {
+        if (typeof window.recalcularCaratulaCompleta === 'function') {
+          window.recalcularCaratulaCompleta();
+        }
+
+        const canvas = document.getElementById('sigCanvas');
+        const img = document.getElementById('sigPrintImage');
+
+        if (canvas && img) {
+          try {
+            img.src = canvas.toDataURL('image/png');
+          } catch (e) {
+            console.warn('No se pudo sincronizar la firma para impresión:', e);
+          }
+        }
+
+        window.print();
+
+      } catch (error) {
+        console.error('Error al imprimir:', error);
+        window.print();
+      }
+    });
+  }
+
+  /* ============================================================
+     3. BOTÓN REGRESAR
+     ------------------------------------------------------------
+     Acepta los dos IDs:
+     - btnRegresar
+     - btn-regresar
+  ============================================================ */
+
+  function getBase() {
+    const p = location.pathname.replace(/\/+$/, '/');
+    const i = p.toLowerCase().lastIndexOf('/public/');
+    return i >= 0 ? p.slice(0, i + 8) : '/';
+  }
+
+  function activarBotonRegresar() {
+    const btnRegresar =
+      document.getElementById('btnRegresar') ||
+      document.getElementById('btn-regresar');
+
+    if (!btnRegresar) return;
+
+    btnRegresar.disabled = false;
+    btnRegresar.style.pointerEvents = 'auto';
+
+    const fallbackUrl = getBase() + 'index.php';
+
+    btnRegresar.addEventListener('click', function () {
+      const ref = document.referrer;
+      const sameOrigin = ref && new URL(ref, location.href).origin === location.origin;
+      const hasHistory = history.length > 1;
+
+      const ua = navigator.userAgent || '';
+      const isAndroidWebView =
+        /Android/i.test(ua) && /wv|Version\/\d+\.\d+/i.test(ua);
+
+      if (!isAndroidWebView && hasHistory && sameOrigin) {
+        history.back();
+      } else {
+        window.location.href = fallbackUrl;
+      }
+    });
+
+    btnRegresar.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btnRegresar.click();
+      }
+    });
+  }
+
+  /* ============================================================
+     4. INICIAR BOTONES
+  ============================================================ */
+
+  document.addEventListener('DOMContentLoaded', function () {
+    activarBotonGuardar();
+    activarBotonImprimir();
+    activarBotonRegresar();
+  });
+
+})();
+</script>
+</body>
+</html>

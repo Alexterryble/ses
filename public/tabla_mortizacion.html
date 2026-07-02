@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CIP Financial · Tabla de Amortización</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #eef2f8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .document-container {
+    max-width: 8.5in;
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+  }
+
+  .content-padding {
+    padding: 1.8rem 2rem 1.5rem;
+  }
+
+  /* =========================
+     HEADER
+  ========================== */
+  .header-modern{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    gap:0.08rem;
+    margin-bottom:0.35rem;
+    padding-bottom:0.28rem;
+    border-bottom:1px solid #dfe7ef;
+  }
+
+  .logo-group{
+    display:none;
+  }
+
+  .logo-img{
+    display:block;
+    margin:0 auto;
+    width:auto;
+    height:64px;
+    object-fit:contain;
+  }
+
+  .logo-center{
+    height:190px;
+    max-width:260px;
+  }
+
+  .title-modern{
+    display:block;
+    width:100%;
+    margin-top:0;
+    text-align:center;
+    font-size:1.15rem;
+    font-weight:800;
+    letter-spacing:0.2px;
+    line-height:1.1;
+    background:linear-gradient(135deg, #0a2b3e, #1f5e7e);
+    background-clip:text;
+    -webkit-background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+  }
+
+  /* =========================
+     FOLIO
+  ========================== */
+  .folio-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+  
+  .folio {
+    background: linear-gradient(135deg, #f0f4fa, #e8eff5);
+    padding: 0.4rem 1.2rem;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1f6390;
+    display: inline-block;
+    border: 1px solid #d4e2ef;
+  }
+
+  /* =========================
+     DATOS CLIENTE
+  ========================== */
+  .data-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eef2f8;
+    margin-bottom: 1rem;
+  }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fafcff;
+  }
+
+  .data-item {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid #edf2f7;
+    border-right: 1px solid #edf2f7;
+  }
+
+  .data-item:nth-child(4n) {
+    border-right: none;
+  }
+
+  .data-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b8a9e;
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .data-value {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1e3b4f;
+  }
+
+  .full-name-item {
+    grid-column: span 2;
+    background: #f9fbfe;
+    border-left: 3px solid #e6b422;
+  }
+
+  /* =========================
+     RESUMEN
+  ========================== */
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .stat-card {
+    flex: 1;
+    min-width: 110px;
+    background: white;
+    border-radius: 14px;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    border: 1px solid #e9eff4;
+  }
+
+  .stat-card-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #7f9ab0;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-card-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1f5680;
+  }
+
+  .stat-card-value.highlight {
+    background: #1f5680;
+    color: white;
+    display: inline-block;
+    padding: 0.15rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.95rem;
+  }
+
+  /* =========================
+     TABLA
+  ========================== */
+  .table-container {
+    overflow-x: auto;
+    margin: 0.8rem 0 1rem;
+    border-radius: 14px;
+  }
+
+  .amort-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+  }
+
+  .amort-table th {
+    padding: 0.6rem 0.4rem;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #5c7f9c;
+    border-bottom: 2px solid #e2eaf1;
+    text-align: center;
+    background: #f8fafd;
+  }
+
+  .amort-table td {
+    padding: 0.55rem 0.4rem;
+    text-align: center;
+    border-bottom: 1px solid #eff3f8;
+    color: #1a3a4e;
+    font-weight: 500;
+  }
+
+  .amort-table td:nth-child(2),
+  .amort-table td:nth-child(3),
+  .amort-table td:nth-child(4),
+  .amort-table td:nth-child(5) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .amort-table td:first-child {
+    font-weight: 700;
+    color: #d97706;
+    background: #fffbf5;
+  }
+
+  /* =========================
+     NOTAS
+  ========================== */
+  .notes-area {
+    background: #fafdff;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0 1rem;
+    border: 1px solid #eef3f9;
+  }
+
+  .notes-text {
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: #2c5a78;
+  }
+
+  .notes-text p {
+    margin-bottom: 0.8rem;
+  }
+
+  .notes-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .notes-text .highlight {
+    font-weight: 800;
+    background: #fef2de;
+    color: #c26b1a;
+    padding: 0 4px;
+    border-radius: 8px;
+  }
+
+  /* =========================
+     FIRMA
+  ========================== */
+  .signature-modern{
+    background:#fff;
+    border:1px solid #e7eef5;
+    border-radius:18px;
+    padding:1rem 1rem 1.2rem;
+    margin-top:1rem;
+  }
+
+  /* ocultar el área grande de firma */
+  .sig-canvas-area{
+    display:none;
+    position:relative;
+    width:100%;
+    min-height:120px;
+    border:1.5px dashed #cfdbe7;
+    border-radius:14px;
+    background:#fcfeff;
+    overflow:hidden;
+    margin-bottom:0.5rem;
+  }
+
+  /* solo mostrar si decides agregar esta clase por JS */
+  .sig-canvas-area.has-signature{
+    display:block;
+  }
+
+  #sigCanvas{
+    display:block;
+    width:100%;
+    height:120px;
+    touch-action:none;
+    cursor:crosshair;
+  }
+
+  /* también ocultamos la imagen de firma por defecto */
+  #sigImage{
+    display:none;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#fff;
+  }
+
+  .sig-canvas-area.has-signature #sigImage{
+    display:block;
+  }
+
+  .sig-buttons{
+    display:flex;
+    justify-content:center;
+    gap:.8rem;
+    flex-wrap:wrap;
+    margin:.9rem 0 1rem;
+  }
+
+  .sig-buttons button{
+    border:none;
+    border-radius:999px;
+    padding:.5rem 1rem;
+    font-size:.78rem;
+    font-weight:700;
+    cursor:pointer;
+    background:#eef4fa;
+    color:#1f5680;
+  }
+
+  .signature-line-area{
+    text-align:center;
+    margin-top:.5rem;
+  }
+
+  .thumbprints-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100%;
+    max-width:500px;
+    margin:.2rem auto 1.2rem;
+    gap:0;
+    flex-wrap:nowrap;
+  }
+
+  .thumb-box{
+    width:130px;
+    height:130px;
+    border:1.5px dashed #cbdbe0;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fcfdff;
+    flex:0 0 auto;
+  }
+
+  .thumb-label{
+    font-size:.62rem;
+    font-weight:700;
+    color:#7a8ea1;
+    line-height:1.2;
+    text-align:center;
+  }
+
+  #firmaImg{
+    display:none;
+    max-height:42px;
+    margin:0 auto .35rem;
+  }
+
+  #firmaImg.show{
+    display:block;
+  }
+
+  .signature-divider{
+    width:190px;
+    border-top:1.5px solid #cbdbe0;
+    margin:0 auto .25rem;
+  }
+
+  #firmaNombre{
+    margin:0;
+    font-size:.75rem;
+    font-weight:700;
+    color:#1f5680;
+    text-align:center;
+  }
+
+  /* =========================
+     BOTONES FLOTANTES
+  ========================== */
+  .action-buttons {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.6rem;
+    z-index: 100;
+  }
+
+  .action-btn {
+    background: #1f5680;
+    border: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .action-btn.green { background: #2b7551; }
+  .action-btn.gray { background: #5c6f87; }
+
+  /* =========================
+     IMPRESIÓN
+  ========================== */
+  @page {
+    size: letter;
+    margin: 0.28in 0.24in;
+  }
+
+  @media print {
+    body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .action-buttons {
+      display: none !important;
+    }
+
+    .document-container {
+      max-width: 100% !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+    }
+
+    .content-padding {
+      padding: 0.06cm 0.10cm !important;
+    }
+
+    .header-modern{
+      display:flex !important;
+      flex-direction:column !important;
+      justify-content:center !important;
+      align-items:center !important;
+      text-align:center !important;
+      gap:0.02in !important;
+      margin-bottom:0.06in !important;
+      padding-bottom:0.04in !important;
+      border-bottom:1px solid #dfe7ef !important;
+      page-break-inside:avoid !important;
+      break-inside:avoid !important;
+    }
+
+    .logo-img{
+      display:block !important;
+      margin:0 auto !important;
+      width:auto !important;
+      height:1.00in !important;
+      max-width:3.8in !important;
+      object-fit:contain !important;
+    }
+
+    .logo-center{
+      height:1.28in !important;
+      max-width:4.8in !important;
+    }
+
+    .title-modern{
+      display:block !important;
+      width:100% !important;
+      text-align:center !important;
+      margin-top:0 !important;
+      font-size:11.5pt !important;
+      font-weight:800 !important;
+      line-height:1.02 !important;
+      letter-spacing:0.2px !important;
+      color:#0a2b3e !important;
+      -webkit-text-fill-color:#0a2b3e !important;
+      background:none !important;
+      visibility:visible !important;
+      opacity:1 !important;
+    }
+
+    .folio-container{
+      margin-bottom:0.10cm !important;
+    }
+
+    .folio {
+      font-size: 7.4pt !important;
+      padding: 0.12cm 0.42cm !important;
+    }
+
+    .data-card{
+      margin-bottom:0.20rem !important;
+    }
+
+    .data-item {
+      padding: 0.11cm 0.14cm !important;
+    }
+
+    .data-label{
+      font-size:5.8pt !important;
+      margin-bottom:0.03cm !important;
+    }
+
+    .data-value {
+      font-size: 7.2pt !important;
+      line-height:1.10 !important;
+    }
+
+    .stats-row{
+      gap:0.25rem !important;
+      margin-bottom:0.22rem !important;
+    }
+
+    .stat-card {
+      padding: 0.10cm 0.08cm !important;
+      min-width: 0 !important;
+    }
+
+    .stat-card-label{
+      font-size:5.6pt !important;
+      margin-bottom:0.02cm !important;
+    }
+
+    .stat-card-value {
+      font-size: 7.4pt !important;
+      line-height:1.05 !important;
+    }
+
+    .stat-card-value.highlight{
+      padding:0.04cm 0.18cm !important;
+      font-size:7.2pt !important;
+    }
+
+    .table-container {
+      margin: 0.14rem 0 0.22rem !important;
+    }
+
+    .amort-table {
+      font-size: 6pt !important;
+    }
+
+    .amort-table th {
+      padding: 0.08cm 0.06cm !important;
+      font-size: 5.7pt !important;
+    }
+
+    .amort-table td {
+      padding: 0.07cm 0.06cm !important;
+      font-size: 5.8pt !important;
+      line-height:1.02 !important;
+    }
+
+    .notes-area {
+      padding: 0.11cm 0.16cm !important;
+      margin: 0.10cm 0 !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .notes-text {
+      font-size: 5.8pt !important;
+      line-height: 1.14 !important;
+    }
+
+    .notes-text p{
+      margin-bottom:0.08cm !important;
+    }
+
+    .signature-modern{
+      border:1px solid #d8e3ec !important;
+      border-radius:.16cm !important;
+      padding:.10cm .14cm .12cm !important;
+      margin-top:.10cm !important;
+      break-inside:avoid !important;
+      page-break-inside:avoid !important;
+    }
+
+    .sig-buttons{
+      display:none !important;
+    }
+
+    /* en impresión también ocultamos el cuadro largo */
+    .sig-canvas-area{
+      display:none !important;
+      min-height:1.20cm !important;
+      border:none !important;
+      margin-bottom:0 !important;
+      background:transparent !important;
+    }
+
+    .sig-canvas-area.has-signature{
+      display:block !important;
+    }
+
+    #sigCanvas{
+      display:none !important;
+    }
+
+    #sigImage{
+      display:none !important;
+      position:relative !important;
+      inset:auto !important;
+      width:100% !important;
+      height:1.20cm !important;
+      object-fit:contain !important;
+      background:#fff !important;
+    }
+
+    .sig-canvas-area.has-signature #sigImage{
+      display:block !important;
+    }
+
+    .thumbprints-row{
+      justify-content:space-between !important;
+      align-items:center !important;
+      width:100% !important;
+      max-width:6.8cm !important;
+      margin:.04cm auto .10cm !important;
+      gap:0 !important;
+      flex-wrap:nowrap !important;
+    }
+
+    .thumb-box{
+      width:2.00cm !important;
+      height:2.00cm !important;
+      border-radius:.10cm !important;
+    }
+
+    .thumb-label{
+      font-size:4.6pt !important;
+      line-height:1.02 !important;
+    }
+
+    #firmaImg{
+      display:none !important;
+      max-height:.24in !important;
+      margin:0 auto .02cm !important;
+    }
+
+    #firmaImg.show{
+      display:block !important;
+    }
+
+    .signature-divider{
+      width:3.4cm !important;
+      margin:0 auto .02cm !important;
+    }
+
+    #firmaNombre{
+      font-size:5.8pt !important;
+      font-weight:700 !important;
+      color:#1f5680 !important;
+      line-height:1.02 !important;
+    }
+
+    .amort-table tbody tr,
+    .notes-area,
+    .signature-modern {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+  }
+
+  /* =========================
+     RESPONSIVE
+  ========================== */
+  @media (max-width: 680px) {
+    body {
+      padding: 0.8rem;
+    }
+
+    .content-padding {
+      padding: 1rem;
+    }
+
+    .data-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .data-item:nth-child(4n) {
+      border-right: 1px solid #edf2f7;
+    }
+
+    .full-name-item {
+      grid-column: span 2;
+    }
+
+    .signature-modern{
+      padding:.9rem .8rem 1rem;
+    }
+
+    .sig-canvas-area{
+      min-height:100px;
+    }
+
+    #sigCanvas{
+      height:100px;
+    }
+
+    .thumbprints-row{
+      max-width:320px;
+      margin:.2rem auto 1rem;
+    }
+
+    .thumb-box{
+      width:86px;
+      height:86px;
+    }
+
+    .signature-divider{
+      width:160px;
+    }
+
+    #firmaNombre{
+      font-size:.7rem;
+    }
+  }
+
+  @media print{
+  .print-btn,
+  .save-btn,
+  .back-btn,
+  .action-buttons,
+  .menu-actions{
+    display:none !important;
+  }
+}
+  
+
+  #sigActions,
+.sig-actions,
+.sig-buttons,
+#sigClear,
+#sigSave{
+  display:none !important;
+}
+
+
+
+
+
+
+.header-modern{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;          /* antes flex-start */
+  justify-content:space-between !important;
+  gap:18px !important;
+  width:100% !important;
+  margin-bottom:8px !important;
+}
+
+.header-modern-left{
+  flex:0 0 auto !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+}
+
+.header-modern-left .logo-img,
+#logoMain.logo-img{
+  display:block !important;
+  width:220px !important;                /* cambia aquí tamaño logo */
+  max-width:220px !important;
+  height:auto !important;
+  margin:0 !important;
+}
+
+.header-modern-right{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-end !important;       /* manda texto a la derecha */
+  justify-content:flex-start !important;
+  text-align:right !important;
+  color:#1f2d3d !important;
+  line-height:1.15 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+.header-modern-right .top-frase{
+  font-weight:700 !important;
+  font-size:-10px !important;             /* baja aquí */
+  color:#0d5c86 !important;
+  margin:0 0 2px 0 !important;
+}
+
+.header-modern-right .top-direccion,
+.header-modern-right .top-correo{
+  font-size:11px !important;             /* baja aquí */
+  margin:0 !important;
+}
+
+.title-modern{
+  width:100% !important;
+  text-align:center !important;
+  font-weight:800 !important;
+  font-size:22px !important;
+  margin-top:-50px !important;   /* sube título */
+  margin-bottom:4px !important;
+}
+
+/* si la línea azul está en un hr */
+.header-divider,
+hr{
+  margin-top:0 !important;
+  margin-bottom:1px !important;
+}
+
+/* si la línea azul es borde del contenedor del título */
+.title-wrap,
+.title-section,
+.header-title-wrap{
+  margin-top:-90px !important;   /* sube línea + título juntos */
+  padding-top:0 !important;
+}
+
+
+
+/* =========================
+   BOTONES FLOTANTES
+========================== */
+.action-buttons{
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 22px !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 9999 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+
+  padding: 10px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.86) !important;
+  border: 1px solid rgba(148,163,184,.35) !important;
+  box-shadow: 0 18px 45px rgba(15,23,42,.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.action-btn{
+  min-width: 112px !important;
+  height: 42px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0 18px !important;
+
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+
+  box-shadow: 0 10px 24px rgba(15,23,42,.18) !important;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+}
+
+.action-btn:hover{
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 30px rgba(15,23,42,.25) !important;
+  filter: brightness(1.04) !important;
+}
+
+.action-btn:active{
+  transform: translateY(0) scale(.98) !important;
+}
+
+/* Imprimir */
+#btnPrint{
+  background: linear-gradient(135deg,#0e6a98,#083e5b) !important;
+}
+
+/* Guardar */
+#btnSave,
+.action-btn.green{
+  background: linear-gradient(135deg,#1f8f5f,#16613f) !important;
+}
+
+/* Volver */
+#btnBack,
+.action-btn.gray{
+  background: linear-gradient(135deg,#64748b,#334155) !important;
+}
+
+/* Responsive */
+@media (max-width: 680px){
+  .action-buttons{
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    border-radius: 18px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .action-btn{
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+  }
+}
+
+/* Ocultar al imprimir */
+@media print{
+  .action-buttons,
+  .action-btn,
+  .print-btn,
+  .save-btn,
+  .back-btn{
+    display: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="document-container">
+  <div class="content-padding">
+    <!-- Header -->
+<div class="header-modern">
+  <div class="header-modern-left">
+    <img id="logoMain" class="logo-img" src="img/logo.png" alt="CIP Group" />
+  </div>
+
+  <div class="header-modern-right">
+    <div class="top-frase">Seguridad para tu retiro, confianza para tu futuro.</div>
+    <div class="top-direccion">📍 Jose Maria Pino Suarez 119, Santa Ana Tlapaltitlán, 52160 Toluca de Lerdo, Méx.</div>
+    <div class="top-correo">✉️ contacto@cipmexico.com.mx</div>
+  </div>
+</div>
+
+<div class="title-modern">TABLA DE AMORTIZACIÓN</div>
+    
+    <!-- Folio -->
+    <div class="folio-container">
+      <div class="folio" id="folioText">Folio: CIPE-006</div>
+    </div>
+
+    <!-- Datos cliente -->
+    <div class="data-card">
+      <div class="data-grid">
+        <div class="data-item"><span class="data-label">CURP</span><span class="data-value" id="curpVal">—</span></div>
+        <div class="data-item"><span class="data-label">NSS</span><span class="data-value" id="nssVal">—</span></div>
+        <div class="data-item"><span class="data-label">RFC</span><span class="data-value" id="rfcVal">—</span></div>
+        <div class="data-item"><span class="data-label">CORREO</span><span class="data-value" id="mailVal">—</span></div>
+        <div class="data-item"><span class="data-label">TELÉFONO</span><span class="data-value" id="telVal">—</span></div>
+        <div class="data-item"><span class="data-label">FECHA EMISIÓN</span><span class="data-value" id="fechaVal">—</span></div>
+        <div class="data-item"><span class="data-label">MODALIDAD</span><span class="data-value" id="modPagoVal">—</span></div>
+        <div class="data-item full-name-item"><span class="data-label">NOMBRE COMPLETO</span><span class="data-value" id="nombreClienteVal">—</span></div>
+      </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-card-label">LÍNEA DE CRÉDITO</div><div class="stat-card-value" id="lineaCredito">$0.00</div></div>
+      <div class="stat-card"><div class="stat-card-label">INTERÉS MENSUAL</div><div class="stat-card-value">9.051% + IVA</div></div>
+      <div class="stat-card"><div class="stat-card-label">PLAZO (MESES)</div><div class="stat-card-value" id="mesesResumen">16</div></div>
+      <div class="stat-card"><div class="stat-card-label">MÍNIMO A PAGAR</div><div class="stat-card-value" id="minimoPagar">$0.00</div></div>
+      <div class="stat-card"><div class="stat-card-label">PAGO MENSUAL</div><div class="stat-card-value highlight" id="pagoMensual">—</div></div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-container">
+      <table class="amort-table">
+        <thead>
+          <tr><th>MES</th><th>PAGO MENSUAL</th><th>INTERÉS</th><th>CAPITAL</th><th>SALDO RESTANTE</th> </tr>
+        </thead>
+        <tbody id="amortBody"></tbody>
+       </table>
+    </div>
+
+    <!-- NOTAS EXPLICATIVAS COMPLETAS (texto original que pediste mantener) -->
+    <div class="notes-area">
+      <div class="notes-text">
+        <p>
+          Este préstamo tiene un plazo de <span class="highlight" data-nota="meses">16 meses</span> 
+          con una tasa mensual fija del 9.051% + IVA. En este periodo el monto total para devolver es de: 
+          <span class="highlight" id="notaTotal">$0.00</span>.
+        </p>
+        <p>
+          Esta tabla muestra de forma ilustrativa cómo se distribuyen los intereses y el capital a lo largo de los 
+          <span class="highlight" data-nota="meses">16 meses</span>. 
+          Cada mes, el préstamo genera un interés fijo de 
+          <span class="highlight" id="notaIntMes">$0.00</span>. 
+          Es decir, independientemente de si se paga mes a mes o al final, estos intereses se van acumulando.
+        </p>
+        <p>
+          La tabla te permite ver cómo, si se fueran haciendo pagos mensuales, una parte cubriría los intereses y otra parte amortizaría (reduciría) el capital.
+        </p>
+        <p>
+          Al final de los <span class="highlight" data-nota="meses">16 meses</span> se habría pagado tanto el capital como los intereses generados. 
+          Esto no significa que deba pagar mensualmente, pero te ayuda a entender cuánto se está generando por intereses cada mes y cómo se compone el total a pagar.
+        </p>
+      </div>
+    </div>
+
+    <!-- Firma -->
+<div class="signature-modern">
+  <div class="sig-canvas-area">
+    <canvas id="sigCanvas"></canvas>
+    <img id="sigImage" alt="firma" style="display:none;" />
+  </div>
+
+  <div class="sig-buttons">
+    <button id="sigClear">✖️ Limpiar</button>
+    <button id="sigSave">✓ Guardar firma</button>
+  </div>
+
+  <input type="hidden" id="firmaDataUrl" />
+
+  <div class="signature-line-area">
+    <div class="thumbprints-row">
+      <div class="thumb-box">
+        <span class="thumb-label">PULGAR<br>IZQUIERDO</span>
+      </div>
+
+      <div class="thumb-box">
+        <span class="thumb-label">PULGAR<br>DERECHO</span>
+      </div>
+    </div>
+
+    <img id="firmaImg" alt="" />
+    <div class="signature-divider"></div>
+    <p id="firmaNombre">—</p>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="action-buttons">
+  <button id="btnPrint" class="action-btn" type="button">🖨️ Imprimir</button>
+  <button id="btnSave" class="action-btn green" type="button">💾 Guardar</button>
+  <button id="btnBack" class="action-btn gray" type="button">⬅️ Volver</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(() => {
+  'use strict';
+
+  const MAX_MESES = 16;
+
+  const $id = (id) => document.getElementById(id);
+  const $qs = (sel) => document.querySelector(sel);
+
+  function getAmortBody() {
+    return $id('amortBody') || $qs('.amortization-table tbody');
+  }
+
+  function fmtMXN(v) {
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN'
+    }).format(Number(v || 0));
+  }
+
+  function round2(n) {
+    return Math.round((Number(n || 0) + Number.EPSILON) * 100) / 100;
+  }
+
+  function parseMoney(s) {
+    if (s == null) return 0;
+
+    let t = String(s)
+      .replace(/\u00A0/g, '')
+      .replace(/\s+/g, '')
+      .replace(/[^\d.,-]/g, '');
+
+    if (!t) return 0;
+
+    const lastDot = t.lastIndexOf('.');
+    const lastComma = t.lastIndexOf(',');
+
+    let decSep = null;
+    if (lastDot === -1 && lastComma === -1) {
+      decSep = null;
+    } else if (lastDot > lastComma) {
+      decSep = '.';
+    } else {
+      decSep = ',';
+    }
+
+    if (decSep) {
+      const parts = t.split(decSep);
+      const intPart = parts.slice(0, -1).join(decSep).replace(/[.,]/g, '');
+      const decPart = parts[parts.length - 1];
+      t = `${intPart}.${decPart}`;
+    } else {
+      t = t.replace(/[.,]/g, '');
+    }
+
+    const n = Number(t);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function sanitizeMeses(v) {
+    let n = parseInt(String(v ?? '').replace(/[^\d]/g, ''), 10);
+    if (!Number.isFinite(n) || n < 1) n = 1;
+    if (n > MAX_MESES) n = MAX_MESES;
+    return n;
+  }
+
+  function updateMesesText(meses) {
+    const txt = `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+    document.querySelectorAll('[data-nota="meses"]').forEach(el => {
+      el.textContent = txt;
+    });
+  }
+
+  function actualizarNota({ meses, interesMensual, montoMin }) {
+    const notaIntMes = $id('notaIntMes');
+    if (notaIntMes) notaIntMes.textContent = fmtMXN(interesMensual);
+
+    const notaTotal = $id('notaTotal');
+    if (notaTotal) notaTotal.textContent = fmtMXN(montoMin);
+
+    updateMesesText(meses);
+  }
+
+  function renderTable() {
+    const tbody = getAmortBody();
+    if (!tbody) return;
+
+    const lineaCredito = parseMoney($id('lineaCredito')?.textContent || 0);
+    const montoMin = parseMoney($id('minimoPagar')?.textContent || 0);
+    const meses = sanitizeMeses($id('mesesResumen')?.textContent || 12);
+
+    tbody.innerHTML = '';
+
+    if (!(lineaCredito > 0 && montoMin > 0 && meses > 0)) return;
+
+    // ===== LÓGICA CORRECTA =====
+    const pagoMensual = round2(montoMin / meses);
+    const capitalMensual = round2(lineaCredito / meses);
+    const interesMensual = round2(pagoMensual - capitalMensual);
+
+    // ESTE saldo sí debe arrancar en mínimo a pagar
+    let saldoRestante = round2(montoMin);
+
+    // fila 0
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr style="background:#FEFBF5;">
+        <td style="font-weight:800;">0</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td style="font-weight:700;">${fmtMXN(saldoRestante)}</td>
+      </tr>
+    `);
+
+    for (let i = 1; i <= meses; i++) {
+      let saldoFila;
+
+      if (i === meses) {
+        saldoFila = '—';
+      } else {
+        saldoRestante = round2(saldoRestante - pagoMensual);
+        saldoFila = fmtMXN(saldoRestante);
+      }
+
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td style="font-weight:700;">${i}</td>
+          <td>${fmtMXN(pagoMensual)}</td>
+          <td>${fmtMXN(interesMensual)}</td>
+          <td>${fmtMXN(capitalMensual)}</td>
+          <td>${saldoFila}</td>
+        </tr>
+      `);
+    }
+
+    const pagoEl = $id('pagoMensual');
+    if (pagoEl) pagoEl.textContent = fmtMXN(pagoMensual);
+
+    actualizarNota({
+      meses,
+      interesMensual,
+      montoMin
+    });
+  }
+
+  window.refreshAmort = renderTable;
+  window.AMORT_apply = renderTable;
+
+  document.addEventListener('DOMContentLoaded', renderTable);
+  window.addEventListener('beforeprint', renderTable);
+})();
+</script>
+<script>
+  // ===================== CARGA DE DATOS (MANTENIENDO TU LÓGICA ORIGINAL) =====================
+  (function(){
+const BASE_URL = (() => {
+  const { origin, pathname } = window.location;
+
+  // Local XAMPP
+  if (pathname.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public`;
+  }
+
+  if (pathname.includes('/hp/public/')) {
+    return `${origin}/hp/public`;
+  }
+
+  // Render / Railway
+  return origin;
+})();
+    const API_SOLI = `${BASE_URL}/app/controllers/obtener_datos/get_solicitud_por_id.php`;
+    const API_NSS = `${BASE_URL}/app/controllers/obtener_datos/get_nss.php`;
+    const API_META = `${BASE_URL}/app/controllers/concredito/leer_meta.php`;
+    
+    const $id = id => document.getElementById(id);
+    const fmtMXN = v => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(v||0);
+    const fechaLarga = () => new Intl.DateTimeFormat('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    const getSolicitudId = () => {
+      const sp = new URLSearchParams(location.search);
+      return Number(sp.get('solicitud_id') || sp.get('id') || 0);
+    };
+    
+    async function safeJSON(resp){
+      const txt = await resp.text();
+      try { return JSON.parse(txt); } catch(e){ throw new Error('Error en servidor'); }
+    }
+    
+    async function loadCliente(sid){
+      const resp = await fetch(`${API_SOLI}?solicitud_id=${sid}`,{credentials:'same-origin'});
+      const json = await safeJSON(resp);
+      if(!json?.ok) return;
+      const c = json.cliente || {};
+      const sol = json.solicitud || {};
+      $id('curpVal').innerText = c.curp || '—';
+      $id('rfcVal').innerText = c.rfc || '—';
+      $id('mailVal').innerText = c.correo || '—';
+      $id('telVal').innerText = c.telefono || '—';
+      let nombre = c.nombre || [c.nombres, c.apellido_paterno, c.apellido_materno].filter(Boolean).join(' ') || '—';
+      $id('nombreClienteVal').innerText = nombre;
+      $id('firmaNombre').innerText = nombre;
+      
+      const folioRaw = String(sol.folio || '').trim();
+      const folioElem = document.getElementById('folioText');
+      if(folioElem && folioRaw !== ''){
+        folioElem.innerText = `Folio: ${folioRaw}`;
+      } else if(folioElem && sid){
+        folioElem.innerText = `Folio: CIPE-${String(sid).padStart(3,'0')}`;
+      }
+      
+      let frecuencia = (sol.frecuencia_pago || sol.frecuencia || '').toLowerCase();
+      if(frecuencia.includes('mens')) $id('modPagoVal').innerText = 'MENSUAL';
+      else if(frecuencia.includes('quin')) $id('modPagoVal').innerText = 'QUINCENAL';
+      else $id('modPagoVal').innerText = 'MENSUAL';
+      let meses = Number(sol.plazo_meses ?? sol.plazo ?? sol.meses ?? 16);
+      if(!isFinite(meses) || meses<1) meses=16;
+      if(meses>16) meses=16;
+      if($id('mesesResumen')) $id('mesesResumen').innerText = meses;
+      document.querySelectorAll('[data-nota="meses"]').forEach(el => el.innerText = `${meses} meses`);
+      if(window.AMORT_apply) window.AMORT_apply();
+    }
+    
+    async function loadNSS(sid){
+      try{
+        const resp = await fetch(`${API_NSS}?solicitud_id=${sid}`,{credentials:'same-origin'});
+        const json = await safeJSON(resp);
+        if(json?.ok && json.data) $id('nssVal').innerText = json.data.nss || '—';
+        else $id('nssVal').innerText = '—';
+      } catch(e){ $id('nssVal').innerText = '—'; }
+    }
+    
+    async function loadMeta(sid){
+      const resp = await fetch(`${API_META}?solicitud_id=${sid}`,{credentials:'same-origin'});
+      const json = await safeJSON(resp);
+      if(json?.ok && json.meta){
+        const linea = Number(json.meta.monto_linea_credito) || 0;
+        const min = Number(json.meta.monto_total_pagar) || 0;
+        if($id('lineaCredito')) $id('lineaCredito').innerText = fmtMXN(linea);
+        if($id('minimoPagar')) $id('minimoPagar').innerText = fmtMXN(min);
+        if($id('notaTotal')) $id('notaTotal').innerText = fmtMXN(min);
+        if(window.AMORT_apply) window.AMORT_apply();
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded',()=>{
+      const fechaEl = $id('fechaVal');
+      if(fechaEl && fechaEl.innerText === '—') fechaEl.innerText = fechaLarga();
+      const sid = getSolicitudId();
+      if(sid){
+        loadCliente(sid).catch(console.warn);
+        loadNSS(sid).catch(console.warn);
+        loadMeta(sid).catch(console.warn);
+      } else {
+        if(window.AMORT_apply) window.AMORT_apply();
+      }
+    });
+  })();
+</script>
+
+<script>
+  // ===================== FIRMA DIGITAL =====================
+  (function(){
+    const canvas = document.getElementById('sigCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const imgPad = document.getElementById('sigImage');
+    const imgLine = document.getElementById('firmaImg');
+    const hidden = document.getElementById('firmaDataUrl');
+    const clearBtn = document.getElementById('sigClear');
+    const saveBtn = document.getElementById('sigSave');
+    
+    function resizeCanvas(){
+      const parent = canvas.parentElement;
+      const rect = parent.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, rect.width * ratio);
+      canvas.height = Math.max(1, rect.height * ratio);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#1f5680';
+      if(hidden.value){
+        const img = new Image();
+        img.onload = () => { ctx.clearRect(0,0,rect.width,rect.height); ctx.drawImage(img,0,0,rect.width,rect.height); };
+        img.src = hidden.value;
+      } else { ctx.clearRect(0,0,rect.width,rect.height); }
+    }
+    
+    let drawing = false, lastX=0, lastY=0;
+    const getPos = e => {
+      const rect = canvas.getBoundingClientRect();
+      let cx = e.clientX, cy = e.clientY;
+      if(e.touches){ cx = e.touches[0].clientX; cy = e.touches[0].clientY; }
+      return { x: cx - rect.left, y: cy - rect.top };
+    };
+    const start = e => { drawing=true; const p=getPos(e); lastX=p.x; lastY=p.y; e.preventDefault(); };
+    const draw = e => { if(!drawing) return; const p=getPos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; e.preventDefault(); };
+    const end = () => { drawing=false; };
+    
+    canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',draw); canvas.addEventListener('mouseup',end);
+    canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',draw,{passive:false}); canvas.addEventListener('touchend',end);
+    window.addEventListener('resize',resizeCanvas);
+    
+    clearBtn?.addEventListener('click',()=>{
+      const rect = canvas.parentElement.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      if(imgPad){ imgPad.style.display='none'; imgPad.src=''; }
+      if(imgLine){ imgLine.classList.remove('show'); imgLine.src=''; }
+      if(hidden) hidden.value='';
+    });
+    saveBtn?.addEventListener('click',()=>{
+      const data = canvas.toDataURL('image/png');
+      if(imgPad){ imgPad.src=data; imgPad.style.display='block'; }
+      if(imgLine){ imgLine.src=data; imgLine.classList.add('show'); }
+      if(hidden) hidden.value=data;
+    });
+    setTimeout(resizeCanvas, 120);
+    document.addEventListener('DOMContentLoaded', resizeCanvas);
+  })();
+</script>
+
+<script>
+  // ===================== BOTONES =====================
+  (function(){
+const BASE_URL = (() => {
+  const { origin, pathname } = window.location;
+
+  // Local XAMPP
+  if (pathname.includes('/sempiternal/public/')) {
+    return `${origin}/sempiternal/public`;
+  }
+
+  if (pathname.includes('/hp/public/')) {
+    return `${origin}/hp/public`;
+  }
+
+  // Render / Railway
+  return origin;
+})();
+    const API_GUARDAR_AMORT = `${BASE_URL}/app/controllers/amortizacion/guardar_firma.php`;
+
+    function getSolicitudId(){
+      const sp = new URLSearchParams(location.search);
+      return Number(sp.get('solicitud_id') || sp.get('id') || 0);
+    }
+
+    async function safeJSON(resp){
+      const txt = await resp.text();
+
+      try {
+        return JSON.parse(txt);
+      } catch(e) {
+        console.error('Respuesta no JSON:', txt);
+        throw new Error('El servidor no regresó JSON válido.');
+      }
+    }
+
+    function swalError(titulo, mensaje){
+      return Swal.fire({
+        icon: 'error',
+        title: titulo,
+        text: mensaje,
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#dc2626',
+        background: '#0b1220',
+        color: '#e5e7eb'
+      });
+    }
+
+    function swalLoading(){
+      return Swal.fire({
+        title: 'Guardando tabla…',
+        html: 'Estoy guardando la tabla de amortización.',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        background: '#0b1220',
+        color: '#e5e7eb',
+        didOpen: () => Swal.showLoading()
+      });
+    }
+
+async function swalGuardado(solicitudId){
+  const pagareUrl = `${BASE_URL}/pagare.php?solicitud_id=${encodeURIComponent(String(solicitudId))}`;
+  const homeUrl = `${BASE_URL}/index.php`;
+
+  const result = await Swal.fire({
+    icon: 'success',
+    title: 'Tabla guardada',
+    html: 'La tabla de amortización se guardó correctamente.<br>¿Deseas avanzar al pagaré?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Avanzar',
+    denyButtonText: 'Salir',
+    cancelButtonText: 'Quedarme aquí',
+    confirmButtonColor: '#0a567d',
+    denyButtonColor: '#64748b',
+    cancelButtonColor: '#475569',
+    reverseButtons: true,
+    background: '#0b1220',
+    color: '#e5e7eb'
+  });
+
+  if (result.isConfirmed) {
+    window.location.href = pagareUrl;
+    return;
+  }
+
+  if (result.isDenied) {
+    window.location.href = homeUrl;
+  }
+}
+    async function guardarAmortizacion(){
+      const solicitud_id = getSolicitudId();
+
+      console.log('Solicitud detectada:', solicitud_id);
+      console.log('URL guardar amortización:', API_GUARDAR_AMORT);
+
+      if (!solicitud_id) {
+        swalError(
+          'Falta solicitud',
+          'No encontré el ID de solicitud en la URL.'
+        );
+        return;
+      }
+
+      if (window.AMORT_apply) {
+        window.AMORT_apply();
+      }
+
+      const btn = document.getElementById('btnSave');
+      const oldText = btn?.textContent || '💾 Guardar firma';
+
+      const firmaDataUrl = document.getElementById('firmaDataUrl')?.value || '';
+
+      const fd = new FormData();
+      fd.append('solicitud_id', String(solicitud_id));
+      fd.append('firma_dataurl', firmaDataUrl);
+
+      try {
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Guardando…';
+        }
+
+        swalLoading();
+
+        const res = await fetch(API_GUARDAR_AMORT, {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin'
+        });
+
+        const json = await safeJSON(res);
+
+        console.log('Respuesta guardar amortización:', json);
+
+        if (!json.ok) {
+          throw new Error(json.message || 'No se pudo guardar la amortización.');
+        }
+
+       await swalGuardado(solicitud_id);
+
+      } catch (err) {
+        console.error('Guardar amortización:', err);
+
+        swalError(
+          'No se pudo guardar',
+          err.message || 'Error al guardar amortización.'
+        );
+
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = oldText;
+        }
+      }
+    }
+
+    document.getElementById('btnPrint')?.addEventListener('click', () => {
+      if (window.AMORT_apply) window.AMORT_apply();
+      setTimeout(() => window.print(), 100);
+    });
+
+    document.getElementById('btnBack')?.addEventListener('click', () => {
+      window.history.back();
+    });
+
+    document.getElementById('btnSave')?.addEventListener('click', guardarAmortizacion);
+  })();
+</script>
+</body>
+</html>

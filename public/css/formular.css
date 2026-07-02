@@ -1,0 +1,673 @@
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+/* Agrega esto a tu sección <style> */
+.loan-details-table.no-top-border tr:first-child td {
+    border-top: none; /* Elimina el borde superior de la primera fila de la segunda tabla */
+}
+
+/* Opcional: Si quieres que no haya borde de tabla entre ellas, aunque ya usas border-collapse */
+/* Esto asegura que el borde superior de la segunda tabla y el inferior de la primera no se superpongan */
+.credit-application-table {
+    border-bottom: none; /* Elimina el borde inferior de la primera tabla */
+}
+.loan-details-table {
+    border-top: none; /* Elimina el borde superior de la segunda tabla */
+}
+
+/* Asegúrate de que las celdas de la última fila de la primera tabla tengan su borde inferior */
+.credit-application-table tr:last-child td {
+    border-bottom: 1px solid #2a6ebb;
+}
+
+/* Y las celdas de la primera fila de la segunda tabla no tengan borde superior, porque ya lo tiene la fila de arriba */
+.loan-details-table tr:first-child td {
+    border-top: none;
+}
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 8px;
+      background: white;
+      padding: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
+      font-size: 10px;
+      padding: 4px;
+      margin-bottom: 10px;
+      width: 100%;
+      border: none;
+      outline: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .form-container {
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    label {
+      font-size: 12px;
+      display: block;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #2a6ebb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .formato {
+      font-size: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8px;
+    }
+
+    td, th {
+      border: 1px solid #2a6ebb;
+      padding: 4px;
+      vertical-align: top;
+    }
+
+    .titulo-celda {
+      background-color: #2a6ebb;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+
+.titulo-celda,
+.folio-celda {
+  background-color: #2a6ebb; /* Azul institucional */
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: 1px solid #2a6ebb;
+}
+
+    .radio-list input {
+      margin-right: 4px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      align-items: flex-start;
+      justify-content: space-between;
+      page-break-inside: avoid;
+    }
+
+    .half {
+      flex: 1;
+      width: 50%;
+    }
+
+    .tabla-interna {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: center;
+    }
+    .firma-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px;
+  gap: 20px;
+  page-break-inside: avoid;
+}
+
+.firma-texto {
+  width: 75%;
+  line-height: 1.5;
+}
+
+.firma-cuadro {
+  border: 1px solid #2163b2;
+  width: 250px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: normal;
+  font-size: 10px;
+}
+.sin-borde-firma td,
+.sin-borde-firma th {
+  border: none !important;
+}
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+.logo-container {
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 0;
+  padding-bottom: 5px;
+}
+
+.logo-container img {
+  width: 50px;
+  margin-top: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media print {
+    body {
+    margin: 0;
+    padding: 0;
+  }
+  .logo-container {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  @page {
+    margin-top: 6mm;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  table, td, tr {
+    page-break-inside: avoid !important;
+  }
+}
+
+
+/* Contenedor principal con posición relativa para que ::before funcione */
+#formatoFinal {
+  position: relative;
+  z-index: 0; /* Asegura que el contenido esté por encima del fondo */
+}
+
+/* Marca de agua con logo al centro */
+#formatoFinal::before {
+  content: "";
+  position: fixed; /* ✅ FIXED en lugar de absolute */
+  top: 50%;
+  left: 50%;
+  width: 1000px; /* Ajusta según tamaño deseado */
+  height: 700px;
+  background-image: url('logo.png'); /* ✅ Usa aquí la ruta correcta */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.07; /* Transparencia como en Word */
+  transform: translate(-50%, -50%);
+  z-index: -1; /* Detrás del contenido */
+  pointer-events: none; /* No interfiere con clics */
+}
+
+.formulario-multipaso {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+.formulario-multipaso .form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 25px;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-multipaso h1,
+.formulario-multipaso h1 {
+  color: #3498db;
+  margin-top: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.formulario-multipaso label {
+  display: block;
+  margin: 15px 0 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.formulario-multipaso input[type="text"],
+.formulario-multipaso input[type="number"],
+.formulario-multipaso input[type="email"],
+.formulario-multipaso input[type="date"],
+.formulario-multipaso select,
+.formulario-multipaso textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.formulario-multipaso input[type="radio"] {
+  margin-right: 5px;
+}
+
+.formulario-multipaso .radio-group {
+  margin: 10px 0;
+}
+
+.formulario-multipaso .radio-group label {
+  font-weight: normal;
+  margin-right: 15px;
+}
+
+.formulario-multipaso button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px 5px;
+}
+
+.formulario-multipaso button:hover {
+  background-color: #2980b9;
+}
+
+.formulario-multipaso .btn-danger {
+  background-color: #e74c3c;
+}
+.formulario-multipaso .btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.formulario-multipaso .btn-secondary {
+  background-color: #7f8c8d;
+}
+.formulario-multipaso .btn-secondary:hover {
+  background-color: #6c7a7d;
+}
+
+.formulario-multipaso .form-step {
+  display: none;
+}
+.formulario-multipaso .form-step.active {
+  display: block;
+}
+
+.formulario-multipaso .progress-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.formulario-multipaso .progress-bar:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ddd;
+  z-index: 1;
+}
+
+.formulario-multipaso .progress-step {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+}
+
+.formulario-multipaso .step-number {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: #ddd;
+  border-radius: 50%;
+  line-height: 30px;
+  font-weight: bold;
+  color: #666;
+}
+
+.formulario-multipaso .step-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.formulario-multipaso .progress-step.active .step-number {
+  background: #3498db;
+  color: white;
+}
+
+.formulario-multipaso .progress-step.completed .step-number {
+  background: #2ecc71;
+  color: white;
+}
+
+.formulario-multipaso .navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.formulario-multipaso .signature-container {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.formulario-multipaso .form-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border-left: 4px solid #3498db;
+}
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    .form-container {
+      background: white;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #2a6ebb;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1f5898;
+    }
+
+.folio-en-esquina {
+    position: absolute;
+    top: 40px;   /* Ajusta la distancia desde la parte superior */
+    right: 80px; /* Ajusta la distancia desde la parte derecha */
+    left: auto;
+
+    white-space: nowrap; /* Mantiene el texto en una sola línea */
+
+    /* ***** ESTOS SON LOS ESTILOS ELIMINADOS/SIMPLIFICADOS ***** */
+    font-size: 12px;     /* Mantenemos el tamaño de fuente, ajusta si es necesario */
+    font-weight: bold;   /* Mantenemos la negrita, ajusta si es necesario */
+    color: #333;         /* Mantenemos el color, ajusta si es necesario */
+
+    /* Estas propiedades son las que daban el "diseño" (cuadro, fondo, relleno),
+       y las hemos quitado o puesto a valores por defecto para un estilo "normal". */
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background-color: transparent; /* Fondo transparente */
+    z-index: 10; /* Se mantiene para asegurar que esté por encima de otros elementos */
+}
+
+
+    .seccion-doble {
+  display: flex;
+  flex-wrap: nowrap; /* evita que se baje */
+  align-items: stretch; /* fuerza igual altura */
+  width: 100%;
+  gap: 0;
+}
+
+.half {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+.tabla-interna {
+  flex-grow: 1; /* asegura altura completa */
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+h1 {
+  font-size: 24px;
+  color: #2a6ebb;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #2a6ebb;
+  padding-bottom: 10px;
+}
+
+.step h1 {
+  text-align: center;
+  font-size: 26px;
+  color: #1B0088;
+  font-weight: bold;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.step h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: #1B0088;
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+/* TITULOS H2 */
+.step h2 {
+  text-align: center;
+  font-size: 22px;
+  color: #1B0088;
+  font-weight: bold;
+  margin-bottom: 12px;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.step h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #1B0088;
+  border-radius: 2px;
+  margin: 8px auto 0;
+}
+
+/* TITULOS H3 */
+.step h3 {
+  text-align: left;
+  font-size: 16px;
+  color: #1B0088;
+  font-weight: bold;
+  margin: 16px 0 10px;
+  border-left: 4px solid #1B0088;
+  padding-left: 10px;
+  background-color: #fdfdfd;
+}
+
+
+--------------------------------------------------
+#grupo-propia,
+#grupo-hipoteca,
+#grupo-propietario {
+  transition: all 0.3s ease;
+}
+
+.firma-bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.firma-bloque label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.firma-bloque canvas {
+  border: 1px solid #ccc;
+  cursor: crosshair;
+}
+
+.firma-bloque button {
+  margin-top: 10px;
+}
+
+
+/* Evita desplazamiento/zoom mientras se dibuja dentro del bloque */
+.firma-bloque canvas { touch-action: none; }
+.firma-bloque { overscroll-behavior: contain; } /* corta el “arrastre” hacia el padre */
+
+.pregunta-radio {
+  margin-bottom: 20px;
+}
+
+.pregunta-radio label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.radio-fila {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.radio-fila label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+}
+
+
+
+
+@media print {
+  /* Solo mostrar el formato */
+  html, body { margin: 0; padding: 0; }
+  body * { visibility: hidden !important; }
+  #formatoFinal, #formatoFinal * { visibility: visible !important; }
+  #formatoFinal { position: static; width: 100%; }
+
+  /* Ocultar SIEMPRE cualquier botón e interfaces flotantes */
+  #btnImprimir,
+  #btnDescargarPDF,
+  button,
+  [type="button"],
+  [type="submit"],
+  .btn,
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Por si alguno es fixed, neutraliza stacking */
+  #btnImprimir, #btnDescargarPDF {
+    position: static !important;
+    z-index: auto !important;
+  }
+
+  /* Opcional: evita URLs en enlaces impresos */
+  a[href]:after { content: ""; }
+}
+
+
+
+.firma-cell { padding:8px; vertical-align:top; text-align:center; }
+.firma-box  { width:210px; margin:0 auto; text-align:center; }
+.firma-box canvas { display:block; border:1px solid #ccc; }
+.firma-line { width:100%; border:0; border-top:1px solid #000; margin:6px 0 4px; }
+.firma-label{ font-size:9px; font-weight:700; text-align:center; }

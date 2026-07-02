@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviso de Privacidad</title>
+  <style>
+:root{
+  --azul:#536f99;
+  --texto:#1a1a1a;
+  --link:#6a63a8;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:#d9d9d9;
+  font-family: Arial, Helvetica, sans-serif;
+  color:var(--texto);
+}
+
+.page{
+  width:816px;
+  min-height:1056px;
+  margin:0 auto;
+  background:#fff;
+  padding:24px 48px 95px;
+  position:relative;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+.acciones{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:10px 0 20px;
+}
+
+.btn{
+  appearance:none;
+  border:1px solid #0d6e9b;
+  background:#0d6e9b;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  text-decoration:none;
+  line-height:1;
+}
+
+.btn:hover{
+  filter:brightness(.95);
+}
+
+.btn.sec{
+  background:#fff;
+  color:#0d6e9b;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+/* =========================
+   ENCABEZADO
+========================= */
+.header-top{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:4px;
+  text-align:center;
+}
+
+.logo-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:260px;
+  height:70px;     /* un poco más alto para que quepa más grande */
+  overflow:hidden;
+}
+
+.logo-center img{
+  width:210px;     /* aquí lo hacemos más grande */
+  height:auto;
+  object-fit:contain;
+  display:block;
+  margin:-16px auto -16px;   /* mantiene el recorte arriba y abajo */
+}
+
+.folio-solicitud{
+  text-align:center;
+  font-size:12px;
+  font-weight:700;
+  color:#4b4b4b;
+  letter-spacing:.2px;
+  margin-top:2px;
+}
+
+/* =========================
+   TÍTULOS
+========================= */
+.titulo-doc{
+  text-align:center;
+  margin:4px 0 18px;
+}
+
+.titulo-doc h1{
+  font-size:20px;
+  font-weight:700;
+  color:var(--azul);
+  text-transform:uppercase;
+  margin-bottom:2px;
+}
+
+.subtitulo{
+  font-size:11px;
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.titulo-doc h2{
+  font-size:13px;
+  font-weight:700;
+  color:var(--azul);
+  text-transform:uppercase;
+  margin-bottom:2px;
+}
+
+.folio-centro{
+  font-size:11px;
+  text-align:center;
+  margin-bottom:2px;
+}
+
+/* =========================
+   CONTENIDO
+========================= */
+.content{
+  width:100%;
+  max-width:700px;
+  margin: 65px auto 0;
+}
+.aviso-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:35px;
+}
+
+.bloque{
+  margin-bottom:16px;
+}
+
+.bloque h3{
+  color:var(--azul);
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.bloque p{
+  font-size:13px;
+  line-height:1.25;
+  text-align:justify;
+  margin-bottom:5px;
+}
+
+.bloque ul{
+  margin:5px 0 0 19px;
+  padding:0;
+}
+
+.bloque li{
+  font-size:12px;
+  line-height:1.3;
+  margin-bottom:2px;
+}
+
+.mini-titulo{
+  font-size:11px;
+  font-style:italic;
+  font-weight:700;
+  margin:6px 0 3px;
+}
+
+a{
+  color:var(--link);
+  text-decoration:underline;
+  word-break:break-word;
+}
+
+/* =========================
+   FIRMA
+========================= */
+.firma{
+  position:absolute;
+  left:50%;
+  bottom:42px;
+  transform:translateX(-50%);
+  width:240px;
+  text-align:center;
+}
+
+.firma-linea{
+  width:100%;
+  border-top:1px solid #000;
+  margin:0 auto 3px;
+}
+
+.firma-texto{
+  font-size:10.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+
+/* =========================
+   IMPRESIÓN
+========================= */
+@media print{
+  body{
+    background:#fff;
+  }
+
+  .acciones{
+    display:none !important;
+  }
+
+  .page{
+    margin:0 auto;
+    width:816px;
+    min-height:1056px;
+    box-shadow:none;
+    background:#fff;
+  }
+}
+</style>
+</head>
+<body>
+
+  <div class="acciones">
+  <a class="btn sec" href="https://hp-v1-production.up.railway.app/index.php">Volver al inicio</a>
+  <button class="btn" type="button" id="btnImprimir">Imprimir</button>
+</div>
+<div class="page">
+  <!-- Encabezado -->
+<div class="header-top">
+  <div class="logo-center">
+    <img class="logo logo-cip" src="/img/logo.png" alt="Logo CIP">
+  </div>
+
+  <div id="folioSolicitud" class="folio-solicitud">FOLIO: CIP-2026-00015</div>
+</div>
+
+  <!-- Títulos -->
+  <div class="titulo-doc">
+    <h1>CONSULTORÍA INTEGRAL DE PENSIONES S.A.S. DE C.V.</h1>
+    <h2>AVISO DE PRIVACIDAD SIMPLIFICADO</h2>
+    <p class="subtitulo">(Ley Federal de Protección de Datos Personales en Posesión de los Particulares)</p>
+  </div>
+
+  <!-- Contenido -->
+  <div class="content aviso-grid">
+    <!-- Columna izquierda -->
+    <div class="col">
+      <section class="bloque">
+        <h3>RESPONSABLE DEL TRATAMIENTO DE DATOS PERSONALES</h3>
+        <p>
+          CONSULTORÍA INTEGRAL DE PENSIONES S.A.S. DE C.V., con domicilio en José María Pino Suárez 119 Pte.,
+          Santa Ana Tlapaltitlán, C.P. 50160, Toluca, Estado de México, es responsable del uso y
+          protección de sus datos personales.
+        </p>
+
+        <ul>
+          <li>Departamento de Protección de Datos Personales</li>
+          <li>Correo electrónico: privacidad@cipmexico.com.mx</li>
+          <li>Teléfono: (722) 8038 635</li>
+          <li>Horario de atención: lunes a viernes de 9:00 a 18:00 hrs</li>
+        </ul>
+      </section>
+
+      <section class="bloque">
+        <h3>DATOS PERSONALES QUE RECABAMOS</h3>
+        <ul>
+          <li>Datos de identificación</li>
+          <li>Datos de contacto</li>
+          <li>Datos laborales</li>
+          <li>Datos financieros y patrimoniales</li>
+          <li>Documentos oficiales</li>
+        </ul>
+      </section>
+
+      <section class="bloque">
+        <h3>FINALIDADES DEL TRATAMIENTO</h3>
+
+        <p class="mini-titulo">Finalidades Primarias</p>
+        <ul>
+          <li>Verificar identidad</li>
+          <li>Evaluar historial crediticio</li>
+          <li>Cumplir requisitos legales</li>
+          <li>Integrar expedientes</li>
+        </ul>
+
+        <p class="mini-titulo">Finalidades Secundarias</p>
+        <ul>
+          <li>Medir capacidad de pago</li>
+          <li>Realizar análisis estadísticos</li>
+          <li>Enviar información comercial</li>
+        </ul>
+      </section>
+
+      <section class="bloque">
+        <h3>TRANSFERENCIAS</h3>
+        <p>
+          Sus datos personales podrán ser transferidos a autoridades regulatorias y socios financieros
+          para fines legales y operativos.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="col">
+            <section class="bloque">
+        <h3>DERECHOS ARCO</h3>
+        <p>
+          Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación u Oposición enviando
+          su solicitud al correo electrónico privacidad@cipmexico.com.mx.
+        </p>
+      </section>
+      <section class="bloque">
+        <h3>REVOCACIÓN DEL CONSENTIMIENTO</h3>
+        <p>
+          Puede solicitar la revocación de su consentimiento mediante envío de solicitud al correo
+          electrónico antes señalado.
+        </p>
+      </section>
+
+      <section class="bloque">
+        <h3>LIMITACIÓN DEL USO O DIVULGACIÓN</h3>
+        <p>
+          Puede solicitar la limitación del uso o divulgación de sus datos personales a través del
+          correo electrónico indicado o inscribirse al Registro Público para Evitar Publicidad (REPEP).
+        </p>
+      </section>
+
+      <section class="bloque">
+        <h3>TECNOLOGÍAS DE RASTREO</h3>
+        <p>
+          El sitio web puede utilizar cookies u otras tecnologías de rastreo; se informará
+          oportunamente al usuario.
+        </p>
+      </section>
+
+      <section class="bloque">
+        <h3>VIDEOVIGILANCIA</h3>
+        <p>
+          Las instalaciones pueden contar con cámaras de videovigilancia. Las imágenes serán
+          conservadas por un periodo máximo de 30 días.
+        </p>
+      </section>
+
+      <section class="bloque">
+        <h3>CAMBIOS AL AVISO</h3>
+        <p>
+          Cualquier modificación al presente aviso será publicada en:
+        <a href="https://www.cipmexico.com.mx/Aviso_de_Privacidad_CIP_Financial.pdf" target="_blank">
+          Aviso de Privacidad
+        </a>
+        </p>
+      </section>
+
+      <section class="bloque">
+        <h3>AVISO INTEGRAL</h3>
+        <p>
+          El Aviso de Privacidad Integral se encuentra disponible en:
+          <strong>www.cipmexico.com.mx</strong>
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <!-- Firma -->
+  <div class="firma">
+    <div class="firma-linea"></div>
+    <div class="firma-texto" id="nombreClienteFirma">Nombre del Cliente</div>
+  </div>
+</div>
+
+
+<script>
+(() => {
+  const URL_GET_SOLICITUD = 'https://hp-v1-production.up.railway.app/app/controllers/obtener_datos/get_solicitud_por_id.php';
+
+  function getParam(name) {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(name);
+  }
+
+  function textoSeguro(v) {
+    return (v ?? '').toString().trim();
+  }
+
+  function construirNombreCliente(cliente) {
+    if (!cliente || typeof cliente !== 'object') return '';
+
+    return [
+      textoSeguro(cliente.nombres),
+      textoSeguro(cliente.apellido_paterno),
+      textoSeguro(cliente.apellido_materno)
+    ].filter(Boolean).join(' ') || 'Nombre del Cliente';
+  }
+
+  async function cargarSolicitudAviso() {
+    try {
+      const solicitudId = getParam('solicitud_id') || getParam('id');
+      const folioParam  = getParam('folio');
+
+      if (!solicitudId && !folioParam) {
+        console.warn('No se encontró solicitud_id, id o folio en la URL');
+        return;
+      }
+
+      const url = new URL(URL_GET_SOLICITUD);
+
+      if (solicitudId) {
+        url.searchParams.set('solicitud_id', solicitudId);
+      } else {
+        url.searchParams.set('folio', folioParam);
+      }
+
+      const resp = await fetch(url.toString(), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status}`);
+      }
+
+      const data = await resp.json();
+
+      if (!data || !data.ok) {
+        throw new Error(data?.message || 'No se pudo obtener la solicitud');
+      }
+
+      const cliente = data.cliente || {};
+      const solicitud = data.solicitud || {};
+
+      const nombreCliente = construirNombreCliente(cliente);
+      const folio = textoSeguro(solicitud.folio);
+
+      const nombreFirmaEl = document.getElementById('nombreClienteFirma');
+      if (nombreFirmaEl) {
+        nombreFirmaEl.textContent = nombreCliente;
+      }
+
+      const folioEl = document.getElementById('folioSolicitud');
+      if (folioEl) {
+        folioEl.textContent = folio ? `FOLIO: ${folio}` : '';
+      }
+
+    } catch (error) {
+      console.error('Error al cargar datos del aviso:', error);
+
+      const nombreFirmaEl = document.getElementById('nombreClienteFirma');
+      if (nombreFirmaEl) {
+        nombreFirmaEl.textContent = 'Nombre del Cliente';
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', cargarSolicitudAviso);
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btnImprimir');
+  if (btn) btn.addEventListener('click', () => window.print());
+});
+</script>
+</body>
+</html>

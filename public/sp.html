@@ -1,0 +1,3463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIP Financial Group - Cálculo de Pensión</title>
+    <style>
+     /* ===========================================
+   CSS CORREGIDO PARA UNA SOLA HOJA A4
+   =========================================== */
+
+/* ESTILOS BASE - IMPORTANTE: Fuente más pequeña */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Narrow', 'Arial', sans-serif; /* Fuente más angosta */
+}
+
+/* CONFIGURACIÓN DE PÁGINA A4 */
+@page {
+    size: A4 portrait;
+    margin: 5mm;
+}
+
+/* CONTENEDOR PRINCIPAL - A4 */
+body {
+    width: 210mm; /* Ancho A4 */
+    height: 287mm; /* Alto A4 - margen incluido */
+    margin: 0 auto;
+    padding: 3mm 2mm; /* Márgenes mínimos */
+    font-size: 7.5pt !important; /* Tamaño base más pequeño */
+    line-height: 1;
+    color: #000;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* HEADER SUPER COMPACTO */
+.header {
+    border-bottom: 1pt solid #003366;
+    padding-bottom: 2mm;
+    margin-bottom: 2mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 18mm; /* Altura fija reducida */
+}
+
+.header-logo {
+    width: 70mm;
+    height: 40mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.header-center {
+    text-align: right;
+    flex-grow: 1;
+    padding: 0 2mm;
+}
+
+.header-center h1 {
+    font-size: 10pt !important;
+    color: #003366;
+    margin-bottom: 0.5mm;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 7pt !important;
+    color: #666;
+    margin-bottom: 1mm;
+}
+
+.contact-info {
+    font-size: 6.5pt !important;
+    line-height: 1.1;
+}
+
+.contact-info div {
+    margin: 0.3mm 0;
+}
+
+/* TÍTULOS DE SECCIÓN - MÁS PEQUEÑOS */
+.section-title {
+    background: #003366;
+    color: white;
+    padding: 1.5mm;
+    margin: 1.5mm 0;
+    font-size: 9pt !important;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 1mm;
+}
+
+/* DATOS DEL TITULAR - ULTRA COMPACTO */
+.titular-grid {
+    border: 0.75pt solid #ccc;
+    padding: 2mm;
+    margin-bottom: 2mm;
+    background: #fafafa;
+}
+
+.titular-grid h3 {
+    color: #003366;
+    margin-bottom: 1.5mm;
+    font-size: 8.5pt !important;
+    border-bottom: 0.5pt solid #ddd;
+    padding-bottom: 0.5mm;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 1mm;
+    align-items: center;
+}
+
+.info-label {
+    width: 32mm;
+    font-weight: bold;
+    color: #333;
+    font-size: 7.5pt !important;
+}
+
+.info-input {
+    flex-grow: 1;
+    border: 0.5pt solid #999;
+    padding: 0.5mm 1mm;
+    background: white;
+    min-height: 4mm;
+    font-size: 7.5pt !important;
+}
+
+.pension-row {
+    margin-top: 1.5mm;
+    padding-top: 1.5mm;
+    border-top: 1pt solid #003366;
+}
+
+.pension-box {
+    background: #fff;
+    border: 1pt solid #003366;
+    padding: 1mm 2mm;
+    text-align: center;
+    font-weight: bold;
+    color: #003366;
+    font-size: 10pt !important;
+}
+
+/* TABLAS RÉGIMEN - FUENTE MUY PEQUEÑA */
+.regimen-container {
+    margin-bottom: 2mm;
+}
+
+.regimen-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5mm;
+    font-size: 6.5pt !important; /* Muy pequeña pero legible */
+    table-layout: fixed;
+}
+
+.regimen-table th {
+    background: #e8e8e8;
+    border: 0.5pt solid #000;
+    padding: 1mm;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
+.regimen-table td {
+    border: 0.5pt solid #000;
+    padding: 1mm;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+.main-header {
+    background: #d0d0d0 !important;
+    font-size: 7pt !important;
+}
+
+.sub-header {
+    background: #e0e0e0 !important;
+    font-size: 6.5pt !important;
+}
+
+.pct {
+    font-weight: normal;
+    color: #666;
+    font-size: 6pt !important;
+}
+
+/* CÁLCULO DE PENSIÓN - MÁS COMPACTO */
+.calculation-tables {
+    display: flex;
+    gap: 1.5mm;
+    margin-bottom: 2mm;
+}
+
+.calculation-table-wrapper {
+    flex: 1;
+    border: 0.75pt solid #000;
+}
+
+.table-title {
+    background: #003366;
+    color: white;
+    padding: 1mm;
+    text-align: center;
+    font-weight: bold;
+    font-size: 8pt !important;
+    border-bottom: 0.75pt solid #000;
+}
+
+.calculation-table, .increments-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 6pt !important; /* Extra pequeña */
+}
+
+.calculation-table th,
+.calculation-table td {
+    border: 0.5pt solid #ccc;
+    padding: 0.75mm;
+    text-align: center;
+}
+
+.calculation-table th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+
+.total-box {
+    border-top: 1pt solid #003366;
+    padding: 1mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+}
+
+.total-label {
+    font-weight: bold;
+    color: #003366;
+    font-size: 7pt !important;
+}
+
+.total-value {
+    font-weight: bold;
+    color: #003366;
+    font-size: 8pt !important;
+}
+
+/* SECCIÓN UMA - MÁS PEQUEÑA */
+.uma-container {
+    display: flex;
+    gap: 1.5mm;
+    margin-bottom: 2mm;
+}
+
+.uma-card {
+    flex: 1;
+    border: 0.75pt solid #999;
+    padding: 1.5mm;
+    text-align: center;
+    background: #fafafa;
+}
+
+.uma-card-title {
+    font-weight: bold;
+    font-size: 7pt !important;
+    color: #003366;
+    margin-bottom: 0.5mm;
+}
+
+.uma-year {
+    font-size: 6.5pt !important;
+    color: #666;
+}
+
+.uma-value {
+    font-weight: bold;
+    font-size: 8pt !important;
+    color: #003366;
+    margin: 0.5mm 0;
+}
+
+.age-highlight {
+    background: #e8e8e8;
+    color: #333;
+    padding: 0.5mm;
+    font-size: 6.5pt !important;
+    font-weight: bold;
+    margin-top: 0.5mm;
+}
+
+/* TABLA GRANDE DE EDADES - ULTRA COMPACTA */
+.pension-calculation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 5.8pt !important; /* Mínima legible */
+    margin-bottom: 2mm;
+    table-layout: fixed;
+}
+
+.pension-calculation-table th,
+.pension-calculation-table td {
+    border: 0.5pt solid #ccc;
+    padding: 0.75mm 0.5mm;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.pension-calculation-table th {
+    background: #f0f0f0;
+    font-weight: bold;
+    height: 4mm;
+}
+
+.row-65 td {
+    background: #e8e8e8;
+    font-weight: bold;
+}
+
+/* SECCIÓN COMPARATIVA - MÁS COMPACTA */
+.investment-section {
+    border-top: 1pt solid #003366;
+    padding-top: 1.5mm;
+    margin-top: 1.5mm;
+}
+
+.investment-title {
+    font-weight: bold;
+    text-align: center;
+    font-size: 9pt !important;
+    color: #003366;
+    margin-bottom: 1.5mm;
+}
+
+.investment-layout {
+    display: flex;
+    gap: 1.5mm;
+    margin-bottom: 1.5mm;
+    height: 50mm; /* Altura fija para el layout */
+}
+
+.investment-column {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.investment-chart-wrapper {
+    flex: 0.9;
+    height: 100%;
+}
+
+/* TABLAS DE INFORMACIÓN - PEQUEÑAS */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 6.2pt !important;
+    height: 100%;
+}
+
+.info-table th,
+.info-table td {
+    border: 0.5pt solid #ccc;
+    padding: 1mm 0.5mm;
+    text-align: center;
+    vertical-align: middle;
+    height: 4mm;
+}
+
+.info-table th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+
+.info-row-alt {
+    background: #f9f9f9;
+}
+
+.info-highlight {
+    background: #e8e8e8;
+    font-weight: bold;
+}
+
+.info-header-green {
+    background: #d9ead3 !important;
+    color: #274e13;
+}
+
+/* GRÁFICO - MÁS PEQUEÑO */
+.chart-3d-container {
+    border: 0.75pt solid #999;
+    padding: 1mm;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 35mm;
+    margin-top: 2mm;
+}
+
+.bar-3d {
+    width: 10mm;
+    text-align: center;
+}
+
+.bar-front {
+    background: #4a86e8;
+    width: 100%;
+    height: 25mm; /* Base, se ajustará con JS */
+}
+
+.bar-pmgcdmx .bar-front {
+    background: #6aa84f;
+}
+
+.bar-value {
+    margin-top: 0.5mm;
+    font-weight: bold;
+    font-size: 6pt !important;
+}
+
+.chart-x-labels {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1mm;
+    font-weight: bold;
+    font-size: 6.5pt !important;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 3mm;
+    margin-top: 1mm;
+    font-size: 6pt !important;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 2mm;
+    height: 2mm;
+    margin-right: 0.5mm;
+}
+
+.legend-color.imss {
+    background: #4a86e8;
+}
+
+.legend-color.pmg {
+    background: #6aa84f;
+}
+
+/* FOOTER COMPARATIVA */
+.investment-footer-strip {
+    display: flex;
+    justify-content: space-between;
+    background: #003366;
+    color: white;
+    padding: 1mm 2mm;
+    font-weight: bold;
+    font-size: 6.5pt !important;
+    margin-top: 1mm;
+}
+
+/* AJUSTES ESPECIALES PARA IMPRESIÓN */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 3mm 2mm !important;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Evitar saltos de página */
+    .header, .titular-grid, .regimen-container,
+    .pension-calculation-container, .uma-tables-section,
+    .investment-section, .page-break {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    /* Reducir aún más para garantizar una sola hoja */
+    @media print and (max-height: 287mm) {
+        body {
+            font-size: 7pt !important;
+            padding: 2mm 1mm !important;
+        }
+        
+        .regimen-table {
+            font-size: 6pt !important;
+        }
+        
+        .pension-calculation-table {
+            font-size: 5.5pt !important;
+        }
+        
+        .info-table {
+            font-size: 5.8pt !important;
+        }
+    }
+}
+
+/* BOTÓN DE IMPRESIÓN (solo pantalla) */
+.print-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #003366;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 9pt;
+    z-index: 1000;
+}
+
+.print-button:hover {
+    background: #002244;
+}
+
+/* FORZAR AJUSTE DE ALTURA MÁXIMA */
+.container {
+    max-height: 285mm;
+    overflow: hidden;
+}
+
+/* AJUSTE ESPECIAL: Si aún no cabe, reducir estas medidas */
+@media print {
+    /* Si necesitas más espacio, reduce estos valores */
+    .header { height: 16mm !important; }
+    .investment-layout { height: 45mm !important; }
+    .chart-bars { height: 30mm !important; }
+    .uma-card { padding: 1mm !important; }
+    .pension-calculation-table { font-size: 5.5pt !important; }
+}
+
+
+/* --- NO recortes en pantalla --- */
+body{ overflow: visible !important; }
+.container{ max-height: none !important; overflow: visible !important; }
+
+/* --- SOLO en impresión: si quieres forzar 1 hoja --- */
+@media print{
+  body{ overflow: hidden !important; }
+  .container{ max-height: 285mm !important; overflow: hidden !important; }
+}
+.investment-footer-strip{
+  align-items: center;
+  min-height: 6.5mm;          /* evita corte vertical */
+  padding: 1.2mm 2mm;          /* un poquito más de aire */
+  line-height: 1.2 !important; /* TU line-height:1 la estaba cortando */
+  gap: 3mm;
+  flex-wrap: nowrap;           /* si quieres que NO baje */
+}
+
+/* Si en impresión se sigue cortando, deja que baje a 2 líneas */
+@media print{
+  .investment-footer-strip{
+    flex-wrap: wrap;           /* permite bajar sin recortar */
+    min-height: auto;
+  }
+  .investment-footer-strip span{
+    white-space: normal;
+  }
+}
+@media print{
+  .investment-layout{ height: 46mm !important; } /* antes 50mm */
+  .info-table th, .info-table td{ height: 3.6mm !important; } /* antes 4mm */
+}
+/* ================================
+   FIX DEFINITIVO: Franja azul cortada
+================================ */
+
+/* 1) La franja azul: dale altura real y centrado vertical */
+.investment-footer-strip{
+  display: flex !important;
+  align-items: center !important;
+  padding: 2mm 2mm !important;     /* más aire */
+  min-height: 8mm !important;      /* asegura que "baje" */
+  line-height: 1.25 !important;    /* evita que se rasure */
+  overflow: visible !important;    /* NO cortes el texto */
+  box-sizing: border-box !important;
+}
+
+/* 2) Asegura que sus spans no se “aplasten” */
+.investment-footer-strip span{
+  display: inline-block !important;
+  padding: 0.5mm 0 !important;
+  white-space: nowrap;             /* en pantalla, 1 línea */
+}
+
+/* 3) El problema real: el recorte del contenedor */
+.container{
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* 4) SOLO en impresión: permite 1 hoja sin cortar el footer */
+@media print{
+  body{
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .container{
+    max-height: none !important;   /* quita el recorte */
+    overflow: visible !important;
+    padding-bottom: 3mm !important;/* aire abajo para que no corte */
+  }
+
+  /* si tu layout empuja, bajamos un poco su altura */
+  .investment-layout{ height: 46mm !important; }
+}
+.investment-section{
+  padding-bottom: 3mm; /* aire abajo dentro de la sección */
+}
+
+.investment-footer-strip{
+  margin-top: 2mm;     /* separa la franja del layout */
+  padding: 2mm 2mm;    /* más “baja” visualmente */
+  min-height: 8mm;     /* que no se aplaste */
+  line-height: 1.25;   /* evita que se recorte */
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+
+/* 1) Que el layout NO obligue a pegarse al fondo */
+.investment-layout{
+  height: auto !important;      /* quita la altura fija */
+  min-height: 45mm;             /* si quieres un mínimo */
+  margin-bottom: 3mm !important;/* espacio para que "baje" la franja */
+}
+
+/* 2) La franja azul: separarla y darle aire */
+.investment-footer-strip{
+  margin-top: 3mm !important;   /* aquí “baja” */
+  padding: 2.5mm 2mm !important;
+  min-height: 9mm !important;
+  line-height: 1.25 !important;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* 3) Si el contenedor recorta, esto evita cortes */
+.investment-section{
+  padding-bottom: 4mm !important;
+}
+
+/* ================================
+   SELECTS DENTRO DE TABLAS (FIX)
+================================ */
+
+.regimen-table td select,
+.pension-select{
+  width: 100% !important;        /* ocupa SOLO la celda */
+  max-width: 100% !important;
+  box-sizing: border-box;
+  padding: 1mm 1.5mm;
+  font-size: 6.8pt !important;   /* un poco más chico */
+  line-height: 1.1;
+  height: 5mm;                   /* altura controlada */
+  border: 0.5pt solid #999;
+  background: #fff;
+}
+
+/* ================================
+   SELECT → TEXTO EN PDF / PRINT
+================================ */
+
+/* valor impreso oculto por defecto */
+.print-value{
+  display: none;
+  font-size: 7pt;
+  font-weight: 600;
+  color: #000;
+  line-height: 1.2;
+}
+
+/* SOLO en impresión / PDF */
+@media print{
+  /* ocultamos el select */
+  .select-print-wrapper select{
+    display: none !important;
+  }
+
+  /* mostramos el texto */
+  .select-print-wrapper .print-value{
+    display: block !important;
+  }
+}
+
+
+/* Solo cuando generas PDF */
+body.pdf-export #pdfArea{
+  transform: translateX(-2.5mm);
+}
+body.pdf-export #pdfArea{
+  width: 180mm;      /* un poquito menos que 210mm */
+  margin: 0 auto;    /* centrado */
+}
+
+
+
+/* ================================
+   BARRA DE BOTONES (solo pantalla)
+================================ */
+.top-actions{
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 10px;
+  z-index: 2000;
+}
+
+/* Base común para ambos */
+.top-actions button{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 9pt;
+  box-shadow: 0 4px 10px rgba(0,0,0,.18);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+/* Hover */
+.top-actions button:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px rgba(0,0,0,.22);
+  filter: brightness(0.98);
+}
+
+/* Botón imprimir */
+.top-actions .print-button{
+  background: #003366;
+  color: #fff;
+}
+
+/* Botón PDF */
+.top-actions .fab-pdf{
+  background: linear-gradient(135deg, #b11226, #e53935);
+  color: #fff;
+}
+
+/* icono */
+.top-actions i{
+  font-size: 11pt;
+}
+
+/* ✅ ocultar en impresión/pdf */
+@media print{
+  .top-actions{ display: none !important; }
+}
+
+
+/* ✅ Si usas la barra top-actions, el botón print ya NO debe ser fixed */
+.top-actions .print-button{
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+
+/* ================================
+   BOTONES STACK ABAJO DERECHA
+================================ */
+
+.bottom-actions{
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;   /* 👈 uno arriba del otro */
+  gap: 10px;
+  z-index: 3000;
+  align-items: flex-end;
+}
+
+/* 🔒 evita conflictos con CSS viejo */
+.bottom-actions .print-button,
+.bottom-actions .fab-btn{
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+/* ================================
+   ESTILO COMÚN
+================================ */
+
+.bottom-actions button{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 9pt;
+  box-shadow: 0 4px 10px rgba(0,0,0,.18);
+  transition: transform .2s ease, box-shadow .2s ease;
+  white-space: nowrap;
+}
+
+/* Hover */
+.bottom-actions button:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px rgba(0,0,0,.25);
+}
+
+/* Imprimir */
+.bottom-actions .print-button{
+  background: #003366;
+  color: #fff;
+}
+
+/* PDF */
+.bottom-actions .fab-pdf{
+  background: linear-gradient(135deg, #b11226, #e53935);
+  color: #fff;
+}
+
+.bottom-actions .fab-resumen{
+  background: #0b5ed7;
+  color: #fff;
+}
+
+.bottom-actions .fab-resumen:hover{
+  background: #0a4fb6;
+}
+
+.bottom-actions i{
+  font-size: 11pt;
+}
+
+/* ================================
+   OCULTAR EN PRINT / PDF
+================================ */
+@media print{
+  .bottom-actions{
+    display: none !important;
+  }
+}
+
+/* ================================
+   BOTÓN VOLVER
+================================ */
+
+.bottom-actions .fab-back{
+  background: #6b7280; /* gris elegante */
+  color: #fff;
+}
+
+.bottom-actions .fab-back:hover{
+  background: #4b5563;
+}
+
+/* Opcional: que "Volver" sea un poco más chico */
+.bottom-actions .fab-back{
+  font-size: 8.5pt;
+  padding: 9px 15px;
+}
+
+
+
+
+/* columna de dos para datos, monto */
+
+.titular-grid-2col{
+  display:grid;
+  grid-template-columns: 1.6fr 0.9fr;
+  gap:16px;
+  align-items:stretch;
+}
+
+.titular-datos h3{
+  color:#003366;
+  margin-bottom:1.5mm;
+  font-size:8.5pt !important;
+  border-bottom:0.5pt solid #ddd;
+  padding-bottom:0.5mm;
+}
+
+.titular-datos .info-row{
+  display:flex;
+  margin-bottom:1mm;
+  align-items:center;
+}
+
+.titular-pension{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  border-left:1pt solid #cfcfcf;
+  padding-left:10px;
+}
+
+.pension-title{
+  font-weight:bold;
+  color:#003366;
+  font-size:11pt !important;
+  margin-bottom:8px;
+  text-align:center;
+}
+
+.pension-box-lg{
+  width:100%;
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight:bold;
+  font-size:22pt !important;
+  color:#003366;
+  background:#fff;
+  border:1.5pt solid #003366;
+  border-radius:10px;
+  padding:10px 12px;
+}
+
+
+/* columnas de edad, semanas, salario */
+.regimen-table td{
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.regimen-table td select,
+.regimen-table td input{
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+
+.regimen-table:nth-of-type(2) .yn-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:32px;
+}
+
+.regimen-table:nth-of-type(2) .yn-toggle input[type="radio"]{
+  margin:0 2px 0 0;
+}
+
+.regimen-table:nth-of-type(2) .yn-toggle label{
+  margin:0 8px 0 0;
+  font-size:11px;
+  line-height:1;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+
+
+
+
+/* cajas de total más grandes y centradas */
+/* ===== CONTENEDORES ===== */
+.calculation-table-wrapper{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1pt solid #000;
+}
+
+/* ===== TÍTULO AZUL ===== */
+.table-title{
+  background: #003366;
+  color: #fff;
+  padding: 3px 5px;              /* baja esto si lo quieres más compacto */
+  text-align: center;
+  font-weight: bold;
+  font-size: 12pt !important;    /* <-- BAJA AQUÍ el título azul */
+  border-bottom: 0.75pt solid #000;
+  line-height: 1.05;
+}
+
+/* ===== TABLAS ===== */
+.calculation-table,
+.increments-table{
+  width: 100%;
+  border-collapse: collapse;
+  flex: 1;
+  font-size: 8pt !important;     /* <-- tamaño general base */
+}
+
+.calculation-table th,
+.calculation-table td{
+  border: 0.5pt solid #ccc;
+  padding: 3px 4px;              /* <-- baja aquí si quieres menos alto */
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ===== ENCABEZADOS DE COLUMNAS ===== */
+.calculation-table th{
+  background: #f0f0f0;
+  font-weight: 700;
+  font-size: 8pt !important;     /* <-- BAJA AQUÍ encabezados */
+  line-height: 1.05;
+}
+
+/* ===== VALORES DE CELDAS ===== */
+.calculation-table td{
+  font-size: 8.5pt !important;   /* <-- BAJA AQUÍ valores internos */
+  line-height: 1.05;
+}
+
+/* ===== FILA ESPECIAL ===== */
+.calculation-table tr:first-child th,
+.increments-table tr:first-child td{
+  font-size: 8.5pt !important;   /* <-- BAJA AQUÍ “SEMANAS MÍNIMAS...” */
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ===== VALORES IMPORTANTES ===== */
+#cb-salario,
+#cb-porcentaje,
+#cb-factor,
+#cb-dias,
+#semanas-excedentes,
+#anios-excedentes,
+#ci-pct,
+#inc-factor,
+#inc-dias,
+#cb-inc{
+  font-size: 8.5pt !important;   /* <-- BAJA AQUÍ estos datos */
+  font-weight: 700;
+  text-align: center !important;
+}
+
+/* ===== CAJA DEL TOTAL ===== */
+.total-box{
+  border-top: 1pt solid #003366;
+  min-height: 68px;              /* <-- BAJA AQUÍ la altura del bloque */
+  padding: 8px 10px;             /* <-- baja aquí si ocupa mucho */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #f9f9f9;
+  box-sizing: border-box;
+}
+
+/* ===== TEXTO DEL TOTAL ===== */
+.total-label{
+  margin: 0 0 6px 0;
+  font-weight: 800;
+  color: #003366;
+  font-size: 11pt !important;    /* <-- BAJA AQUÍ "TOTAL CUANTÍA..." */
+  line-height: 1.05;
+  text-align: center;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+/* ===== MONTO GRANDE ===== */
+.total-value{
+  margin: 0;
+  font-weight: 800;
+  color: #003366;
+  font-size: 18pt !important;    /* <-- BAJA AQUÍ el $23,841.43 */
+  line-height: 1;
+  text-align: center;
+  width: 100%;
+}
+
+/* ===== IMPRESIÓN: solo mostrar CUANTÍA DE LA PENSIÓN ===== */
+@media print{
+  .uma-container{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    margin: 6px 0 10px !important;
+  }
+
+  .uma-container .uma-card{
+    display: none !important;   /* ocultar todas */
+  }
+
+  /* mostrar solo la segunda */
+  .uma-container .uma-card:nth-child(2){
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 70% !important;      /* <-- más ancho */
+    max-width: 200px !important;
+    min-height: 5px !important; /* <-- más alto */
+    padding: 8px 12px !important;
+    border: 1pt solid #999 !important;
+    background: #fafafa !important;
+    text-align: center !important;
+  }
+
+  .uma-container .uma-card:nth-child(2) .uma-card-title{
+    font-size: 11pt !important;   /* <-- título */
+    font-weight: 800 !important;
+    margin-bottom: 4px !important;
+    color: #003366 !important;
+  }
+
+  .uma-container .uma-card:nth-child(2) .uma-year{
+    font-size: 8pt !important;    /* <-- año */
+    margin-bottom: 2px !important;
+    color: #666 !important;
+  }
+
+  .uma-container .uma-card:nth-child(2) .uma-value{
+    font-size: 20pt !important;   /* <-- monto grande */
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    margin: 4px 0 !important;
+    color: #003366 !important;
+  }
+
+  .uma-container .uma-card:nth-child(2) .age-highlight{
+    font-size: 9pt !important;    /* <-- 100% */
+    font-weight: 700 !important;
+    margin-top: 4px !important;
+  }
+}
+
+
+/* ===== TABLA DE EDADES MÁS GRANDE EN IMPRESIÓN ===== */
+@media print{
+  .pension-calculation-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 520pt !important;         /* <-- tamaño general base */
+    margin-bottom: 2mm;
+    table-layout: fixed;
+  }
+
+  .pension-calculation-table th,
+  .pension-calculation-table td{
+    border: 0.5pt solid #ccc;
+    padding: 2.2mm 1.8mm;              /* <-- sube esto para más alto */
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  .pension-calculation-table th{
+    background: #f0f0f0;
+    font-weight: bold;
+    font-size: 7pt !important;         /* <-- encabezados */
+    height: 5mm;                       /* <-- alto encabezado */
+    line-height: 1.1;
+  }
+
+  .pension-calculation-table td{
+    font-size: 7.5pt !important;       /* <-- contenido */
+    line-height: 1.1;
+  }
+
+  .row-65 td{
+    background: #e8e8e8;
+    font-weight: bold;
+    font-size: 7.8pt !important;       /* <-- fila 65 destacada */
+  }
+}
+
+    </style>
+</head>
+<body>
+  <!-- Botón de impresión (solo en pantalla) -->
+<div class="bottom-actions no-print">
+  <button class="print-button" type="button" onclick="window.print()">
+    🖨️ Imprimir
+  </button>
+
+  <button class="fab-btn fab-pdf" type="button" onclick="guardarPDF()">
+    <i class="fa-solid fa-file-pdf"></i>
+    Guardar PDF
+  </button>
+
+    <button class="fab-btn fab-back" type="button" onclick="volver()">
+    ⬅️ Volver
+  </button>
+
+    <button class="fab-btn fab-resumen" type="button" id="btnEnviarResumen">
+    Ir a retroactivo
+  </button>
+</div>
+
+  <div id="pdfArea" class="container">
+<!-- HEADER COMPACTO (LOGOS REALES) -->
+<div class="header">
+  <div class="header-logo">
+    <img src="/img/logo.png" alt="CIP Financial Group" />
+  </div>
+
+  <div class="header-center">
+    <div class="subtitle">Seguridad para tu retiro, confianza para tu futuro.</div>
+
+    <div class="contact-info">
+      <div>📍 Isabel la Católica 201b, Sur, San Sebastian, 50090 Toluca de Lerdo, Méx.</div>
+      <div>✉️ contacto@cipmexico.com.mx</div>
+    </div>
+  </div>
+</div>
+
+<!-- TÍTULO PRINCIPAL -->
+<div class="section-title">CALCULADORA DE PENSIÓN POR RÉGIMEN 73</div>
+
+<!-- DATOS DEL TITULAR (TUS INPUTS REALES) -->
+<div class="titular-grid titular-grid-2col">
+  <div class="titular-datos">
+    <h3>Datos del Titular</h3>
+
+    <div class="info-row">
+      <span class="info-label">Nombre:</span>
+      <input class="info-input" id="titularNombre" type="text" placeholder="Nombre completo" value="">
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Número de seguro social:</span>
+      <input class="info-input" id="titularNss" type="text" inputmode="numeric" placeholder="NSS" value="">
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">CURP:</span>
+      <span class="info-input" id="titular-curp" contenteditable="true"></span>
+    </div>
+  </div>
+
+  <div class="titular-pension">
+    <div class="pension-title">Pensión estimada:</div>
+    <div class="pension-box pension-box-lg" id="pensionEstimada">$0.00</div>
+  </div>
+</div>
+
+<!-- TABLAS DE RÉGIMEN (CON TUS SELECT + RADIOS) -->
+<div class="regimen-container">
+
+  <!-- TABLA 1 -->
+  <table class="regimen-table">
+    <tr>
+      <th class="main-header">RÉGIMEN DE LEY DEL SEGURO SOCIAL</th>
+      <th class="main-header">Seguros Tipo de Pensión</th>
+      <th class="main-header">Edad de Retiro</th>
+      <th class="main-header">Semanas de Cotización</th>
+      <th class="main-header">Salario Promedio</th>
+    </tr>
+
+    <tr>
+      <td><strong>Régimen 73</strong></td>
+
+      <td>
+        <select id="tipoPension" class="pension-select">
+          <option value="" selected disabled>Selecciona…</option>
+          <option value="Vejez">Vejez</option>
+          <option value="Cesantía en Edad Avanzada">Cesantía en Edad Avanzada</option>
+          <option value="Orfandad">Orfandad</option>
+          <option value="Riesgo de Trabajo">Riesgo de Trabajo</option>
+          <option value="Invalidez y Vida">Invalidez y Vida</option>
+        </select>
+      </td>
+
+      <td>
+        <select id="edadRetiro" class="pension-select">
+          <option value="" selected disabled>Edad</option>
+          <option value="60">60</option>
+          <option value="61">61</option>
+          <option value="62">62</option>
+          <option value="63">63</option>
+          <option value="64">64</option>
+          <option value="65">65</option>
+        </select>
+      </td>
+
+      <td>
+        <input type="text" id="semanasCotizadas" class="pension-input" inputmode="numeric" placeholder="Ej. 1184">
+      </td>
+
+      <td>
+        <input type="text" id="salarioPromedio" class="pension-input" inputmode="decimal" placeholder="Ej. 1000.00">
+      </td>
+    </tr>
+  </table>
+
+  <!-- TABLA 2 -->
+  <table class="regimen-table">
+    <tr>
+      <th class="sub-header">Ayuda Asistencial <span class="pct">(15%)</span></th>
+      <th class="sub-header">Conyuge / Concubina <span class="pct">(15%)</span></th>
+      <th class="sub-header">Hijo(s) <span class="pct">(10%)</span></th>
+      <th class="sub-header">Padre y/o Madre <span class="pct">(10%)</span></th>
+    </tr>
+
+    <tr>
+      <td>
+        <div class="yn-toggle">
+          <label for="asist-si">Sí</label>
+          <input type="radio" id="asist-si" name="asist" value="si">
+
+          <label for="asist-no">No</label>
+          <input type="radio" id="asist-no" name="asist" value="no" checked>
+          
+        </div>
+      </td>
+
+      <td>
+        <div class="yn-toggle">
+          <label for="cony-si">Sí</label>
+          <input type="radio" id="cony-si" name="cony" value="si">
+          
+          <label for="cony-no">No</label>
+          <input type="radio" id="cony-no" name="cony" value="no" checked>
+        </div>
+      </td>
+
+      <td>
+        <select id="hijosCount" name="hijosCount" class="pension-select">
+          <option value="0" selected>Ninguno</option>
+          <option value="1">1 hijo</option>
+          <option value="2">2 hijos</option>
+          <option value="3">3 hijos</option>
+          <option value="4">4 hijos</option>
+          <option value="5">5 hijos</option>
+          <option value="6">6 hijos</option>
+        </select>
+      </td>
+
+      <td>
+        <div class="yn-toggle">
+          <label for="padres-si">Sí</label>
+          <input type="radio" id="padres-si" name="padres" value="si">
+          
+          <label for="padres-no">No</label>
+          <input type="radio" id="padres-no" name="padres" value="no" checked>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- CÁLCULO DE PENSIÓN -->
+<div class="section-title">CÁLCULO DE PENSIÓN</div>
+
+<div class="calculation-tables">
+  <div class="calculation-table-wrapper">
+    <div class="table-title">CUANTÍA BÁSICA</div>
+
+    <table class="calculation-table">
+      <tr><th colspan="4">SEMANAS MÍNIMAS REQUISIDAS: 500</th></tr>
+      <tr>
+        <th>Salario Promedio</th>
+        <th>Porcentaje</th>
+        <th>Factor</th>
+        <th>Días</th>
+      </tr>
+      <tr>
+        <td id="cb-salario" data-salario>$0.00</td>
+        <td id="cb-porcentaje">13.00%</td>
+        <td id="cb-factor">1.11</td>
+        <td id="cb-dias">365</td>
+      </tr>
+    </table>
+
+    <div class="total-box">
+      <div class="total-label">TOTAL CUANTÍA BÁSICA</div>
+      <div class="total-value" id="cb-total">$0.00</div>
+    </div>
+  </div>
+
+  <div class="calculation-table-wrapper">
+    <div class="table-title">INCREMENTOS A LA CUANTÍA</div>
+
+    <table class="calculation-table increments-table">
+      <tr class="special-header-row">
+        <td colspan="2">SEMANAS EXCEDENTES</td>
+        <td colspan="3" id="semanas-excedentes">0</td>
+
+        <td colspan="2">EN AÑOS</td>
+        <td colspan="2" id="anios-excedentes">0.00</td>
+      </tr>
+
+      <tr>
+        <th colspan="2">Salario Promedio</th>
+        <th colspan="2">Porcentaje Incremento Anual</th>
+        <th colspan="2">Factor de Compensación</th>
+        <th colspan="2">Periodo Anual (Días)</th>
+        <th colspan="2">AÑOS EXCEDENTES (REDONDEADO)</th>
+      </tr>
+
+      <!-- ✅ IMPORTANTE: esta clase la ocupa tu JS -->
+      <tr class="data-row">
+        <td colspan="2" data-salario>$0.00</td>
+        <td colspan="2" id="ci-pct">0.000%</td>
+
+        <!-- ✅ IMPORTANTE: tu JS necesita leer factor y días como números -->
+        <td colspan="2" id="inc-factor">1.11</td>
+        <td colspan="2" id="inc-dias">365</td>
+
+        <!-- ✅ IMPORTANTE: tu JS usa ESTE para el cálculo (redondeado) -->
+        <td colspan="2" id="cb-inc">0.00</td>
+      </tr>
+    </table>
+
+    <div class="total-box">
+      <div class="total-label">TOTAL CON INCREMENTOS</div>
+      <div class="total-value" id="total-inc">$0.00</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN UMA -->
+<div class="uma-container">
+  <div class="uma-card">
+    <div class="uma-card-title">BAJA DEL IMSS (UMA)</div>
+    <div class="uma-year" id="umaYearBaja">—</div>
+    <div class="uma-value" id="umaValueBaja">$0.00</div>
+    <div class="age-highlight">65 AÑOS</div>
+  </div>
+
+  <div class="uma-card">
+    <div class="uma-card-title">CUANTIA DE LA PENSIÓN</div>
+    <div class="uma-year" id="umaYearActual">—</div>
+    <div class="uma-value" id="pension-vejez-total" data-base65="">$0.00</div>
+    <div class="age-highlight">100%</div>
+  </div>
+
+  <div class="uma-card">
+    <div class="uma-card-title">UMA ACTUAL</div>
+    <div class="uma-year" id="umaYearActual2">—</div>
+    <div class="uma-value" id="umaValueActual">$0.00</div>
+    <div class="age-highlight">REFERENCIA</div>
+  </div>
+</div>
+
+<!-- TABLA DE CÁLCULO POR EDAD (TU MISMA TABLA) -->
+<table class="pension-calculation-table">
+  <thead>
+    <tr>
+      <th>EDAD</th>
+      <th>% RETIRO</th>
+      <th>SUBTOTAL</th>
+      <th>HIJO(S)</th>
+      <th>PADRES</th>
+      <th>ASISTENCIAL</th>
+      <th>CONYUGE</th>
+      <th>ANUAL</th>
+      <th>MENSUAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="age-column">60 AÑOS</td>
+      <td class="percentage-column">75%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+    <tr>
+      <td class="age-column">61 AÑOS</td>
+      <td class="percentage-column">80%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+    <tr>
+      <td class="age-column">62 AÑOS</td>
+      <td class="percentage-column">85%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+    <tr>
+      <td class="age-column">63 AÑOS</td>
+      <td class="percentage-column">90%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+    <tr>
+      <td class="age-column">64 AÑOS</td>
+      <td class="percentage-column">95%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+    <tr class="row-65">
+      <td class="age-column">65 AÑOS</td>
+      <td class="percentage-column">100%</td>
+      <td class="subtotal-column">0</td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="empty-cell"></td>
+      <td class="controls-column"></td>
+      <td class="annual-column"></td>
+      <td class="monthly-column">$0.00</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECCIÓN COMPARATIVA -->
+<div class="investment-section">
+  <div class="investment-title">COMPARATIVA DE PENSIÓN</div>
+
+  <div class="investment-layout">
+    <div class="investment-column">
+      <table class="info-table">
+        <tr><th colspan="2">INFORMACIÓN PERSONAL</th></tr>
+        <tr><th>Fecha de nacimiento</th><th>HOY</th></tr>
+        <tr class="info-row-alt"><td id="fecha-nacimiento">--/--/----</td><td id="fecha-hoy">--/--/----</td></tr>
+
+        <tr><th colspan="2">HOY ➜ 60 AÑOS</th></tr>
+        <tr class="info-row-alt"><td colspan="2" id="rango-hoy-60">--</td></tr>
+
+        <tr><th colspan="2">EDAD ACTUAL</th></tr>
+        <tr class="info-row-alt"><td colspan="2" id="edad-exacta">--</td></tr>
+
+        <tr><th colspan="2">FALTA PARA PENSIONARME</th></tr>
+        <tr class="info-row-alt"><td colspan="2" id="faltan-60">--</td></tr>
+
+        <tr><th colspan="2">ÚLTIMA COTIZACIÓN</th></tr>
+        <tr class="info-highlight">
+          <td colspan="2"><input type="date" id="ultimaCotizacionInput_calc" class="pension-input"></td>
+        </tr>
+
+        <tr><th colspan="2">CONSERVACIÓN HASTA</th></tr>
+        <tr class="info-highlight"><td colspan="2" id="conservacionHastaCell_calc">--/--/----</td></tr>
+      </table>
+    </div>
+
+    <div class="investment-chart-wrapper">
+      <div class="chart-3d-container">
+        <div class="chart-bars">
+          <div class="bar-3d bar-imss">
+            <div class="bar-front" style="height: 25mm;"></div>
+            <div class="bar-value" id="bar-imss-val">$0.00</div>
+          </div>
+          <div class="bar-3d bar-pmgcdmx">
+            <div class="bar-front" style="height: 18mm;"></div>
+            <div class="bar-value" id="bar-pmg-val">$0.00</div>
+          </div>
+        </div>
+
+        <div class="chart-x-labels">
+          <span>IMSS</span>
+          <span>PMGCDMX</span>
+        </div>
+
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-color imss"></span>IMSS</span>
+          <span class="legend-item"><span class="legend-color pmg"></span>PMGCDMX</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="investment-column">
+      <table class="info-table">
+        <tr><th class="info-header-green" colspan="2">PMGCDMX</th></tr>
+        <tr class="info-header-green">
+          <td colspan="2">
+            <select id="pg-year" class="pension-input">
+              <option value="2024">2024</option>
+              <option value="2025" selected>2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr class="info-highlight"><td colspan="2" id="pg-monto">$0.00</td></tr>
+
+        <tr><th colspan="2">PRESTACIÓN IMSS AGUINALDO</th></tr>
+        <tr class="info-row-alt"><td colspan="2" id="prestacion-aguinaldo">$0.00</td></tr>
+
+        <tr><th colspan="2">SEGUROS DE VIDA IMSS</th></tr>
+        <tr class="info-row-alt"><td>VIUDEZ</td><td id="seguro-viudez">$0.00</td></tr>
+        <tr><td>ORFANDAD</td><td id="seguro-orfandad">$0.00</td></tr>
+        <tr class="info-row-alt"><td>ASCENDENCIA</td><td id="seguro-ascendencia">$0.00</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="investment-footer-strip">
+    <span id="edad-retiro-detalle">
+  EDAD DE RETIRO: -- años -- meses -- días
+</span>
+    <span id="fecha-pensionado">PENSIONADO --/--/----</span>
+  </div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+<script>
+(function(){
+  function qs(sel){ return document.querySelector(sel); }
+
+  function isChecked(id){
+    const el = qs(id);
+    return !!(el && el.checked);
+  }
+
+  function hijosActivos(){
+    const sel = qs('#hijosCount');
+    if (!sel) return false;
+    return Number(sel.value) > 0;
+  }
+
+  function actualizarAyudaAsistencial(){
+    const asistSi = qs('#asist-si');
+    const asistNo = qs('#asist-no');
+
+    if (!asistSi || !asistNo) return;
+
+    const cony  = isChecked('#cony-si');
+    const padres = isChecked('#padres-si');
+    const hijos  = hijosActivos();
+
+    const hayOtroBeneficio = cony || padres || hijos;
+
+    if (hayOtroBeneficio) {
+      asistNo.checked = true;
+    } else {
+      asistSi.checked = true;
+    }
+  }
+
+  function initAyudaLogic(){
+    // radios cónyuge / padres
+    ['#cony-si', '#cony-no', '#padres-si', '#padres-no'].forEach(id => {
+      qs(id)?.addEventListener('change', actualizarAyudaAsistencial);
+    });
+
+    // select hijos
+    qs('#hijosCount')?.addEventListener('change', actualizarAyudaAsistencial);
+
+    // primera evaluación al cargar
+    actualizarAyudaAsistencial();
+  }
+
+  document.addEventListener('DOMContentLoaded', initAyudaLogic);
+})();
+</script>
+<script>
+(function(){
+
+  function obtenerEdadFila(texto){
+    const m = String(texto || '').match(/\d+/);
+    return m ? parseInt(m[0], 10) : null;
+  }
+
+  function filtrarTablaPorEdad(){
+    const sel = document.getElementById('edadRetiro');
+    const table = document.querySelector('.pension-calculation-table');
+
+    if (!sel || !table) return;
+
+    const edadSeleccionada = parseInt(sel.value || '0', 10);
+    const filas = table.querySelectorAll('tbody tr');
+
+    filas.forEach(tr => {
+      const celdaEdad = tr.querySelector('.age-column');
+      const edadFila = obtenerEdadFila(celdaEdad?.textContent);
+
+      if (!edadSeleccionada) {
+        // si no hay edad elegida → mostrar todo
+        tr.style.display = '';
+        return;
+      }
+
+      if (edadFila === edadSeleccionada) {
+        tr.style.display = '';
+      } else {
+        tr.style.display = 'none';
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    filtrarTablaPorEdad();
+
+    document.getElementById('edadRetiro')
+      ?.addEventListener('change', filtrarTablaPorEdad);
+  });
+
+})();
+</script>
+
+<script>
+/* =============================================================================
+   ✅ JS COMPLETO (UNIFICADO) - CIP Pensión
+   - Sin duplicados
+   - Sin MutationObserver (evita freeze)
+   - Con CONSERVACIÓN HASTA (dias = (semanas/4)*7 + fecha baja)
+============================================================================= */
+
+window.__printing = false;
+
+(function(){
+  'use strict';
+
+  /* ==========================================================================
+     0) CONFIG
+  ========================================================================== */
+const BASE = (() => {
+  const p = location.pathname;
+  if (typeof BASE_URL !== 'undefined' && BASE_URL) {
+    // Si BASE_URL es "/sempiternal/public/" o "/"
+    return location.origin + BASE_URL.replace(/^\/*/, '/').replace(/\/?$/, '/');
+  }
+  if (p.includes('/sempiternal/public/')) return location.origin + '/sempiternal/public/';
+  return location.origin + '/';
+})();
+
+  const SHOW_ONLY_SELECTED_ROW = true;
+
+  // Beneficios
+  const PCT_HIJO   = 0.10;
+  const PCT_PADRES = 0.10;
+  const PCT_AYUDA  = 0.15;
+  const PCT_CONY   = 0.15;
+
+  let UMA_ACTUAL = null;
+  let UMA_BAJA   = null;
+
+  /* ==========================================================================
+     0.1) LOCKS / SCHEDULERS (anti-bucle)
+  ========================================================================== */
+  let _recalcLock = false;
+  let _recalcRAF  = 0;
+  let _chartRAF   = 0;
+
+  function scheduleRecalc(){
+    cancelAnimationFrame(_recalcRAF);
+    _recalcRAF = requestAnimationFrame(() => {
+      _recalcRAF = 0;
+      recalcularTodo();
+    });
+  }
+
+  function scheduleChart(){
+    if (window.__printing) return; // ✅ no tocar gráfica en impresión
+    cancelAnimationFrame(_chartRAF);
+    _chartRAF = requestAnimationFrame(() => {
+      _chartRAF = 0;
+      updateChart(false);
+    });
+  }
+
+  /* ==========================================================================
+     0.2) UMA a usar para r (salario/UMA)
+  ========================================================================== */
+  function getUMAParaR(){
+    const inp = document.getElementById('ultimaCotizacionInput_calc');
+    const hasFecha = !!(inp && inp.value);
+
+    if (hasFecha && UMA_BAJA && Number.isFinite(UMA_BAJA.uma) && UMA_BAJA.uma > 0) {
+      return UMA_BAJA;
+    }
+    if (UMA_ACTUAL && Number.isFinite(UMA_ACTUAL.uma) && UMA_ACTUAL.uma > 0) {
+      return UMA_ACTUAL;
+    }
+    return null;
+  }
+
+  /* ==========================================================================
+     1) HELPERS (MX)
+  ========================================================================== */
+  function formatCurrency(value) {
+    const n = Number(value || 0);
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 2
+    }).format(n);
+  }
+
+  function parseNumberMX(v) {
+    if (v == null) return 0;
+    const s = String(v).replace(/\$/g,'').replace(/\s/g,'').replace(/,/g,'');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function parsePercent(v) {
+    if (v == null) return 0;
+    const s = String(v).replace('%','').trim();
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : (n / 100);
+  }
+
+  function text(el){ return (el?.textContent || '').trim(); }
+
+  function setTextIfChanged(el, v){
+    if (!el) return;
+    const nv = String(v);
+    if (el.textContent !== nv) el.textContent = nv;
+  }
+
+  function moneyOrEmpty(td, amount){
+    if (!td) return;
+    if (!amount || amount <= 0) { setTextIfChanged(td, ''); return; }
+    const txt = formatCurrency(amount);
+    if (td.textContent !== txt) td.textContent = txt;
+  }
+
+  function toInt(val){
+    const n = parseInt(String(val || '').replace(/[^\d]/g,''), 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  /* ==========================================================================
+     2) UI: tipo de pensión (label debajo del select)
+  ========================================================================== */
+  function initTipoPensionLabel(){
+    const sel = document.getElementById('tipoPension');
+    const out = document.getElementById('tipoPensionFull');
+    if (!sel || !out) return;
+
+    const render = () => {
+      const txt = sel.options[sel.selectedIndex]?.text || '';
+      setTextIfChanged(out, txt);
+    };
+    sel.addEventListener('change', render);
+    render();
+  }
+
+  /* ==========================================================================
+     3) SEMANAS EXCEDENTES + AÑOS (raw y redondeo especial)
+  ========================================================================== */
+  function redondeoEspecial(x){
+    if (!Number.isFinite(x)) return 0;
+    const eps = 1e-9;
+    const entero = Math.floor(x + eps);
+    const frac = x - entero;
+    if (frac < 0.25 - eps) return entero;
+    if (frac < 0.75 - eps) return entero + 0.50;
+    return entero + 1.00;
+  }
+
+  function actualizarSemanasExcedentes(){
+    const input = document.getElementById('semanasCotizadas');
+    const out   = document.getElementById('semanas-excedentes');
+    if (!input || !out) return;
+
+    const semanas = toInt(input.value);
+    const exced = Math.max(0, semanas - 500);
+    setTextIfChanged(out, exced.toLocaleString('es-MX'));
+  }
+
+  function actualizarAniosExcedentes(){
+    const semanasEl = document.getElementById('semanas-excedentes');
+    const aniosEl   = document.getElementById('anios-excedentes'); // ✅ se muestra RAW
+    const cbIncEl   = document.getElementById('cb-inc');           // ✅ se usa redondeado
+
+    if (!semanasEl) return;
+
+    const semanas = toInt(semanasEl.textContent);
+    const aniosRaw = semanas / 52;
+    const aniosRed = redondeoEspecial(aniosRaw);
+
+    if (aniosEl) setTextIfChanged(aniosEl, aniosRaw.toFixed(2));
+    if (cbIncEl) setTextIfChanged(cbIncEl, aniosRed.toFixed(2));
+  }
+
+  /* ==========================================================================
+     4) UMA: FETCH + NORMALIZAR + PINTAR CARDS
+  ========================================================================== */
+  function normalizarRespuestaUMA(j){
+    if (!j) return null;
+
+    const ok = (j.success === true || j.success === 1 || j.success === "1" || j.success === "true");
+    const hasData = !!(j.data && (j.data.uma != null || j.data.UMA != null));
+    const hasFlat = (j.uma != null || j.UMA != null);
+
+    if (!ok && !hasData && !hasFlat) return null;
+
+    const src = j.data ? j.data : j;
+    const umaVal = (src.uma ?? src.UMA ?? src.valor ?? src.value);
+    if (umaVal == null) return null;
+
+    return {
+      year: (src.year ?? src.anio ?? src.año ?? j.year ?? null),
+      uma:  parseFloat(umaVal),
+      topado: (src.topado != null ? parseFloat(src.topado) : null),
+      pension_garantizada: (src.pension_garantizada != null ? parseFloat(src.pension_garantizada) : null)
+    };
+  }
+
+  async function cargarUMA(year){
+    const url = `${BASE}analisis/get_uma.php?year=${encodeURIComponent(year)}`;
+
+    const res = await fetch(url, {
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    const txt = await res.text();
+
+    const clean = String(txt)
+      .replace(/^\uFEFF/, '')
+      .replace(/^[\s\S]*?(\{|\[)/, '$1')
+      .trim();
+
+    let j;
+    try {
+      j = JSON.parse(clean);
+    } catch (e) {
+      console.error('❌ Respuesta cruda get_uma.php:', txt);
+      throw new Error('get_uma.php no devolvió JSON válido (revisa warnings/echo)');
+    }
+
+    const data = normalizarRespuestaUMA(j);
+    if (!data || !Number.isFinite(data.uma)) {
+      throw new Error(j?.message || 'No se pudo obtener UMA');
+    }
+
+    if (!data.year) data.year = year;
+    return data;
+  }
+
+  function pintarUMACards(data){
+    if (!data) return;
+    const year = data.year ?? new Date().getFullYear();
+    const uma  = Number.isFinite(data.uma) ? data.uma : 0;
+
+    // UMA ACTUAL (tarjeta)
+    const yA2 = document.getElementById('umaYearActual2');
+    const vA  = document.getElementById('umaValueActual');
+    if (yA2) setTextIfChanged(yA2, String(year));
+    if (vA)  setTextIfChanged(vA,  formatCurrency(uma));
+
+    // si quieres también esta (si existe)
+    const yA = document.getElementById('umaYearActual');
+    if (yA) setTextIfChanged(yA, String(year));
+  }
+
+  function pintarUMABajaCard(data){
+    const yB = document.getElementById('umaYearBaja');
+    const vB = document.getElementById('umaValueBaja');
+
+    const year = data?.year ?? '—';
+    const uma  = data?.uma ?? 0;
+
+    if (yB) setTextIfChanged(yB, String(year));
+    if (vB) setTextIfChanged(vB, formatCurrency(uma));
+  }
+
+  /* ==========================================================================
+     5) SALARIO (pinta todos los [data-salario])
+  ========================================================================== */
+  function obtenerSalarioActual(){
+    const inp = document.getElementById('salarioPromedio');
+    return inp ? parseNumberMX(inp.value) : 0;
+  }
+
+  function pintarSalarioDesdeInput(){
+    const salario = obtenerSalarioActual();
+    document.querySelectorAll('[data-salario]').forEach(td => {
+      setTextIfChanged(td, formatCurrency(salario));
+    });
+  }
+
+  function recalcularUmaDivSalario(){
+    const salario = obtenerSalarioActual();
+    if (!salario || salario <= 0) return null;
+
+    const umaObj = getUMAParaR();
+    if (!umaObj) return null;
+
+    return salario / umaObj.uma;
+  }
+
+  /* ==========================================================================
+     6) TABLA CB/CI POR r (tu tabla)
+  ========================================================================== */
+  const fila1 = [0.00,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.50];
+  const fila2 = [0.51,0.52,0.53,0.54,0.55,0.56,0.57,0.58,0.59,0.60,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.69,0.70,0.71,0.72,0.73,0.74,0.75];
+  const fila3 = [0.76,0.77,0.78,0.79,0.80,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.90,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,1.00];
+  const fila4 = [1.01,1.02,1.03,1.04,1.05,1.06,1.07,1.08,1.09,1.10,1.11,1.12,1.13,1.14,1.15,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25];
+  const fila5 = [1.26,1.27,1.28,1.29,1.30,1.31,1.32,1.33,1.34,1.35,1.36,1.37,1.38,1.39,1.40,1.41,1.42,1.43,1.44,1.45,1.46,1.47,1.48,1.49,1.50];
+  const fila6 = [1.51,1.52,1.53,1.54,1.55,1.56,1.57,1.58,1.59,1.60,1.61,1.62,1.63,1.64,1.65,1.66,1.67,1.68,1.69,1.70,1.71,1.72,1.73,1.74,1.75];
+  const fila7 = [1.76,1.77,1.78,1.79,1.80,1.81,1.82,1.83,1.84,1.85,1.86,1.87,1.88,1.89,1.90,1.91,1.92,1.93,1.94,1.95,1.96,1.97,1.98,1.99,2.00];
+  const fila8 = [2.01,2.02,2.03,2.04,2.05,2.06,2.07,2.08,2.09,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,2.20,2.21,2.22,2.23,2.24,2.25];
+  const fila9 = [2.26,2.27,2.28,2.29,2.30,2.31,2.32,2.33,2.34,2.35,2.36,2.37,2.38,2.39,2.40,2.41,2.42,2.43,2.44,2.45,2.46,2.47,2.48,2.49,2.50];
+  const fila10 = [2.51,2.52,2.53,2.54,2.55,2.56,2.57,2.58,2.59,2.60,2.61,2.62,2.63,2.64,2.65,2.66,2.67,2.68,2.69,2.70,2.71,2.72,2.73,2.74,2.75];
+  const fila11 = [2.76,2.77,2.78,2.79,2.80,2.81,2.82,2.83,2.84,2.85,2.86,2.87,2.88,2.89,2.90,2.91,2.92,2.93,2.94,2.95,2.96,2.97,2.98,2.99,3.00];
+  const fila12 = [3.01,3.02,3.03,3.04,3.05,3.06,3.07,3.08,3.09,3.10,3.11,3.12,3.13,3.14,3.15,3.16,3.17,3.18,3.19,3.20,3.21,3.22,3.23,3.24,3.25];
+  const fila13 = [3.26,3.27,3.28,3.29,3.30,3.31,3.32,3.33,3.34,3.35,3.36,3.37,3.38,3.39,3.40,3.41,3.42,3.43,3.44,3.45,3.46,3.47,3.48,3.49,3.50];
+  const fila14 = [3.51,3.52,3.53,3.54,3.55,3.56,3.57,3.58,3.59,3.60,3.61,3.62,3.63,3.64,3.65,3.66,3.67,3.68,3.69,3.70,3.71,3.72,3.73,3.74,3.75];
+  const fila15 = [3.76,3.77,3.78,3.79,3.80,3.81,3.82,3.83,3.84,3.85,3.86,3.87,3.88,3.89,3.90,3.91,3.92,3.93,3.94,3.95,3.96,3.97,3.98,3.99,4.00];
+  const fila16 = [4.01,4.02,4.03,4.04,4.05,4.06,4.07,4.08,4.09,4.10,4.11,4.12,4.13,4.14,4.15,4.16,4.17,4.18,4.19,4.20,4.21,4.22,4.23,4.24,4.25];
+
+  // ⚠️ OJO: arriba se coló "hiook" (eso te rompe TODO).
+  // Yo lo corrijo aquí:
+  // Reemplaza toda la fila16 por esta versión correcta:
+
+  const fila16_fix = [4.01,4.02,4.03,4.04,4.05,4.06,4.07,4.08,4.09,4.10,4.11,4.12,4.13,4.14,4.15,4.16,4.17,4.18,4.19,4.20,4.21,4.22,4.23,4.24,4.25];
+
+  const fila17 = [4.26,4.27,4.28,4.29,4.30,4.31,4.32,4.33,4.34,4.35,4.36,4.37,4.38,4.39,4.40,4.41,4.42,4.43,4.44,4.45,4.46,4.47,4.48,4.49,4.50];
+  const fila18 = [4.51,4.52,4.53,4.54,4.55,4.56,4.57,4.58,4.59,4.60,4.61,4.62,4.63,4.64,4.65,4.66,4.67,4.68,4.69,4.70,4.71,4.72,4.73,4.74,4.75];
+  const fila19 = [4.76,4.77,4.78,4.79,4.80,4.81,4.82,4.83,4.84,4.85,4.86,4.87,4.88,4.89,4.90,4.91,4.92,4.93,4.94,4.95,4.96,4.97,4.98,4.99,5.00];
+  const fila20 = [5.01,5.02,5.03,5.04,5.05,5.06,5.07,5.08,5.09,5.10,5.11,5.12,5.13,5.14,5.15,5.16,5.17,5.18,5.19,5.20,5.21,5.22,5.23,5.24,5.25];
+  const fila21 = [5.26,5.27,5.28,5.29,5.30,5.31,5.32,5.33,5.34,5.35,5.36,5.37,5.38,5.39,5.40,5.41,5.42,5.43,5.44,5.45,5.46,5.47,5.48,5.49,5.50];
+  const fila22 = [5.51,5.52,5.53,5.54,5.55,5.56,5.57,5.58,5.59,5.60,5.61,5.62,5.63,5.64,5.65,5.66,5.67,5.68,5.69,5.70,5.71,5.72,5.73,5.74,5.75];
+  const fila23 = [5.76,5.77,5.78,5.79,5.80,5.81,5.82,5.83,5.84,5.85,5.86,5.87,5.88,5.89,5.90,5.91,5.92,5.93,5.94,5.95,5.96,5.97,5.98,5.99,6.00];
+  const fila24 = [6.00];
+
+  const FILAS = [
+    fila1,fila2,fila3,fila4,fila5,fila6,fila7,fila8,fila9,fila10,fila11,fila12,fila13,fila14,fila15,fila16_fix,fila17,fila18,fila19,fila20,fila21,fila22,fila23,fila24
+  ];
+
+  const CB_CI = [
+    { cb: 0.00,  ci: 0.000 },
+    { cb: 0.00,  ci: 0.000 },
+    { cb: 80.00, ci: 0.563 },
+    { cb: 77.11, ci: 0.814 },
+    { cb: 58.18, ci: 1.178 },
+    { cb: 49.23, ci: 1.430 },
+    { cb: 42.67, ci: 1.615 },
+    { cb: 37.65, ci: 1.756 },
+    { cb: 33.68, ci: 1.868 },
+    { cb: 30.48, ci: 1.958 },
+    { cb: 27.83, ci: 2.033 },
+    { cb: 25.60, ci: 2.096 },
+    { cb: 23.70, ci: 2.149 },
+    { cb: 22.07, ci: 2.195 },
+    { cb: 20.65, ci: 2.235 },
+    { cb: 19.39, ci: 2.271 },
+    { cb: 18.29, ci: 2.302 },
+    { cb: 17.30, ci: 2.330 },
+    { cb: 16.41, ci: 2.355 },
+    { cb: 15.61, ci: 2.377 },
+    { cb: 14.88, ci: 2.398 },
+    { cb: 14.22, ci: 2.416 },
+    { cb: 13.62, ci: 2.433 },
+    { cb: 13.00, ci: 2.450 }
+  ];
+
+  function obtenerCbCiPorParametro(r){
+    if (!Number.isFinite(r)) return { idx:-1, cb:0, ci:0, min:null, max:null };
+
+    if (r >= 6 - 1e-9) {
+      const last = FILAS.length - 1;
+      return { idx:last, ...CB_CI[last], min:6.00, max:Infinity };
+    }
+
+    for (let i = 0; i < FILAS.length - 1; i++) {
+      const row = FILAS[i];
+      const min = row[0];
+      const max = row[row.length - 1];
+      if (r >= min - 1e-9 && r <= max + 1e-9) {
+        return { idx:i, ...CB_CI[i], min, max };
+      }
+    }
+
+    return { idx:0, ...CB_CI[0], min:FILAS[0][0], max:FILAS[0][FILAS[0].length-1] };
+  }
+
+  function pintarCbCiEnTabla(sel){
+    const tdCB = document.getElementById('cb-porcentaje');
+    if (tdCB) setTextIfChanged(tdCB, `${sel.cb.toFixed(2)}%`);
+
+    const tdCI = document.getElementById('ci-pct');
+    if (tdCI) setTextIfChanged(tdCI, `${sel.ci.toFixed(3)}%`);
+  }
+
+  /* ==========================================================================
+     7) CUANTÍA BÁSICA
+  ========================================================================== */
+  function actualizarCuantiaBasica(){
+    const inSal = document.getElementById('salarioPromedio');
+
+    const tdSal = document.getElementById('cb-salario');
+    const tdPct = document.getElementById('cb-porcentaje');
+    const tdFac = document.getElementById('cb-factor');
+    const tdDia = document.getElementById('cb-dias');
+    const elTot = document.getElementById('cb-total');
+
+    if (!tdPct || !tdFac || !tdDia || !elTot) return;
+
+    const salario = inSal ? parseNumberMX(inSal.value) : parseNumberMX(tdSal?.textContent);
+    const pct     = parsePercent(tdPct.textContent);
+    const factor  = parseNumberMX(tdFac.textContent);
+    const dias    = parseNumberMX(tdDia.textContent);
+
+    const total = salario * pct * factor * dias;
+
+    if (tdSal) setTextIfChanged(tdSal, formatCurrency(salario));
+    setTextIfChanged(elTot, formatCurrency(total));
+  }
+
+  /* ==========================================================================
+     8) INCREMENTOS (total-inc)
+  ========================================================================== */
+  function calcularTotalIncrementos(){
+    const row = document.querySelector('tr.data-row');
+    const out = document.getElementById('total-inc');
+    if (!row || !out) return;
+
+    const salarioEl = row.querySelector('[data-salario]');
+    const salario = parseNumberMX(salarioEl?.textContent || '0');
+
+    const ciEl = document.getElementById('ci-pct');
+    const ci = parsePercent(ciEl?.textContent || '0%');
+
+    const factor = parseNumberMX(document.getElementById('inc-factor')?.textContent || '1.11');
+    const dias   = parseNumberMX(document.getElementById('inc-dias')?.textContent || '365');
+
+    const anios = parseNumberMX(document.getElementById('cb-inc')?.textContent || '0');
+
+    const total = salario * ci * factor * dias * anios;
+    setTextIfChanged(out, formatCurrency(total));
+  }
+
+  /* ==========================================================================
+     9) SUMA FINAL (pensión base 65)
+  ========================================================================== */
+  function recalcularSumaFinal(){
+    const cbEl  = document.getElementById('cb-total');
+    const incEl = document.getElementById('total-inc');
+    const out   = document.getElementById('pension-vejez-total');
+    if (!cbEl || !incEl || !out) return;
+
+    const cb  = parseNumberMX(text(cbEl));
+    const inc = parseNumberMX(text(incEl));
+    setTextIfChanged(out, formatCurrency(cb + inc));
+  }
+
+  /* ==========================================================================
+     10) TABLA 60-65 (mensual/anual)
+  ========================================================================== */
+  function isYes(name){
+    const yes = document.querySelector(`input[name="${name}"][value="si"]`);
+    return !!(yes && yes.checked);
+  }
+
+  function getHijosCount(){
+    const sel = document.getElementById('hijosCount');
+    const n = parseInt(sel?.value || '0', 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function recalcularTablaPension(){
+    const baseEl = document.getElementById('pension-vejez-total');
+    const table  = document.querySelector('.pension-calculation-table');
+    if (!baseEl || !table) return;
+
+    const base65 = parseNumberMX(text(baseEl));
+    if (!base65) return;
+
+    const ayuda  = isYes('asist');
+    const cony   = isYes('cony');
+    const padres = isYes('padres');
+    const hijosN = getHijosCount();
+
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const tds = tr.querySelectorAll('td');
+      if (tds.length < 9) return;
+
+      const retiro = parsePercent(tds[1].textContent);
+      const subtotal = base65 * retiro;
+
+      const hijosAmt  = subtotal * (PCT_HIJO * hijosN);
+      const padresAmt = subtotal * (padres ? PCT_PADRES : 0);
+      const ayudaAmt  = subtotal * (ayuda  ? PCT_AYUDA  : 0);
+      const conyAmt   = subtotal * (cony   ? PCT_CONY   : 0);
+
+      const anual   = subtotal + hijosAmt + padresAmt + ayudaAmt + conyAmt;
+      const mensual = anual / 12;
+
+      setTextIfChanged(tds[2], formatCurrency(subtotal));
+      moneyOrEmpty(tds[3], hijosAmt);
+      moneyOrEmpty(tds[4], padresAmt);
+      moneyOrEmpty(tds[5], ayudaAmt);
+      moneyOrEmpty(tds[6], conyAmt);
+      setTextIfChanged(tds[7], formatCurrency(anual));
+      setTextIfChanged(tds[8], formatCurrency(mensual));
+
+      tds[2].dataset.value = String(subtotal);
+      tds[7].dataset.value = String(anual);
+      tds[8].dataset.value = String(mensual);
+    });
+  }
+
+  /* ==========================================================================
+     11) FILTRO POR EDAD (selecciona una fila)
+  ========================================================================== */
+  function normalizarEdad(txt){
+    const m = String(txt || '').match(/\d+/);
+    return m ? parseInt(m[0], 10) : null;
+  }
+
+  function aplicarFiltroEdad(){
+    const sel = document.getElementById('edadRetiro');
+    const table = document.querySelector('.pension-calculation-table');
+    if (!sel || !table) return;
+
+    const edad = parseInt(sel.value || '0', 10);
+    const rows = table.querySelectorAll('tbody tr');
+
+    rows.forEach(tr => tr.classList.remove('is-selected','is-hidden'));
+    if (!edad) return;
+
+    rows.forEach(tr=>{
+      const ageCell = tr.querySelector('td.age-column');
+      const edadFila = normalizarEdad(ageCell?.textContent);
+      const match = (edadFila === edad);
+
+      tr.classList.toggle('is-selected', match);
+      if (SHOW_ONLY_SELECTED_ROW) tr.classList.toggle('is-hidden', !match);
+    });
+  }
+
+  function getRowActiva(){
+    const table = document.querySelector('.pension-calculation-table');
+    if (!table) return null;
+    return (
+      table.querySelector('tbody tr.is-selected') ||
+      table.querySelector('tbody tr:not(.is-hidden)') ||
+      table.querySelector('tbody tr')
+    );
+  }
+
+  /* ==========================================================================
+     12) AGUINALDO + SEGUROS (PMG vs IMSS)
+  ========================================================================== */
+  function getMensual(row){
+    if (!row) return 0;
+    const td = row.querySelector('.monthly-column');
+    return parseNumberMX(td?.dataset?.value ?? td?.textContent ?? '0');
+  }
+
+  function getSubtotal(row){
+    if (!row) return 0;
+    const td = row.querySelector('.subtotal-column');
+    return parseNumberMX(td?.dataset?.value ?? td?.textContent ?? '0');
+  }
+
+  function getPMG(){
+    const el = document.getElementById('pg-monto');
+    return parseNumberMX(el?.dataset?.value ?? el?.textContent ?? '0');
+  }
+
+  function recalcularAguinaldoYSeguros(){
+    const row = getRowActiva();
+    if (!row) return;
+
+    const i41 = getMensual(row);
+    const i50 = getPMG();
+
+    const c47 = getSubtotal(row);
+    const c47_12 = c47 / 12;
+
+    const aguinaldo = (i41 < i50) ? i50 : c47_12;
+    const outAg = document.getElementById('prestacion-aguinaldo');
+    if (outAg) setTextIfChanged(outAg, formatCurrency(aguinaldo));
+
+    const cond = (i41 < i50);
+
+    const viudez = cond
+      ? ((i50 / 1.15) * 0.90)
+      : ((c47 * 0.90) / 12);
+
+    const orfandad    = cond ? (i50 * 0.10) : ((c47 * 0.10) / 12);
+    const ascendencia = cond ? (i50 * 0.10) : ((c47 * 0.10) / 12);
+
+    const elV = document.getElementById('seguro-viudez');
+    const elO = document.getElementById('seguro-orfandad');
+    const elA = document.getElementById('seguro-ascendencia');
+
+    if (elV) setTextIfChanged(elV, formatCurrency(viudez));
+    if (elO) setTextIfChanged(elO, formatCurrency(orfandad));
+    if (elA) setTextIfChanged(elA, formatCurrency(ascendencia));
+  }
+
+  /* ==========================================================================
+     13) PENSIÓN ESTIMADA (MAX entre IMSS mensual vs PG)
+  ========================================================================== */
+function pintarPensionEstimadaMax(){
+  const out = document.getElementById('pensionEstimada');
+  if (!out) return;
+
+  const row = getRowActiva();
+
+  // Pensión mensual IMSS desde la fila activa
+  const imssTxt = row?.querySelector('.monthly-column')?.dataset?.value
+    ?? row?.querySelector('.monthly-column')?.textContent
+    ?? '0';
+
+  const imss = parseNumberMX(imssTxt);
+
+  // PMGCDMX
+  const pgEl = document.getElementById('pg-monto');
+  const pmgTxt = pgEl?.dataset?.value ?? pgEl?.textContent ?? '0';
+  const pmg = parseNumberMX(pmgTxt);
+
+  // Tope por salario promedio × 30
+  const salarioPromedio = obtenerSalarioActual();
+  const tope30Salarios = salarioPromedio > 0 ? salarioPromedio * 30 : 0;
+
+  // ✅ Primero topamos SOLO la pensión IMSS
+  const imssTopado = tope30Salarios > 0
+    ? Math.min(imss, tope30Salarios)
+    : imss;
+
+  // ✅ Después comparamos contra PMG
+  // Si PMG es mayor, debe ganar PMG
+  const pensionFinal = Math.max(imssTopado, pmg);
+
+  out.dataset.imssOriginal = imss.toFixed(2);
+  out.dataset.imssTopado = imssTopado.toFixed(2);
+  out.dataset.pmg = pmg.toFixed(2);
+  out.dataset.final = pensionFinal.toFixed(2);
+
+  setTextIfChanged(out, formatCurrency(pensionFinal));
+}
+
+  /* ==========================================================================
+     14) PG POR AÑO (select pg-year)
+  ========================================================================== */
+  async function pintarPG(){
+    const sel = document.getElementById('pg-year');
+    const out = document.getElementById('pg-monto');
+    if (!sel || !out) return;
+
+    const year = parseInt(sel.value || '0', 10) || new Date().getFullYear();
+
+    try{
+      const data = await cargarUMA(year);
+      const val = Number(data.pension_garantizada || 0);
+      setTextIfChanged(out, formatCurrency(val));
+      out.dataset.value = String(val);
+    }catch(e){
+      console.error('❌ No se pudo cargar PG:', e);
+      setTextIfChanged(out, formatCurrency(0));
+      out.dataset.value = '0';
+    }
+  }
+
+  /* ==========================================================================
+     15) GRÁFICA (BARRAS)
+  ========================================================================== */
+  function roundUpToStep(n, step){
+    n = Math.max(0, Number(n || 0));
+    step = Math.max(1, Number(step || 2500));
+    return Math.ceil(n / step) * step;
+  }
+
+  function updateChart(isPrint = false){
+    const chart = document.querySelector(".chart-3d-container");
+    if (!chart) return;
+
+    const barIMSS = chart.querySelector(".bar-3d.bar-imss .bar-front");
+    const barPMG  = chart.querySelector(".bar-3d.bar-pmgcdmx .bar-front");
+    if (!barIMSS || !barPMG) return;
+
+    const valIMSS = chart.querySelector(".bar-3d.bar-imss .bar-value");
+    const valPMG  = chart.querySelector(".bar-3d.bar-pmgcdmx .bar-value");
+
+    const rect = chart.getBoundingClientRect();
+    const base = Math.max(90, Math.floor(rect.height * 0.60));
+    const maxBarPx = isPrint ? Math.min(base, 120) : base;
+
+    const row = getRowActiva();
+    const imssTxt = row?.querySelector(".monthly-column")?.dataset?.value
+      ?? row?.querySelector(".monthly-column")?.textContent
+      ?? "0";
+    const imss = parseNumberMX(imssTxt);
+    const pmg  = getPMG();
+
+    const maxVal   = Math.max(imss, pmg, 1);
+    const maxScale = roundUpToStep(maxVal, 2500);
+
+    function setBar(barFrontEl, labelEl, value){
+      const v = Math.max(0, Number(value || 0));
+
+      if (labelEl){
+        const newTxt = formatCurrency(v);
+        if (labelEl.textContent !== newTxt) labelEl.textContent = newTxt;
+      }
+
+      const pct = maxScale > 0 ? (v / maxScale) : 0;
+      let h = Math.round(Math.max(0, Math.min(1, pct)) * maxBarPx);
+
+      if (v > 0 && h < 6) h = 6;
+      if (h > maxBarPx) h = maxBarPx;
+
+      barFrontEl.style.height = h + "px";
+      barFrontEl.style.maxHeight = maxBarPx + "px";
+    }
+
+    setBar(barIMSS, valIMSS, imss);
+    setBar(barPMG,  valPMG,  pmg);
+  }
+
+  /* ==========================================================================
+     16) FECHAS: HOY + CONSERVACIÓN HASTA + PENSIONADO
+  ========================================================================== */
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function formatDMY(d){
+    return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
+  }
+
+  function ponerFechaHoy(){
+    const td = document.getElementById('fecha-hoy');
+    if (!td) return;
+    const d = new Date();
+    setTextIfChanged(td, formatDMY(d));
+  }
+
+  function parseYMD(ymd){
+    const m = String(ymd || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    const y = parseInt(m[1],10);
+    const mo = parseInt(m[2],10) - 1;
+    const d = parseInt(m[3],10);
+    const dt = new Date(y, mo, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== mo || dt.getDate() !== d) return null;
+    return dt;
+  }
+
+  function addDays(date, days){
+    const x = new Date(date.getTime());
+    x.setDate(x.getDate() + days);
+    return x;
+  }
+
+  // ✅ CONSERVACIÓN HASTA = fecha_baja + round((semanas/4)*7)
+  function recalcularConservacionHasta(){
+    const semanasInp = document.getElementById('semanasCotizadas');
+    const fechaInp   = document.getElementById('ultimaCotizacionInput_calc');
+    const out        = document.getElementById('conservacionHastaCell_calc');
+
+    if (!fechaInp || !out) return;
+
+    if (!fechaInp.value){
+      out.textContent = '--/--/----';
+      return;
+    }
+
+    const base = parseYMD(fechaInp.value);
+    if (!base){
+      out.textContent = '--/--/----';
+      return;
+    }
+
+    const semanas = toInt(semanasInp?.value);
+    if (!semanas || semanas <= 0){
+      out.textContent = formatDMY(base);
+      return;
+    }
+
+    const dias = Math.round((semanas / 4) * 7);
+    const fechaFinal = addDays(base, dias);
+    out.textContent = formatDMY(fechaFinal);
+  }
+
+  function recalcularPensionado(){
+    const input = document.getElementById('ultimaCotizacionInput_calc');
+    const out   = document.getElementById('fecha-pensionado');
+    if (!input || !out) return;
+
+    if (!input.value){
+      setTextIfChanged(out, 'PENSIONADO --/--/----');
+      return;
+    }
+
+    const base = parseYMD(input.value);
+    if (!base){
+      setTextIfChanged(out, 'PENSIONADO --/--/----');
+      return;
+    }
+
+    setTextIfChanged(out, `PENSIONADO ${formatDMY(addDays(base, 63))}`);
+  }
+
+  /* ==========================================================================
+     17) UMA BAJA (cargar por fecha baja)
+  ========================================================================== */
+  async function cargarUMABajaDesdeFecha(){
+    const inp = document.getElementById('ultimaCotizacionInput_calc');
+    const ymd = (inp?.value || '').trim();
+    const year = ymd ? Number(ymd.slice(0,4)) : 0;
+
+    if (!year) {
+      UMA_BAJA = null;
+      pintarUMABajaCard({ year:'—', uma:0 });
+      return;
+    }
+
+    try{
+      UMA_BAJA = await cargarUMA(year);
+      pintarUMABajaCard(UMA_BAJA);
+    }catch(e){
+      console.warn('⚠️ No se pudo cargar UMA_BAJA:', e);
+      UMA_BAJA = null;
+      pintarUMABajaCard({ year, uma:0 });
+    }
+  }
+
+  /* ==========================================================================
+     18) ORQUESTADOR (recalcularTodo)
+  ========================================================================== */
+  function recalcularTodo(){
+    if (_recalcLock) return;
+    _recalcLock = true;
+
+    try{
+      pintarSalarioDesdeInput();
+
+      actualizarSemanasExcedentes();
+      actualizarAniosExcedentes();
+
+      const r = recalcularUmaDivSalario();
+      if (r != null) {
+        const sel = obtenerCbCiPorParametro(r);
+        pintarCbCiEnTabla(sel);
+      }
+
+      actualizarCuantiaBasica();
+      calcularTotalIncrementos();
+
+      recalcularSumaFinal();
+      recalcularTablaPension();
+      aplicarFiltroEdad();
+
+      recalcularAguinaldoYSeguros();
+      pintarPensionEstimadaMax();
+
+      scheduleChart();
+
+      recalcularConservacionHasta();
+      recalcularPensionado();
+
+    } catch(err){
+      console.error('❌ Error en recalcularTodo:', err);
+    } finally {
+      requestAnimationFrame(() => { _recalcLock = false; });
+    }
+  }
+
+  /* ==========================================================================
+     19) INIT + LISTENERS
+  ========================================================================== */
+  document.addEventListener('DOMContentLoaded', async () => {
+    initTipoPensionLabel();
+    ponerFechaHoy();
+
+    // UMA actual
+    try {
+      const year = new Date().getFullYear();
+      UMA_ACTUAL = await cargarUMA(year);
+      pintarUMACards(UMA_ACTUAL);
+    } catch (err) {
+      console.warn("⚠️ No se pudo cargar UMA_ACTUAL:", err);
+      UMA_ACTUAL = null;
+      pintarUMACards({ year: new Date().getFullYear(), uma: 0 });
+    }
+
+    // UMA baja desde fecha
+    await cargarUMABajaDesdeFecha();
+
+    // cuando cambie la fecha baja => recarga UMA baja + recalc
+    document.getElementById('ultimaCotizacionInput_calc')
+      ?.addEventListener('change', async () => {
+        await cargarUMABajaDesdeFecha();
+        scheduleRecalc();
+      });
+
+    // inputs principales
+    ['salarioPromedio','semanasCotizadas','edadRetiro','pg-year','hijosCount','ultimaCotizacionInput_calc'].forEach(id=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      // date picker
+      if (id === 'ultimaCotizacionInput_calc'){
+        el.addEventListener('click', () => {
+          if (typeof el.showPicker === 'function') el.showPicker();
+        });
+      }
+
+      el.addEventListener('input',  scheduleRecalc);
+      el.addEventListener('change', scheduleRecalc);
+    });
+
+    // toggles sí/no
+    ['padres','asist','cony'].forEach(name=>{
+      document.querySelectorAll(`input[name="${name}"]`).forEach(inp=>{
+        inp.addEventListener('change', scheduleRecalc);
+      });
+    });
+
+    // PG por año
+    const pgSel = document.getElementById('pg-year');
+    if (pgSel) pgSel.addEventListener('change', async ()=> {
+      await pintarPG();
+      scheduleRecalc();
+    });
+    await pintarPG();
+
+    // primer cálculo
+    recalcularTodo();
+  });
+
+  // expone helpers por si quieres probar en consola
+  window.__cipRecalc = scheduleRecalc;
+  window.__cipChart  = scheduleChart;
+
+})();
+</script>
+
+
+
+
+
+
+<script>
+  function imprimirConRegimenCompleto(){
+    // Activamos “modo impresión” para que la tabla quepa completa
+    document.body.classList.add('print-regimen-landscape');
+
+    // imprimir
+    window.print();
+
+  }
+</script>
+
+
+
+<script>
+(function(){
+  // ✅ Usa el endpoint que YA te funciona en Tabla 3 si existe; si no, pon el tuyo
+  const UMA_ENDPOINT =
+    (window.UMA_ENDPOINT && String(window.UMA_ENDPOINT)) ||
+    '/analisis/get_uma.php'; // <-- AJUSTA si tu ruta es otra
+
+  function dmyToYmd(dmy){
+    const m = String(dmy||'').trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+  }
+
+  async function fetchUMA(year){
+    const url = `${UMA_ENDPOINT}?year=${encodeURIComponent(year)}`;
+    const res = await fetch(url, { headers: { 'Accept':'application/json' }});
+    const json = await res.json();
+    if (!json || !json.success) throw new Error(json?.message || 'UMA inválida');
+    return json.data;
+  }
+
+  async function pintarUMABaja(){
+    const yearEl = document.getElementById('umaYearBaja');
+    const valEl  = document.getElementById('umaValueBaja');
+    if (!yearEl || !valEl) return;
+
+    // 1) intenta del input date
+    const inp = document.getElementById('ultimaCotizacionInput_calc');
+    let ymd = (inp?.value || '').trim();
+
+    // 2) si no hay, intenta de sessionStorage
+    if (!ymd){
+      let data=null;
+      try { data = JSON.parse(sessionStorage.getItem('CIP_DATOS_TABLA3') || 'null'); } catch(e){}
+      if (data){
+        ymd = (data.fecha_actualxd_ymd || '').trim();
+        if (!ymd) ymd = dmyToYmd((data.fecha_actualxd || '').trim());
+      }
+      // si lo encontramos, rellena el input para que ya quede visible
+      if (inp && ymd) inp.value = ymd;
+    }
+
+    const year = ymd ? Number(ymd.slice(0,4)) : 0;
+
+    console.log('[UMA BAJA] ymd:', ymd, 'year:', year, 'endpoint:', UMA_ENDPOINT);
+
+    if (!year){
+      yearEl.textContent = '—';
+      valEl.textContent  = '$0.00';
+      return;
+    }
+
+try{
+  const d = await fetchUMA(year);
+  const uma = Number(d.uma || 0);
+
+  yearEl.textContent = String(d.year ?? year);
+  valEl.textContent  = `$ ${uma.toLocaleString('es-MX',{minimumFractionDigits:2, maximumFractionDigits:2})}`;
+
+  // ✅ guarda UMA BAJA para cálculos
+  UMA_BAJA = { year: (d.year ?? year), uma };
+
+}catch(err){
+  console.error('[UMA BAJA] ERROR:', err);
+  yearEl.textContent = String(year);
+  valEl.textContent = '$0.00';
+  UMA_BAJA = null;
+}
+
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ✅ 1) pinta normal
+    pintarUMABaja();
+
+    // ✅ 2) y vuelve a pintar al final por si otro JS lo sobreescribe
+    setTimeout(pintarUMABaja, 300);
+    setTimeout(pintarUMABaja, 900);
+
+    // ✅ 3) si cambian la fecha, actualiza UMA
+    document.getElementById('ultimaCotizacionInput_calc')
+      ?.addEventListener('change', pintarUMABaja);
+  });
+
+  // por si quieres llamarlo desde consola
+  window.pintarUMABaja = pintarUMABaja;
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const year = new Date().getFullYear();
+
+  // UMA ACTUAL (esta tarjeta)
+  const el = document.getElementById('umaYearActual2');
+  if (el) el.textContent = year;
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  // 🔹 año actual del sistema
+  const year = new Date().getFullYear();
+
+  // 🔹 pinta el año (por si acaso)
+  document.getElementById('umaYearActual2')?.textContent = year;
+
+  // 🔹 endpoint PHP que YA usas en tu sistema
+   '/analisis/get_uma.php'; // AJUSTA si cambia
+
+  try {
+    const res = await fetch(`${UMA_ENDPOINT}?year=${encodeURIComponent(year)}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+
+    const json = await res.json();
+    if (!json || !json.success) {
+      throw new Error(json?.message || 'UMA inválida');
+    }
+
+    const uma = Number(json.data?.uma || 0);
+
+    // ✅ pinta la UMA actual
+    document.getElementById('umaValueActual').textContent =
+      `$ ${uma.toLocaleString('es-MX', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}`;
+
+  } catch (err) {
+    console.error('Error UMA actual:', err);
+    document.getElementById('umaValueActual').textContent = '$0.00';
+  }
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('pg-year');
+  if (!sel) return;
+
+  const year = new Date().getFullYear();
+  const yStr = String(year);
+
+  // ✅ Si ya existe la opción, selecciónala
+  const optExist = Array.from(sel.options).some(o => o.value === yStr);
+  if (optExist) {
+    sel.value = yStr;
+    return;
+  }
+
+  // ✅ Si NO existe, la creamos y la insertamos ordenada
+  const opt = document.createElement('option');
+  opt.value = yStr;
+  opt.textContent = yStr;
+  opt.selected = true;
+
+  // Insertar en orden numérico
+  let inserted = false;
+  for (let i = 0; i < sel.options.length; i++) {
+    const v = Number(sel.options[i].value);
+    if (Number.isFinite(v) && year < v) {
+      sel.insertBefore(opt, sel.options[i]);
+      inserted = true;
+      break;
+    }
+  }
+  if (!inserted) sel.appendChild(opt);
+
+  sel.value = yStr;
+});
+</script>
+
+
+
+<script>
+(function(){
+  "use strict";
+
+  function getBajaYear(){
+    const inp = document.getElementById("ultimaCotizacionInput_calc");
+    const ymd = (inp && inp.value) ? String(inp.value).trim() : ""; // "YYYY-MM-DD"
+    if (!ymd || ymd.length < 4) return null;
+
+    const y = Number(ymd.slice(0, 4));
+    return (Number.isFinite(y) && y >= 1900) ? y : null;
+  }
+
+  function setSelectToYear(sel, year){
+    if (!sel || !year) return false;
+
+    const yStr = String(year);
+
+    // 1) Si ya existe la opción, selecciónala
+    const optExist = Array.from(sel.options).some(o => o.value === yStr);
+    if (optExist){
+      sel.value = yStr;
+      // dispara change por si tu pintarPG depende de esto
+      sel.dispatchEvent(new Event("change", { bubbles:true }));
+      return true;
+    }
+
+    // 2) Si no existe, créala e insértala ordenada
+    const opt = document.createElement("option");
+    opt.value = yStr;
+    opt.textContent = yStr;
+
+    let inserted = false;
+    for (let i = 0; i < sel.options.length; i++){
+      const v = Number(sel.options[i].value);
+      if (Number.isFinite(v) && year < v){
+        sel.insertBefore(opt, sel.options[i]);
+        inserted = true;
+        break;
+      }
+    }
+    if (!inserted) sel.appendChild(opt);
+
+    sel.value = yStr;
+    sel.dispatchEvent(new Event("change", { bubbles:true }));
+    return true;
+  }
+
+  function syncPgYearWithBaja(){
+    const sel = document.getElementById("pg-year");
+    const year = getBajaYear();
+    if (!sel || !year) return;
+
+    // ✅ siempre que haya fecha baja, forzamos año de baja
+    setSelectToYear(sel, year);
+  }
+
+  // 1) Al cargar
+  document.addEventListener("DOMContentLoaded", () => {
+    // un intento inmediato
+    syncPgYearWithBaja();
+
+    // y 2 intentos extra por si otro script rellena la fecha después (sessionStorage)
+    setTimeout(syncPgYearWithBaja, 50);
+    setTimeout(syncPgYearWithBaja, 250);
+    setTimeout(syncPgYearWithBaja, 700);
+  });
+
+  // 2) Cuando cambie la fecha de baja
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.id === "ultimaCotizacionInput_calc"){
+      syncPgYearWithBaja();
+    }
+  });
+
+  // 3) Si tu código cambia value por JS sin lanzar eventos, esto lo detecta
+  const inp = document.getElementById("ultimaCotizacionInput_calc");
+  if (inp){
+    const obs = new MutationObserver(() => syncPgYearWithBaja());
+    obs.observe(inp, { attributes:true, attributeFilter:["value"] });
+  }
+
+  // opcional para probar en consola: window.syncPgYearWithBaja()
+  window.syncPgYearWithBaja = syncPgYearWithBaja;
+
+})();
+</script>
+
+<script>
+/* ==========================================================
+   ✅ CURP → Fecha nacimiento + Edad exacta + Faltan para 60 + Edad de retiro
+   IDs usados:
+   - CURP: #titular-curp   (input o contenteditable o td)
+   - fecha nacimiento: #fecha-nacimiento
+   - edad exacta: #edad-exacta
+   - faltan 60: #faltan-60
+   - rango hoy→60: #rango-hoy-60 (opcional)
+   - edad retiro: #edad-retiro-detalle (span)
+   - fecha pensionado: #fecha-pensionado (ej: "PENSIONADO 14/01/2026")
+========================================================== */
+
+(function(){
+  "use strict";
+
+  /* -------------------------
+     Helpers
+  ------------------------- */
+  function pad2(n){ return String(n).padStart(2,'0'); }
+
+  function formatDMY(d){
+    return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
+  }
+
+  // ✅ Devuelve el texto/valor del CURP sin importar si es input o contenteditable o td
+  function readCurp(){
+    const el = document.getElementById("titular-curp");
+    if (!el) return "";
+    const raw = ("value" in el) ? el.value : el.textContent;
+    return String(raw || "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 18);
+  }
+
+  // ✅ CURP básica: 4 letras + 6 dígitos fecha + H/M + 5 letras + alfanum + dígito
+  function isValidCurpBasic(curp){
+    return /^[A-Z]{4}\d{6}[HM][A-Z]{5}[0-9A-Z]\d$/.test(curp);
+  }
+
+  // ✅ Determina siglo con el carácter 17 (índice 16):
+  // dígito => 1900s, letra => 2000s
+  function nacimientoDesdeCURP(curp){
+    curp = String(curp || "");
+    if (curp.length !== 18) return null;
+
+    const yy = curp.slice(4,6);
+    const mm = curp.slice(6,8);
+    const dd = curp.slice(8,10);
+
+    if (!/^\d{2}$/.test(yy) || !/^\d{2}$/.test(mm) || !/^\d{2}$/.test(dd)) return null;
+
+    const year2 = parseInt(yy,10);
+    const month = parseInt(mm,10);
+    const day   = parseInt(dd,10);
+
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+    const c17 = curp.charAt(16);
+    const fullY = (/^\d$/.test(c17) ? 1900 : 2000) + year2;
+
+    const d = new Date(fullY, month-1, day);
+    if (d.getFullYear() !== fullY || d.getMonth() !== (month-1) || d.getDate() !== day) return null;
+
+    return d;
+  }
+
+  // ✅ Cálculo tipo SIFECHA (años, meses, días exactos)
+  function diffYMD(from, to){
+    if (!(from instanceof Date) || !(to instanceof Date)) return null;
+
+    // fechas limpias para evitar DST
+    const A = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+    const B = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+    if (B < A) return { years:0, months:0, days:0 };
+
+    let years  = B.getFullYear() - A.getFullYear();
+    let months = B.getMonth() - A.getMonth();
+    let days   = B.getDate() - A.getDate();
+
+    if (days < 0){
+      months--;
+      const lastDayPrevMonth = new Date(B.getFullYear(), B.getMonth(), 0).getDate();
+      days += lastDayPrevMonth;
+    }
+
+    if (months < 0){
+      years--;
+      months += 12;
+    }
+
+    return { years, months, days };
+  }
+
+  // ✅ Lee "DD/MM/YYYY" dentro de un texto tipo "PENSIONADO 14/01/2026"
+  function parseDMYFromText(txt){
+    const m = String(txt || "").match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    if (!m) return null;
+    const dd = parseInt(m[1],10);
+    const mm = parseInt(m[2],10) - 1;
+    const yy = parseInt(m[3],10);
+    const d = new Date(yy, mm, dd);
+    return isNaN(d) ? null : d;
+  }
+
+  /* -------------------------
+     Pintar todo (nacimiento + edades)
+  ------------------------- */
+  function pintarDatosDesdeCURP(){
+    const curp = readCurp();
+
+    const outFN    = document.getElementById("fecha-nacimiento");
+    const outEdad  = document.getElementById("edad-exacta");
+    const outF60   = document.getElementById("faltan-60");
+    const outR60   = document.getElementById("rango-hoy-60");
+    const outRet   = document.getElementById("edad-retiro-detalle"); // ✅ NUEVO
+
+    // reset helper
+    function resetAll(){
+      if (outFN)   outFN.textContent = "--/--/----";
+      if (outEdad) outEdad.textContent = "-- años -- meses -- días";
+      if (outF60)  outF60.textContent  = "-- años -- meses -- días";
+      if (outR60)  outR60.textContent  = "--/--/---- ➜ --/--/----";
+      if (outRet)  outRet.textContent  = "EDAD DE RETIRO: -- años -- meses -- días";
+    }
+
+    if (!curp){
+      resetAll();
+      return;
+    }
+
+    const nac = nacimientoDesdeCURP(curp);
+    if (!nac){
+      resetAll();
+      return;
+    }
+
+    // ✅ Fecha nacimiento
+    if (outFN) outFN.textContent = formatDMY(nac);
+
+    // ✅ Edad exacta hoy
+    const hoy = new Date();
+    const edad = diffYMD(nac, hoy);
+    if (outEdad && edad){
+      outEdad.textContent = `${edad.years} años ${edad.months} meses ${edad.days} días`;
+    }
+
+    // ✅ Falta para 60
+    const cumple60 = new Date(nac.getFullYear() + 60, nac.getMonth(), nac.getDate());
+    if (outF60){
+      if (hoy >= cumple60){
+        outF60.textContent = "0 años 0 meses 0 días";
+      } else {
+        const faltan = diffYMD(hoy, cumple60);
+        outF60.textContent = `${faltan.years} años ${faltan.months} meses ${faltan.days} días`;
+      }
+    }
+
+    // ✅ Rango HOY -> 60 (opcional)
+    if (outR60){
+      const hoyLimpio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+      outR60.textContent = `${formatDMY(hoyLimpio)} ➜ ${formatDMY(cumple60)}`;
+    }
+
+    // ✅ EDAD DE RETIRO = SIFECHA(nacimiento, fecha_pensionado)
+    if (outRet){
+      const pensionadoEl = document.getElementById("fecha-pensionado");
+      const fechaRetiro  = parseDMYFromText(pensionadoEl?.textContent || "");
+
+      if (!fechaRetiro){
+        outRet.textContent = "EDAD DE RETIRO: -- años -- meses -- días";
+      } else {
+        const er = diffYMD(nac, fechaRetiro);
+        outRet.textContent = `EDAD DE RETIRO: ${er.years} años ${er.months} meses ${er.days} días`;
+      }
+    }
+
+    // ✅ marca inválida visualmente si quieres
+    const elCurp = document.getElementById("titular-curp");
+    if (elCurp){
+      const invalid = (curp.length === 18 && !isValidCurpBasic(curp));
+      elCurp.classList.toggle("is-invalid", invalid);
+    }
+  }
+
+  /* -------------------------
+     Init + listeners
+  ------------------------- */
+  document.addEventListener("DOMContentLoaded", () => {
+    pintarDatosDesdeCURP();
+
+    const el = document.getElementById("titular-curp");
+    if (el){
+      el.addEventListener("input", pintarDatosDesdeCURP);
+      el.addEventListener("blur",  pintarDatosDesdeCURP);
+    }
+
+    // ✅ cuando cambie la fecha pensionado (por tu recálculo), vuelve a pintar "edad de retiro"
+    const pensionadoEl = document.getElementById("fecha-pensionado");
+    if (pensionadoEl){
+      const obs = new MutationObserver(() => {
+        requestAnimationFrame(pintarDatosDesdeCURP);
+      });
+      obs.observe(pensionadoEl, { childList:true, characterData:true, subtree:true });
+    }
+  });
+
+  // por si quieres probar en consola:
+  window.__pintarCURP = pintarDatosDesdeCURP;
+
+})();
+
+</script>
+
+
+
+
+
+<script>
+(function(){
+  function unlockScroll(){
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+
+    // por si quedó una clase pegada
+    document.body.classList.remove('print-regimen-landscape');
+    document.body.classList.remove('pdf-export');
+  }
+
+  // al cargar
+  document.addEventListener('DOMContentLoaded', unlockScroll);
+
+  // al terminar impresión
+  window.addEventListener('afterprint', unlockScroll);
+
+  // por si algo lo vuelve a bloquear después
+  setTimeout(unlockScroll, 300);
+  setTimeout(unlockScroll, 1200);
+})();
+</script>
+
+
+
+
+<script>
+async function guardarPDF(){
+  // ✅ valida librería
+  if (typeof html2pdf === 'undefined') {
+    alert('No está cargado html2pdf.js');
+    return;
+  }
+
+  // ✅ usa el contenedor recomendado
+  const element = document.getElementById('pdfArea') || document.body;
+
+  // 🔒 modo PDF (oculta .no-print y aplica tus ajustes)
+  document.body.classList.add('pdf-export');
+
+  // ✅ evita que tu gráfica se “recalcule raro” durante captura
+  window.__printing = true;
+
+  try{
+    // sube al inicio para capturar bien
+    window.scrollTo(0,0);
+
+    // deja que el DOM aplique estilos
+    await new Promise(r => requestAnimationFrame(r));
+    await new Promise(r => requestAnimationFrame(r));
+
+    // ✅ si existe tu función de gráfica, fuerza modo “print”
+    if (typeof window.__cipChart === 'function') {
+      window.__cipChart(); // tu scheduler
+    }
+    if (typeof window.updateChart === 'function') {
+      window.updateChart(true);
+    }
+
+    await new Promise(r => requestAnimationFrame(r));
+
+    const opt = {
+      margin:       [5, 5, 5, 5], // mm aprox (html2pdf lo interpreta en "unidad" del jsPDF)
+      filename:     `CIP_Pension_${new Date().toISOString().slice(0,10)}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  {
+        scale: 2,            // más nitidez
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.scrollWidth
+      },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all','css','legacy'] }
+    };
+
+    await html2pdf().set(opt).from(element).save();
+
+  } catch(err){
+    console.error('Error al generar PDF:', err);
+    alert('No se pudo generar el PDF. Revisa consola (F12).');
+  } finally {
+    // 🔓 limpieza
+    window.__printing = false;
+    document.body.classList.remove('pdf-export');
+  }
+}
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  function syncSelectToPrint(selectId, printId){
+    const sel = document.getElementById(selectId);
+    const out = document.getElementById(printId);
+    if (!sel || !out) return;
+
+    const render = () => {
+      const txt = sel.options[sel.selectedIndex]?.text || '';
+      out.textContent = txt;
+    };
+
+    sel.addEventListener('change', render);
+    render(); // inicial
+  }
+
+  // 🔹 sincroniza aquí todos tus selects
+  syncSelectToPrint('tipoPension', 'print-tipoPension');
+  syncSelectToPrint('edadRetiro', 'print-edadRetiro');
+});
+</script>
+
+
+<script>
+function volver(){
+  // ✅ 1) guarda estado si existe tu persistencia
+  try { window.__spPersist?.save?.(); } catch(e){}
+
+  const BASE = (typeof BASE_URL !== 'undefined' && BASE_URL)
+    ? BASE_URL
+    : (location.pathname.includes('/sempiternal/public/') ? '/sempiternal/public/' : '/');
+
+  const BAD = ['/analisis/procesar.php'];
+
+  // ✅ 2) si el referrer es válido y NO es procesar.php, regresar ahí
+  const ref = document.referrer || '';
+  const sameHost = ref.includes(location.host);
+
+  if (ref && sameHost && !BAD.some(b => ref.includes(b)) && ref !== location.href) {
+    location.href = ref;
+    return;
+  }
+
+  // ✅ 3) intenta history.back() pero si cae en procesar.php lo corregimos
+  history.back();
+
+  setTimeout(() => {
+    const path = location.pathname || '';
+    if (BAD.some(b => path.includes(b))) {
+      // ✅ fallback final al index
+      location.href = BASE + 'index.php';
+    }
+  }, 250);
+}
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let data = null;
+  try { data = JSON.parse(sessionStorage.getItem('CIP_DATOS_TABLA3') || 'null'); }
+  catch(e){ data = null; }
+
+  if (!data) {
+    console.warn('⚠️ No hay CIP_DATOS_TABLA3 en sessionStorage');
+    return;
+  }
+
+  const clean = (v) =>
+    String(v ?? '')
+      .replace(/\$/g,'')
+      .replace(/,/g,'')
+      .replace(/;/g,'')
+      .trim();
+
+  const setVal = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const v = clean(value);
+
+    // input/textarea/select
+    if ('value' in el) {
+      el.value = v;
+      el.dispatchEvent(new Event('input',  { bubbles:true }));
+      el.dispatchEvent(new Event('change', { bubbles:true }));
+      return;
+    }
+
+    // contenteditable / span / div
+    el.textContent = v;
+    el.dispatchEvent(new Event('input',  { bubbles:true }));
+    el.dispatchEvent(new Event('change', { bubbles:true }));
+  };
+
+  // ✅ PINTAR CAMPOS
+  setVal('titularNombre',   data.nombre);
+  setVal('titularNss',      data.nss);
+  setVal('titular-curp',    data.curp);
+  setVal('semanasCotizadas',data.semanas);
+  setVal('salarioPromedio', data.diario);
+
+  console.log('✅ SP cargó datos:', data);
+
+  // ✅ Si tu recalculo existe, lo forzamos al final
+  if (typeof window.__cipRecalc === 'function') {
+    window.__cipRecalc();
+  } else if (typeof window.recalcularTodo === 'function') {
+    window.recalcularTodo();
+  }
+});
+</script>
+
+<script>
+function salirDelCalculo(){
+  const ok = confirm(
+    'Vas a salir del cálculo de pensión y regresarás a tu dashboard.\n\n¿Estás seguro?'
+  );
+
+  if (!ok) return;
+
+  // Detecta si estás en /sempiternal/public/ o raíz
+  const path = location.pathname;
+
+  if (path.includes('/sempiternal/public/')) {
+    window.location.href = '/sempiternal/public/index.php';
+  } else {
+    window.location.href = '/index.php';
+  }
+}
+</script>
+<script>
+(function(){
+  const inp = document.getElementById('salarioPromedio');
+  if(!inp) return;
+
+  function cleanToNumber(str){
+    const s = String(str||'')
+      .replace(/\$/g,'')
+      .replace(/\s/g,'')
+      .replace(/,/g,'');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function formatMXN(n){
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(n);
+  }
+
+  // mientras escribe: solo deja números y punto
+  inp.addEventListener('input', () => {
+    inp.value = inp.value
+      .replace(/[^\d.]/g,'')
+      .replace(/(\..*)\./g,'$1'); // solo 1 punto
+  });
+
+  // al salir: formatea con $
+  inp.addEventListener('blur', () => {
+    const n = cleanToNumber(inp.value);
+    if(n <= 0){ inp.value = ''; return; }
+    inp.value = formatMXN(n);
+  });
+
+  // al entrar: quita formato para editar rápido
+  inp.addEventListener('focus', () => {
+    const n = cleanToNumber(inp.value);
+    inp.value = (n > 0) ? String(n) : '';
+  });
+})();
+</script>
+
+</body>
+</html>

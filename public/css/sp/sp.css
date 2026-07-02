@@ -1,0 +1,3247 @@
+
+
+@media print {
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1900px;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.header {
+  background-color: #1a3a5f;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.header .subtitle {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.main-content {
+  padding: 30px;
+}
+
+.section-title {
+  background-color: #2c5282;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  margin: 25px 0 15px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.pension-calculation-container {
+  width: 100%;
+  margin: 30px 0;
+}
+
+.calculation-tables {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.calculation-table-wrapper {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.table-title {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #1a3a5f;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #2c5282;
+}
+
+.calculation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.calculation-table th {
+  background-color: #2c5282;
+  color: white;
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid #2c5282;
+}
+
+.calculation-table td {
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.calculation-table tr:nth-child(even) {
+  background-color: white;
+}
+
+.calculation-table tr:nth-child(odd) {
+  background-color: #f8fafc;
+}
+
+.total-box {
+  text-align: center;
+  background-color: #e6f7ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 2px solid #2c5282;
+}
+
+.total-label {
+  font-size: 1.1rem;
+  color: #2c5282;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.total-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a3a5f;
+}
+
+.increments-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.increments-table th {
+  background-color: #2c5282;
+  color: white;
+  padding: 10px 5px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid #2c5282;
+}
+
+.increments-table td {
+  padding: 10px 5px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.increments-table tr:nth-child(even) {
+  background-color: white;
+}
+
+.increments-table tr:nth-child(odd) {
+  background-color: #f8fafc;
+}
+
+.special-header-row {
+  background-color: #2c5282 !important;
+  color: white;
+  font-weight: 600;
+}
+
+.special-header-row td {
+  background-color: #2c5282 !important;
+  color: white;
+  font-weight: 700;
+  padding: 12px 5px;
+  border: 1px solid #3a6aa5;
+}
+
+.data-row {
+  background-color: white;
+}
+
+.regimen-container {
+  width: 100%;
+  margin: 30px 0;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.regimen-title {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #1a3a5f;
+  font-weight: 700;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #2c5282;
+}
+
+.regimen-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.regimen-table th {
+  background-color: #1a3a5f;
+  color: white;
+  padding: 15px 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid #2c5282;
+}
+
+.regimen-table td {
+  padding: 15px 10px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.main-header {
+  background-color: #2c5282;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.sub-header {
+  background-color: #4299e1;
+  font-weight: 600;
+}
+
+.regimen-data {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #1a3a5f;
+  font-size: 1rem;
+}
+
+.percentage-cell {
+  background-color: #e6f7ff;
+  font-weight: 700;
+  color: #2b6cb0;
+  font-size: 1.1rem;
+}
+
+.note-text {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 15px;
+  text-align: center;
+  font-style: italic;
+  padding-top: 15px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.pension-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.info-block {
+  flex: 1;
+  min-width: 250px;
+  margin: 10px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #2c5282;
+}
+
+.info-block h3 {
+  color: #2c5282;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #ddd;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.info-value {
+  font-weight: 700;
+  color: #1a3a5f;
+}
+
+.pension-amount {
+  text-align: center;
+  background-color: #e6f7ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 25px 0;
+  border: 2px dashed #2c5282;
+}
+
+.pension-amount .label {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.pension-amount .value {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1a3a5f;
+}
+
+.systems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.system-item {
+  background-color: #f0f9ff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #cce7ff;
+}
+
+.system-title {
+  font-weight: 600;
+  color: #2c5282;
+  margin-bottom: 5px;
+}
+
+.system-value {
+  font-weight: 700;
+  color: #1a3a5f;
+}
+
+.footer {
+  background-color: #1a3a5f;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.9rem;
+}
+
+.footer a {
+  color: #90cdf4;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.date-section {
+  text-align: right;
+  font-style: italic;
+  margin-top: 20px;
+  color: #666;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #2c5282;
+}
+
+.observation-box {
+  background-color: #fff8e1;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  margin: 20px 0;
+}
+
+.calculation-number {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background-color: #2c5282;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.header-content {
+  position: relative;
+}
+
+.divider {
+  height: 2px;
+  background: linear-gradient(to right, transparent, #2c5282, transparent);
+  margin: 40px 0;
+}
+
+.uma-tables-section {
+  margin: 30px 0;
+}
+
+.uma-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.uma-card {
+  flex: 1;
+  min-width: 250px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.uma-card-title {
+  background-color: #2c5282;
+  color: white;
+  padding: 12px;
+  margin: -20px -20px 20px -20px;
+  border-radius: 10px 10px 0 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.uma-year {
+  font-size: 1.3rem;
+  color: #1a3a5f;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.uma-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #2c5282;
+  margin: 15px 0;
+}
+
+.age-highlight {
+  font-size: 1.5rem;
+  color: #1a3a5f;
+  font-weight: 700;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.pension-calculation-table-container {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.pension-calculation-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.pension-calculation-table thead {
+  background-color: #1a3a5f;
+  color: white;
+}
+
+.pension-calculation-table th {
+  padding: 16px 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pension-calculation-table th:last-child {
+  border-right: none;
+}
+
+.pension-calculation-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pension-calculation-table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.pension-calculation-table tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.pension-calculation-table td {
+  padding: 14px 10px;
+  text-align: center;
+  border-right: 1px solid #e2e8f0;
+}
+
+.pension-calculation-table td:first-child {
+  font-weight: 600;
+  color: #1a3a5f;
+}
+
+.pension-calculation-table td:last-child {
+  border-right: none;
+}
+
+.age-column {
+  font-weight: 700 !important;
+  color: #1a3a5f !important;
+  background-color: #e6f7ff !important;
+}
+
+.percentage-column {
+  color: #2c5282;
+  font-weight: 600;
+}
+
+.subtotal-column {
+  color: #2b6cb0;
+  font-weight: 600;
+}
+
+.controls-column {
+  color: #38a169;
+  font-weight: 600;
+}
+
+.annual-column {
+  color: #d69e2e;
+  font-weight: 700;
+}
+
+.monthly-column {
+  color: #805ad5;
+  font-weight: 700;
+}
+
+.row-65 {
+  background-color: #e6f7ff !important;
+  font-weight: 700;
+}
+
+.empty-cell {
+  background-color: #f8f9fa;
+  color: #a0aec0;
+}
+
+/* ===========================
+   INVERSIÓN CON SALARIO TOPADO - DISEÑO MEJORADO
+   ============================ */
+.investment-section {
+  margin: 40px 0 30px;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.investment-title {
+  text-align: center;
+  font-weight: 700;
+  padding: 20px 10px 15px;
+  font-size: 1.4rem;
+  color: #1a3a5f;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #2c5282;
+}
+
+.investment-subtitle {
+  text-align: center;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.investment-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  background-color: #fff;
+}
+
+.investment-column {
+  flex: 1;
+  min-width: 280px;
+  padding: 20px;
+}
+
+.investment-column.left {
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+
+.investment-column.right {
+  background-color: #f8fafc;
+  border-left: 1px solid #e2e8f0;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0 auto;
+}
+
+.info-table th {
+  background-color: #2c5282;
+  color: white;
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid #2c5282;
+}
+
+.info-table td {
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+}
+
+.info-header-green {
+  background-color: #38a169 !important;
+  color: white;
+  font-weight: 700;
+}
+
+.info-highlight {
+  background-color: #e6f7ff !important;
+  color: #2c5282 !important;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.info-row-alt {
+  background-color: #f8fafc !important;
+}
+
+.investment-chart-wrapper {
+  flex: 2;
+  min-width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+}
+
+.chart-3d-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.chart-axes {
+  position: relative;
+  padding-left: 60px;
+  padding-bottom: 40px;
+  height: 250px;
+}
+
+/* ✅ CORREGIDO: líneas en 25%, 50%, 75% (coincide con labels 0/25/50/75/100) */
+.chart-y-lines{
+  position: absolute;
+  left: 60px;
+  right: 30px;
+  top: 0;
+  bottom: 40px;
+
+  background-image:
+    repeating-linear-gradient(to right, #e2e8f0 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(to right, #e2e8f0 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(to right, #e2e8f0 0 6px, transparent 6px 12px);
+  background-size: 100% 1px, 100% 1px, 100% 1px;
+  background-position: 0 25%, 0 50%, 0 75%;
+  background-repeat: no-repeat;
+}
+
+/* ✅ Eliminar reglas antiguas que generaban 33%/66% */
+.chart-y-lines::before,
+.chart-y-lines::after{
+  content: none !important;
+  display: none !important;
+}
+
+.chart-x-line {
+  position: absolute;
+  left: 60px;
+  right: 30px;
+  bottom: 40px;
+  border-bottom: 2px solid #4a5568;
+}
+
+/* ✅ CORREGIDO: sin padding raro para que el 0 y el 100 queden clavados */
+.chart-y-labels {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 0.85rem;
+  color: #4a5568;
+  font-weight: 600;
+  padding: 0 5px 0 0; /* antes: 10px 5px 30px 0 */
+}
+
+.chart-y-labels span {
+  background-color: white;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid #e2e8f0;
+}
+
+.chart-bars{
+  height: 200px;          /* igual al plotHeight del JS */
+  padding-bottom: 0;      /* 🔥 quita el padding que desalineaba */
+  margin-left: 60px;
+  margin-right: 30px;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: relative;
+}
+.bar-3d {
+  position: relative;
+  width: 80px;
+  height: 0;
+  transform: skewX(-10deg);
+  transform-origin: bottom;
+  transition: height 1s ease;
+  cursor: pointer;
+}
+
+.bar-front {
+  position: absolute;
+  inset: 0;
+  transform: skewX(10deg);
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+}
+
+.bar-3d:hover .bar-front {
+  filter: brightness(110%);
+  transform: skewX(10deg) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bar-imss .bar-front {
+  background: linear-gradient(to bottom, #4299e1, #2c5282);
+  border: 1px solid #2c5282;
+  box-shadow: 0 2px 8px rgba(44, 82, 130, 0.3);
+}
+
+.bar-pmgcdmx .bar-front {
+  background: linear-gradient(to bottom, #48bb78, #2f855a);
+  border: 1px solid #2f855a;
+  box-shadow: 0 2px 8px rgba(47, 133, 90, 0.3);
+}
+
+.bar-value {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c5282;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 100px;
+  text-align: center;
+  z-index: 10;
+}
+
+.bar-imss .bar-value {
+  color: #2c5282;
+  border-color: #2c5282;
+}
+
+.bar-pmgcdmx .bar-value {
+  color: #2f855a;
+  border-color: #2f855a;
+}
+
+.chart-x-labels {
+  position: absolute;
+  left: 60px;
+  right: 30px;
+  bottom: 15px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.chart-x-labels span {
+  background-color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.chart-legend {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.legend-item {
+  margin: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #4a5568;
+  background-color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.legend-color {
+  width: 20px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.legend-color.imss {
+  background: linear-gradient(to right, #4299e1, #2c5282);
+}
+
+.legend-color.pmg {
+  background: linear-gradient(to right, #48bb78, #2f855a);
+}
+
+.investment-footer-strip {
+  background-color: #e6f7ff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid #2c5282;
+  color: #1a3a5f;
+}
+
+.investment-footer-strip span {
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+/* Media queries para responsive */
+@media (max-width: 1100px) {
+  .investment-layout {
+    flex-direction: column;
+  }
+
+  .investment-column {
+    min-width: 100%;
+  }
+
+  .investment-column.left,
+  .investment-column.right {
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .investment-chart-wrapper {
+    order: -1;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .investment-footer-strip {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .investment-title {
+    font-size: 1.2rem;
+    padding: 15px 10px 10px;
+  }
+
+  .info-table {
+    font-size: 0.85rem;
+  }
+
+  .info-table th,
+  .info-table td {
+    padding: 8px 5px;
+  }
+
+  .chart-axes {
+    padding-left: 50px;
+    padding-bottom: 30px;
+    height: 200px;
+  }
+
+  .chart-y-labels {
+    font-size: 0.8rem;
+  }
+
+  .chart-bars {
+    margin-left: 50px;
+    margin-right: 20px;
+    height: 160px;
+  }
+
+  .bar-3d {
+    width: 60px;
+  }
+
+  .bar-value {
+    font-size: 0.8rem;
+    min-width: 80px;
+    padding: 4px 8px;
+  }
+
+  .investment-footer-strip {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+  }
+
+  .uma-container {
+    flex-direction: column;
+  }
+
+  .uma-card {
+    min-width: 100%;
+  }
+
+  .calculation-tables {
+    flex-direction: column;
+  }
+
+  .calculation-table-wrapper {
+    min-width: 100%;
+  }
+
+  .pension-info {
+    flex-direction: column;
+  }
+
+  .contact-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .contact-info div {
+    margin-bottom: 10px;
+  }
+
+  .pension-amount .value {
+    font-size: 2rem;
+  }
+
+  .regimen-table {
+    font-size: 0.85rem;
+  }
+
+  .regimen-table th,
+  .regimen-table td {
+    padding: 10px 5px;
+  }
+
+  .regimen-title {
+    font-size: 1.2rem;
+  }
+
+  .total-value {
+    font-size: 1.5rem;
+  }
+
+  .increments-table th,
+  .increments-table td {
+    padding: 8px 3px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Animaciones para las barras */
+@keyframes barGrow {
+  from { height: 0; }
+  to { height: var(--bar-height); }
+}
+
+/* Asegurar que las barras tengan altura inicial */
+.bar-3d.bar-imss {
+  --bar-height: 180px;
+}
+
+.bar-3d.bar-pmgcdmx {
+  --bar-height: 120px;
+}
+
+/* ====== extras tuyos ====== */
+.tabla-responsive{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+.regimen-table{
+  width:100%;
+  min-width:1100px;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.row-percent td{ background:#eaf5ff; font-weight:800; }
+.percent-empty{ text-align:center; color:#0b3a66; }
+.percent-empty .mini{ font-size:.9em; opacity:.75; font-weight:600; }
+
+.pension-select{
+  width:100%;
+  padding:10px 40px 10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,.18);
+  background:#fff;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+#edadRetiro.pension-select{ text-align:center; }
+
+.inline-input{ display:flex; align-items:center; gap:10px; }
+
+.pension-input{
+  width:120px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,.18);
+  font-weight:700;
+}
+
+.suffix{ white-space:nowrap; opacity:.8; font-weight:700; }
+
+.yn-toggle{
+  display:inline-flex;
+  gap:8px;
+  padding:6px;
+  border-radius:14px;
+  background:#f1f5f9;
+  border:1px solid rgba(15,23,42,.12);
+}
+
+.yn-toggle input{ position:absolute; left:-9999px; }
+
+.yn-toggle label{
+  padding:8px 14px;
+  border-radius:12px;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.10);
+}
+
+.yn-toggle input:checked + label{
+  background:#0ea5e9;
+  color:#fff;
+  border-color:#0ea5e9;
+}
+
+.select-fulltext{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:700;
+  color:#0b2d4d;
+  opacity:.9;
+  line-height:1.15;
+  white-space:normal;
+  word-break:break-word;
+}
+
+.hijos-select{
+  height:44px;
+  border-radius:14px;
+  font-weight:800;
+  text-align:center;
+  padding:0 10px;
+}
+
+.pension-calculation-table tr.is-selected td{
+  background:#e9f6ff !important;
+  font-weight:800;
+}
+
+.pension-calculation-table tr.is-selected td.age-column{
+  text-decoration: underline;
+}
+
+.pension-calculation-table tr.is-hidden{
+  display:none !important;
+}
+
+.info-input{
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.info-input:focus{
+  background: #fff;
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* ==========================
+   COMPACTAR DISEÑO (sin hacerlo mini)
+   Pegar AL FINAL del CSS
+   ========================== */
+
+body{
+  padding: 10px !important;
+}
+
+.container{
+  max-width: 1400px !important;
+}
+
+.header{
+  padding: 20px !important;
+}
+
+.main-content{
+  padding: 18px !important;
+}
+
+.section-title{
+  margin: 16px 0 10px !important;
+  padding: 10px 14px !important;
+  font-size: 1.15rem !important;
+}
+
+.pension-calculation-container,
+.regimen-container,
+.uma-tables-section,
+.investment-section{
+  margin: 18px 0 !important;
+}
+
+.calculation-table-wrapper,
+.uma-card{
+  padding: 14px !important;
+}
+
+.pension-amount{
+  margin: 16px 0 !important;
+  padding: 14px !important;
+}
+
+.pension-amount .value{
+  font-size: 2.2rem !important;
+}
+
+.divider{
+  margin: 24px 0 !important;
+}
+
+/* ==========================
+   ALINEAR CUANTÍA BÁSICA vs INCREMENTOS
+   ========================== */
+
+.calculation-table-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+.calculation-table-wrapper .total-box{
+  margin-top: auto;
+}
+
+.calculation-table-wrapper .total-box{
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.calculation-table-wrapper .total-label{
+  margin-bottom: 6px;
+}
+
+.regimen-divider{
+  height: 10px;
+}
+
+/* que la tabla de abajo se vea como “bloque” */
+.regimen-table-bottom{
+  margin-top: 6px;
+}
+
+/* el % chiquito en header */
+.regimen-table-bottom .pct{
+  font-weight: 800;
+  opacity: .85;
+  margin-left: 6px;
+}
+
+
+/* =========================
+   IMPRESIÓN FINAL (LIMPIO / SIN BUGS)
+========================= */
+@media print {
+
+  @page { size: Letter; margin: 8mm; }
+
+  html, body{
+    background:#fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ✅ Ajuste general */
+  body{ zoom: 1.00; }
+
+  .container{
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .main-content{ padding: 10px !important; }
+
+  /* ✅ Header compacto */
+  .header{ padding: 12px !important; margin: 0 0 10px 0 !important; }
+  .header h1{ font-size: 20px !important; margin: 0 0 6px 0 !important; line-height: 1.1 !important; }
+  .subtitle{ font-size: 13px !important; margin: 0 0 8px 0 !important; }
+  .contact-info{ font-size: 11px !important; }
+
+  /* ✅ Títulos */
+  .section-title{
+    font-size: 14px !important;
+    padding: 9px 12px !important;
+    margin: 10px 0 !important;
+  }
+
+  /* ✅ 2 tarjetas lado a lado */
+  .pension-info{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+  .info-block{
+    min-width: 0 !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+  }
+  .info-block h3{ font-size: 13px !important; margin: 0 0 6px 0 !important; }
+  .info-label, .info-value, .info-input{ font-size: 11px !important; }
+
+  /* =========================================================
+     ✅ REGLA CLAVE:
+     NO bloquees cortes de TODAS las tablas (eso crea el hueco)
+  ========================================================= */
+  table, thead, tbody, tr, td, th{
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  /* ✅ Solo “avoid” en bloques chicos (no en la tabla grande) */
+  .regimen-table,
+  .info-table,
+  .calculation-table,
+  .increments-table,
+  .uma-card,
+  .calculation-table-wrapper,
+  .total-box{
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* =========================
+     ✅ TABLA RÉGIMEN (ancho completo)
+  ========================= */
+  .tabla-responsive{
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .regimen-container{
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  .regimen-table{
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  .regimen-table, .regimen-table *{
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .regimen-table th,
+  .regimen-table td{
+    padding: 4px 5px !important;
+    font-size: 9.5px !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    vertical-align: middle !important;
+  }
+
+  .regimen-table input,
+  .regimen-table select{
+    width: 100% !important;
+    height: 22px !important;
+    padding: 2px 5px !important;
+    font-size: 9.5px !important;
+    border-radius: 8px !important;
+  }
+
+  .regimen-table .yn-toggle{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 3px !important;
+    justify-items: stretch !important;
+  }
+  .regimen-table .yn-toggle label{
+    width: 100% !important;
+    text-align: center !important;
+    padding: 2px 4px !important;
+    font-size: 9px !important;
+    white-space: nowrap !important;
+  }
+
+  /* =========================
+     ✅ CÁLCULO DE PENSIÓN (2 columnas siempre)
+  ========================= */
+  .pension-calculation-container .calculation-tables{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+  .calculation-table-wrapper{ min-width: 0 !important; }
+
+  .calculation-table-wrapper .table-title{
+    font-size: 13px !important;
+    padding: 8px 10px !important;
+    margin: 0 0 8px 0 !important;
+  }
+
+  .calculation-table th,
+  .calculation-table td,
+  .increments-table th,
+  .increments-table td{
+    padding: 5px 6px !important;
+    font-size: 9.5px !important;
+    line-height: 1.15 !important;
+  }
+
+  .total-box{
+    margin-top: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+  .total-label{ font-size: 11px !important; }
+  #cb-total, #total-inc{ font-size: 20px !important; }
+
+  .observation-box{
+    margin-top: 10px !important;
+    padding: 10px 12px !important;
+    font-size: 10.5px !important;
+  }
+
+  /* =========================
+     ✅ UMA (3 columnas siempre)
+  ========================= */
+  .uma-tables-section .uma-container{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+  .uma-container > .uma-card{ min-width: 0 !important; width: auto !important; }
+
+  .uma-card{ padding: 10px 12px !important; border-radius: 12px !important; }
+  .uma-card-title{ font-size: 11.5px !important; padding: 8px 10px !important; }
+  .uma-year{ font-size: 12px !important; margin: 8px 0 4px !important; }
+  .uma-value{ font-size: 22px !important; margin: 2px 0 8px !important; }
+  .age-highlight{ font-size: 12px !important; padding: 6px 8px !important; }
+
+  /* =========================
+     ✅ TABLA GRANDE (pensión por edad)
+     ESTA ES LA QUE CAUSABA EL HUECO:
+     aquí permitimos que se parta + la hacemos más compacta
+  ========================= */
+  .pension-calculation-table-container{
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    zoom: 0.88;
+    margin-bottom: 8px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .pension-calculation-table{
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  .pension-calculation-table thead{ display: table-header-group !important; }
+
+  .pension-calculation-table th,
+  .pension-calculation-table td{
+    padding: 3px 4px !important;
+    font-size: 8.6px !important;
+    line-height: 1.05 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    vertical-align: middle !important;
+  }
+
+  /* =========================
+     ✅ INVERSIÓN (3 columnas: izq tabla / centro gráfica / der tabla)
+  ========================= */
+  .investment-title{
+    margin: 6px 0 8px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .investment-section{ page-break-before: auto !important; break-before: auto !important; }
+
+  .investment-section .investment-layout{
+    display: grid !important;
+    grid-template-columns: 28% 44% 28% !important;
+    gap: 10px !important;
+    align-items: start !important;
+
+    /* CLAVE: permitir que suba aunque tenga que partirse */
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  .investment-section .investment-column.left{ grid-column: 1 !important; grid-row: 1 !important; }
+  .investment-section .investment-chart-wrapper{ grid-column: 2 !important; grid-row: 1 !important; }
+  .investment-section .investment-column.right{ grid-column: 3 !important; grid-row: 1 !important; }
+
+  /* Evitar corte feo dentro de cada columna */
+  .investment-column,
+  .investment-chart-wrapper{
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-width: 0 !important;
+  }
+
+  .investment-section .info-table th,
+  .investment-section .info-table td{
+    padding: 5px 6px !important;
+    font-size: 9.5px !important;
+    line-height: 1.15 !important;
+  }
+
+  .investment-section select,
+  .investment-section input{
+    width: 100% !important;
+    height: 22px !important;
+    font-size: 9.5px !important;
+    padding: 2px 5px !important;
+    box-sizing: border-box !important;
+  }
+
+  .investment-chart-wrapper{ padding: 6px !important; }
+  .chart-3d-container{ transform: none !important; filter: none !important; box-shadow: none !important; }
+  .chart-y-labels span, .chart-x-labels span, .chart-legend{ font-size: 9px !important; }
+  .bar-value{ font-size: 9px !important; padding: 2px 4px !important; }
+
+  .investment-footer-strip{
+    padding: 8px 10px !important;
+    font-size: 10px !important;
+  }
+
+  /* Ocultar botones */
+  .no-print, button, .btn-print{ display:none !important; }
+
+  /* Scrollbars fuera */
+  ::-webkit-scrollbar{ width: 0 !important; height: 0 !important; }
+}
+
+@media print{
+  .calculo-pension-title{
+    page-break-before: avoid!important;
+    break-before: auto !important;
+  }
+}
+@media print{
+
+  /* 1) Compactar la sección inversión para que NO se vaya el strip solo */
+  .investment-section{
+    margin-top: 6px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .investment-section .investment-title{
+    margin: 6px 0 8px !important;
+    font-size: 16px !important;     /* baja un poquito */
+    line-height: 1.1 !important;
+  }
+
+  /* 2) Layout 3 columnas más compacto */
+  .investment-section .investment-layout{
+    display: grid !important;
+    grid-template-columns: 30% 40% 30% !important; /* más realista */
+    gap: 8px !important;
+    align-items: start !important;
+
+    /* CLAVE: que se mantenga como bloque y no deje huérfano el strip */
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 3) Encoger tablas laterales (reduce altura total) */
+  .investment-section .info-table th,
+  .investment-section .info-table td{
+    padding: 4px 5px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+
+  .investment-section select,
+  .investment-section input{
+    height: 20px !important;
+    font-size: 9px !important;
+    padding: 2px 4px !important;
+  }
+
+  /* 4) Gráfica más compacta (reduce altura) */
+  .investment-section .investment-chart-wrapper{
+    padding: 4px !important;
+  }
+  .investment-section .chart-y-labels span,
+  .investment-section .chart-x-labels span,
+  .investment-section .chart-legend{
+    font-size: 8.5px !important;
+  }
+  .investment-section .bar-value{
+    font-size: 8.5px !important;
+    padding: 2px 4px !important;
+  }
+
+  /* 5) ✅ IMPORTANTÍSIMO: el footer strip NO debe separarse */
+  .investment-footer-strip{
+    margin-top: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 9.5px !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 6) Evitar que el navegador “corte” justo antes del strip */
+  .investment-layout{
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+}
+@media print{
+
+  /* Ocultar línea superior con CURP / NSS / Nombre / etc */
+  #outCurp,
+  #outNss,
+  #outNombreNombre,
+  #outNombre,
+  #outSemanas,
+  #outDiario,
+  #outFecha{
+    display: none !important;
+  }
+
+}
+@media print{
+
+  /* ✅ Evitar hoja en blanco por saltos forzados al final */
+  .footer,
+  .investment-section,
+  .investment-footer-strip,
+  .container,
+  .main-content{
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* ✅ Si el último elemento de la página trae break-after/break-before, lo anulamos */
+  .container > *:last-child,
+  .main-content > *:last-child{
+    page-break-after: auto !important;
+    break-after: auto !important;
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
+
+  /* ✅ Si hay algún “spacer” vacío, lo eliminamos en impresión */
+  .page-break,
+  .break,
+  .spacer,
+  .print-spacer{
+    display: none !important;
+  }
+}
+
+@media print{
+
+  /* =========================
+     1) QUITAR SALTOS FORZADOS QUE CREAN HOJAS EN BLANCO
+  ========================= */
+
+  /* Esta regla era la que te rompía páginas */
+  .calculo-pension-title{
+    page-break-before: auto !important;
+    break-before: auto !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* Si tu .section-title es el que estás viendo solo (barra azul),
+     evita que quede huérfano */
+  .section-title{
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* =========================
+     2) NO BLOQUEES CORTES EN TODO (evita huecos)
+  ========================= */
+  table, thead, tbody, tr, td, th{
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  /* =========================
+     3) INVERSIÓN: QUE SUBA Y SE IMPRIMA EN 3 COLUMNAS
+        - Permitimos que la SECCIÓN pueda partirse si hace falta
+        - Pero evitamos cortes feos dentro de cada columna
+  ========================= */
+
+  .investment-section{
+    page-break-before: auto !important;
+    break-before: auto !important;
+
+    /* CLAVE: no la obligues a irse completa a otra hoja */
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+
+    margin-top: 8px !important;
+  }
+
+  /* Layout en 3 columnas en print */
+  .investment-section .investment-layout{
+    display: grid !important;
+    grid-template-columns: 30% 40% 30% !important;
+    gap: 8px !important;
+    align-items: start !important;
+
+    /* IMPORTANTÍSIMO: aquí DEBE ser auto (no avoid) para que suba */
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+
+    /* y que no meta saltos raros antes/después */
+    page-break-before: auto !important;
+    break-before: auto !important;
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* Cada columna NO se parte (para que no se rompa una tabla a la mitad) */
+  .investment-section .investment-column,
+  .investment-section .investment-chart-wrapper{
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-width: 0 !important;
+  }
+
+  /* Footer strip: que se quede pegado al layout */
+  .investment-footer-strip{
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+
+    margin-top: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 9.5px !important;
+  }
+
+  /* =========================
+     4) ÚLTIMA HOJA EN BLANCO (corta cualquier break-after final)
+  ========================= */
+  .footer,
+  .container,
+  .main-content{
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  .container > *:last-child,
+  .main-content > *:last-child{
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
+
+/* =========================
+   FIX: No mandar "INVERSIÓN" a la 3ra hoja
+   (Pegar AL FINAL del CSS)
+========================= */
+@media print{
+
+  /* ✅ La sección inversión NO debe ser “bloque no-partible” */
+  .investment-section{
+    break-before: auto !important;
+    page-break-before: auto !important;
+
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+
+    /* ayuda a que suba y no deje huecos */
+    margin-top: 6px !important;
+  }
+
+  /* ✅ CLAVE: el layout NO debe estar en avoid (si no, se baja entero) */
+  .investment-section .investment-layout{
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+
+    break-before: auto !important;
+    page-break-before: auto !important;
+    break-after: auto !important;
+    page-break-after: auto !important;
+
+    /* Mantén tus 3 columnas */
+    display: grid !important;
+    grid-template-columns: 30% 40% 30% !important;
+    gap: 8px !important;
+    align-items: start !important;
+  }
+
+  /* ✅ Las columnas sí pueden ser “avoid” para que no se corten feo */
+  .investment-section .investment-column,
+  .investment-section .investment-chart-wrapper{
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    min-width: 0 !important;
+  }
+
+  /* ✅ Mantener el strip pegado al bloque, sin hacerlo “bloque gigante” */
+  .investment-footer-strip{
+    break-before: avoid !important;
+    page-break-before: avoid !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+
+    margin-top: 6px !important;
+  }
+
+  /* ✅ (RECOMENDADO) compactar SOLO inversión para que alcance en la hoja anterior */
+  .investment-section{
+    zoom: 0.92 !important;         /* ajusta 0.90–0.95 si quieres */
+  }
+
+  /* ✅ Muy importante: elimina tu “page-break” que fuerza hoja en blanco */
+  .page-break{ display:none !important; }
+}
+
+@media print{
+
+  /* HEADER ULTRA COMPACTO */
+  .header{
+    padding: 6px 10px !important;     /* antes estaba muy alto */
+    margin: 0 0 6px 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .header-content{
+    padding: 0 !important;
+  }
+
+  .header h1{
+    font-size: 16px !important;       /* reduce alto visual */
+    line-height: 1.05 !important;
+    margin: 0 0 4px 0 !important;
+  }
+
+  .header .subtitle{
+    font-size: 10.5px !important;
+    margin: 0 0 4px 0 !important;
+    line-height: 1.05 !important;
+  }
+
+  .contact-info{
+    font-size: 9.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .contact-info div{
+    margin: 0 !important;             /* elimina espacios extra */
+    padding: 0 !important;
+  }
+
+  /* Si hay línea divisoria */
+  .header hr,
+  .header .divider{
+    margin: 4px 0 !important;
+  }
+}
+
+
+/* =========================
+   SOLO "Datos del Titular" en 2 columnas
+========================= */
+.info-block.titular-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+  row-gap: 6px;
+}
+
+.info-block.titular-grid h3{
+  grid-column: 1 / -1;
+  margin: 0 0 6px 0;
+}
+
+/* Fila como “label arriba / input abajo” */
+.info-block.titular-grid .info-row{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 3px 0;
+  border-bottom: 1px dashed rgba(0,0,0,.10);
+}
+
+/* Inputs visibles en pantalla */
+.info-block.titular-grid .info-input{
+  width: 100%;
+  max-width: none;               /* importante para que no se vea raro en print */
+  background: #f8fbff;
+  border: 1px solid rgba(15,23,42,.18);
+  padding: 6px 9px;
+  border-radius: 10px;
+}
+
+/* CURP contenteditable */
+.info-block.titular-grid span.info-input[contenteditable="true"]{
+  display: block;
+  min-height: 32px;
+}
+
+/* =========================
+   PRINT: que se vea PERFECTO
+========================= */
+@media print{
+  .info-block.titular-grid{
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 10px !important;
+    row-gap: 5px !important;
+  }
+
+  .info-block.titular-grid .info-label{
+    font-size: 10px !important;
+  }
+
+  .info-block.titular-grid .info-input{
+    font-size: 10px !important;
+    padding: 4px 7px !important;
+    background: #fff !important;          /* CLAVE: en print no transparente */
+    border: 1px solid #cbd5e1 !important; /* CLAVE: que se marque */
+    color: #0b1b33 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Evitar cortes feos dentro de esta tarjeta */
+  .info-block.titular-grid{
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+
+/* =========================
+   IMPRESIÓN (más compacto)
+========================= */
+@media print{
+  .info-block{
+    grid-template-columns: 1fr 1fr;
+    column-gap: 12px;
+  }
+
+  .info-label{
+    font-size: 10.5px !important;
+  }
+
+  .info-input{
+    font-size: 10.5px !important;
+    padding: 5px 7px !important;
+  }
+}
+
+@media print{
+
+  /* 1) Quitar el duplicado:
+     - Deja SOLO la pensión que va dentro de .pension-info (tu nueva tarjeta)
+     - Oculta la pensión original que está suelta arriba del título
+  */
+
+  /* 2) Pegar el contenido al header azul */
+  .header{
+    margin-bottom: 4mm !important;   /* antes te dejaba mucho aire */
+    padding: 6px 10px !important;
+  }
+  .main-content{
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* 3) Que la fila de tarjetas (Datos / Pensión) quede pegada y ordenada */
+  .pension-info{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    gap: 6px !important;
+    grid-template-columns: 65% 35% !important;
+    align-items: stretch !important;
+  }
+
+  /* 4) Hacer la tarjeta de “Pensión Estimada” más compacta */
+  .pension-info .info-block .pension-amount{
+    margin: 0 !important;
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  .pension-info .pension-amount .label{
+    font-size: 10.5px !important;
+    line-height: 1.1 !important;
+    margin: 0 0 3px 0 !important;
+  }
+
+  .pension-info .pension-amount .value{
+    font-size: 18px !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+  }
+
+  /* 5) Si tu tarjeta trae borde punteado o padding extra, lo compactamos */
+  .pension-info .pension-amount{
+    border-width: 1px !important;
+  }
+}
+
+@media print{
+
+  /* ✅ 2 columnas: mismas alturas */
+  .pension-calculation-container .calculation-tables{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    align-items: stretch !important;   /* CLAVE */
+  }
+
+  /* ✅ Cada tarjeta se estira igual */
+  .calculation-table-wrapper{
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  /* ✅ Empuja el total-box hasta abajo en ambos */
+  .calculation-table-wrapper .total-box{
+    margin-top: auto !important;       /* CLAVE */
+    width: 100% !important;
+    min-height: 62px !important;       /* ajusta 58–80 si quieres */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  /* ✅ Por si la tabla de incrementos “crece” por line-height */
+  .calculation-table,
+  .increments-table{
+    margin-bottom: 8px !important;
+  }
+}
+@media print{
+
+  /* ✅ 3 cards iguales (misma altura) */
+  .uma-tables-section .uma-container{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 10px !important;
+    align-items: stretch !important;   /* CLAVE */
+  }
+
+  .uma-container > .uma-card{
+    height: 100% !important;          /* CLAVE */
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  /* ✅ centra y compacta */
+  .uma-card-title{
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+  }
+
+  .uma-year{
+    margin: 6px 0 2px !important;
+    font-size: 11.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .uma-value{
+    margin: 0 0 6px !important;
+    font-size: 20px !important;
+    line-height: 1.1 !important;
+  }
+
+  /* ✅ que la franja de abajo quede igual en las 3 */
+  .age-highlight{
+    margin-top: auto !important;       /* CLAVE */
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+    min-height: 26px !important;       /* CLAVE */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+
+@media print{
+
+  .investment-section .bar-value{
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+
+    /* 🔧 AQUÍ EL CAMBIO */
+    padding: 6px 10px !important;     /* más alto */
+    min-height: 20px !important;      /* fuerza altura */
+    line-height: 1.2 !important;
+
+    border-radius: 6px !important;    /* cuadro suave, NO óvalo */
+    background: #ffffff !important;
+    color: #0b2d4d !important;
+
+    white-space: nowrap !important;
+    text-align: center !important;
+    z-index: 3 !important;
+  }
+
+}
+
+
+
+@media print{
+
+  /* Ocultar todo por defecto */
+  .yn-toggle label{
+    display: none !important;
+  }
+
+  /* Mostrar SOLO el que está seleccionado */
+  .yn-toggle input:checked + label{
+    display: inline-block !important;
+    background: transparent !important;
+    color: #0b1b33 !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+  }
+
+  /* Ocultar el input real */
+  .yn-toggle input{
+    display: none !important;
+  }
+}
+/* En pantalla NO se ve el print-only */
+.regimen-table .print-only{ display:none; }
+
+/* En pantalla */
+.select-fulltext{
+  display: none;
+}
+
+@media print{
+
+  /* ❌ El select NUNCA debe imprimirse */
+  #tipoPension{
+    display: none !important;
+  }
+
+  /* ✅ Solo este texto se imprime */
+  .select-fulltext{
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    color: #0b1b33 !important;
+    white-space: nowrap;
+  }
+}
+
+
+/* =========================
+   BOTONES FLOTANTES (Imprimir / PDF)
+   ========================= */
+.fab-actions{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fab-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: .2px;
+
+  cursor: pointer;
+  user-select: none;
+
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, opacity .15s ease;
+  color: #fff;
+}
+
+.fab-btn i{ font-size: 15px; }
+
+.fab-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(0,0,0,.22);
+  filter: brightness(1.05);
+}
+.fab-btn:active{
+  transform: scale(.98);
+  box-shadow: 0 10px 22px rgba(0,0,0,.18);
+}
+
+/* Variantes */
+.fab-print{
+  background: linear-gradient(135deg, #0b3a8d, #1e88e5);
+}
+.fab-pdf{
+  background: linear-gradient(135deg, #2f855a, #48bb78);
+}
+
+/* Mini etiqueta */
+.fab-hint{
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .95;
+}
+
+/* Ocultar en impresión */
+@media print{
+  .fab-actions{ display:none !important; }
+}
+
+@media print {
+
+  /* Arregla el texto largo del tipo de pensión */
+  .select-fulltext,
+  .regimen-table td,
+  .regimen-table th {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.2 !important;
+  }
+
+}
+
+/* =========================
+   SOLO PDF (html2pdf): más compacto y limpio
+   Se activa con: body.pdf-export
+========================= */
+/* =========================================================
+   SOLO PDF (html2pdf) – ESTABLE / SIN RECORTE
+   Se activa con: body.pdf-export  (+ html.pdf-export-html si lo usas)
+========================================================= */
+
+/* =========================================================
+   SOLO PDF (html2pdf) – ESTABLE / SIN RECORTE / SIN ZOOM RARO
+   Se activa con: body.pdf-export
+========================================================= */
+body.pdf-export{
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fff !important;
+  overflow: visible !important;
+}
+
+/* ✅ Root: NO flex, NO transform, NO ancho fijo */
+body.pdf-export #pdf-root{
+  display: block !important;
+  width: fit-content !important;     /* ✅ se ajusta al contenido */
+  max-width: none !important;
+  margin: 0 auto !important;         /* ✅ centra sin recortar */
+  padding: 0 !important;
+  background: #fff !important;
+  transform: none !important;
+}
+
+/* ✅ Container: NO forzar 1120px, respeta tu diseño original */
+body.pdf-export #pdf-root .container{
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+
+  position: static !important;
+  left: auto !important;
+  transform: none !important;
+
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* =========================================================
+   COMPACTADO (opcional)
+   Si quieres que se vea EXACTO como impresión, comenta esta sección.
+========================================================= */
+body.pdf-export #pdf-root .header{
+  padding: 8px 14px !important;
+  margin: 0 0 8px 0 !important;
+  border-radius: 0 !important;
+  background: #163a5f !important;
+}
+
+body.pdf-export #pdf-root .header h1{
+  font-size: 17px !important;
+  margin: 0 0 3px 0 !important;
+  line-height: 1.05 !important;
+}
+
+body.pdf-export #pdf-root .header .subtitle{
+  font-size: 10.5px !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.05 !important;
+}
+
+body.pdf-export #pdf-root .contact-info{
+  font-size: 9.5px !important;
+  margin-top: 6px !important;
+  padding-top: 6px !important;
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+body.pdf-export #pdf-root .main-content{ padding: 10px !important; }
+
+body.pdf-export #pdf-root .section-title{
+  margin: 8px 0 6px !important;
+  padding: 7px 10px !important;
+  font-size: 12.5px !important;
+  border-radius: 8px !important;
+}
+
+body.pdf-export #pdf-root table th,
+body.pdf-export #pdf-root table td{
+  padding: 4px 5px !important;
+  font-size: 9.2px !important;
+  line-height: 1.1 !important;
+}
+
+body.pdf-export #pdf-root table input,
+body.pdf-export #pdf-root table select{
+  height: 20px !important;
+  padding: 2px 5px !important;
+  font-size: 9.2px !important;
+  border-radius: 9px !important;
+}
+
+body.pdf-export #pdf-root .calculation-tables{
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+body.pdf-export #pdf-root .uma-container{
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+/* =========================================================
+   OCULTAR
+========================================================= */
+body.pdf-export .no-print,
+body.pdf-export .fab-actions{
+  display: none !important;
+}
+
+
+/* Overlay que muestra el valor capturado en el PDF (sin cambiar el layout) */
+#pdf-root .pdf-field-wrap{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+#pdf-root .pdf-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centra como tus pills */
+  font-weight: 700;
+  color: #0b2b4a;
+  pointer-events: none;
+}
+
+
+/* =========================================
+   PDF (html2canvas) - mostrar SOLO "Sí" o "No"
+   y quitar bolitas / pseudos
+========================================= */
+/* =========================================
+   PDF (html2canvas) - mostrar SOLO "Sí" o "No"
+   y quitar bolitas / pseudos
+========================================= */
+body.pdf-export .yn-toggle{
+  display: inline-block !important;
+}
+
+/* Oculta el radio nativo (la bolita) */
+body.pdf-export .yn-toggle input[type="radio"]{
+  display: none !important;
+}
+
+/* Oculta TODO label por defecto */
+body.pdf-export .yn-toggle label{
+  display: none !important;
+}
+
+/* Muestra SOLO el label del seleccionado como TEXTO */
+body.pdf-export .yn-toggle input[type="radio"]:checked + label{
+  display: inline-block !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+
+  color: #0b1b33 !important;
+  font-size: 12.5px !important;     /* ✅ unificado */
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  font-family: Arial, sans-serif !important;
+}
+
+/* Quita cualquier circulito / pseudo que tu CSS meta */
+body.pdf-export .yn-toggle label::before,
+body.pdf-export .yn-toggle label::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* =========================================
+   PDF: ocultar select y mostrar texto completo
+========================================= */
+body.pdf-export #tipoPension{
+  display: none !important;
+}
+
+body.pdf-export .select-fulltext{
+  display: block !important;
+  font-size: 12.5px !important;    /* ✅ unificado */
+  font-weight: 800 !important;
+  color: #0b1b33 !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;  /* ✅ permite varias líneas */
+  overflow: visible !important;
+}
+
+/* =========================================
+   PDF: evitar que se corten los campos (tabla régimen)
+========================================= */
+body.pdf-export .regimen-table td,
+body.pdf-export .regimen-table th{
+  overflow: visible !important;
+  vertical-align: middle !important;
+}
+
+/* ✅ IMPORTANTE:
+   NO uses "body.pdf-export input" global,
+   porque afecta "Datos del Titular".
+   Solo ajustamos inputs/selects dentro de .regimen-table
+*/
+body.pdf-export .regimen-table input,
+body.pdf-export .regimen-table select,
+body.pdf-export .regimen-table .pension-select,
+body.pdf-export .regimen-table .info-input{
+  height: 34px !important;        /* 🔧 sube/baja 32–38 */
+  padding: 6px 10px !important;   /* 🔧 más aire */
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+/* Si tus cajitas son div/span tipo input */
+body.pdf-export .regimen-table .fake-input,
+body.pdf-export .regimen-table .chip-input{
+  min-height: 34px !important;
+  padding: 6px 10px !important;
+  line-height: 1.2 !important;
+}
+
+@media print{
+  /* ✅ Quitar ancho mínimo que provoca corte */
+  .pension-calculation-table{
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  /* ✅ El contenedor NO debe tener overflow hidden */
+  .pension-calculation-table-container{
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ✅ Ajuste fino de celdas para que quepa */
+  .pension-calculation-table th,
+  .pension-calculation-table td{
+    padding: 2px 3px !important;
+    font-size: 8px !important;
+    line-height: 1.05 !important;
+
+    /* permite que el texto quiebre y no empuje ancho */
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* ✅ Si alguna columna trae nowrap en otro lado */
+  .pension-calculation-table th * ,
+  .pension-calculation-table td *{
+    white-space: normal !important;
+  }
+}
+
+
+@media print{
+
+  /* Contenedor principal de la comparativa */
+  .comparativa-pension,
+  .comparativa-penson,
+  .comparativa-pension-container{
+    zoom: 1.08 !important;   /* 🔧 prueba 1.05 – 1.12 */
+  }
+
+}
+
+
+
+/* =========================
+   HEADER CON LOGOS
+========================= */
+
+.header-grid{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo img{
+  max-height: 70px;   /* ajusta 60–80 */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Centro */
+.header-center{
+  text-align: center;
+}
+
+.header-center h1{
+  margin: 0;
+}
+
+/* Contact info debajo */
+.header .contact-info{
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px){
+  .header-grid{
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .header-logo.left,
+  .header-logo.right{
+    order: 0;
+  }
+
+  .header-center{
+    order: 1;
+  }
+
+  .header-logo img{
+    max-height: 55px;
+  }
+
+  .header .contact-info{
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* =========================
+   IMPRESIÓN / PDF
+========================= */
+@media print{
+  .header-grid{
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+  }
+
+  .header-logo img{
+    max-height: 55px; /* compacto */
+  }
+
+  .header-center h1{
+    font-size: 16px !important;
+  }
+
+  .subtitle{
+    font-size: 11px !important;
+  }
+
+  .contact-info{
+    font-size: 9.5px !important;
+  }
+}
+
+/* ===== CUADRO BLANCO PARA LOGOS ===== */
+.header-logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CUADRO BLANCO IZQUIERDA */
+.header-logo.left{
+  background: #ffffff;               /* 🔥 CUADRO BLANCO */
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+
+  width: 160px;                      /* 🔥 CLAVE */
+  height: 90px;                      /* 🔥 CLAVE */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CUADRO BLANCO DERECHA (opcional igual) */
+.header-logo.right{
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+
+  width: 160px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* LOGO NO SE DEFORMA */
+.header-logo img{
+  max-height: 70px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+}
+@media print{
+  .header-logo.left,
+  .header-logo.right{
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+}
+
+
+/* =========================
+   FIX LOGOS EN IMPRESIÓN
+   (pegar al final)
+========================= */
+@media print{
+
+  /* 1) Header en 3 columnas: logo | texto | logo */
+  .header-content{
+    display: grid !important;
+    grid-template-columns: 120px 1fr 120px !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+  }
+
+  /* 2) Cajas blancas de logos: SIN tamaño fijo */
+  .header-logo.left,
+  .header-logo.right{
+    width: auto !important;
+    height: auto !important;
+    padding: 6px 8px !important;
+    border-radius: 10px !important;
+
+    background: #fff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+
+  /* 3) Logo: limita alto para impresión */
+  .header-logo img{
+    max-height: 46px !important;  /* ajusta 42–52 si quieres */
+    max-width: 100% !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* 4) Evitar que el texto “aviente” el grid */
+  .header-center{
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .header h1{ font-size: 18px !important; }
+  .header .subtitle{ font-size: 10px !important; }
+
+  /* 5) Dirección y correo que no se desborden */
+  .contact-info{
+    font-size: 9px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+}
+/* =========================
+   HEADER GRID (pantalla)
+========================= */
+.header-grid{
+  display: grid;
+  grid-template-columns: 170px 1fr 170px;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-center{
+  text-align: center;
+  min-width: 0;
+}
+
+.contact-info{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.20);
+}
+
+/* ===== CUADRO BLANCO PARA LOGOS (pantalla) ===== */
+.header-logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo.left,
+.header-logo.right{
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+
+.header-logo img{
+  max-height: 64px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* =========================
+   HEADER GRID (CORREGIDO)
+========================= */
+.header-grid{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+/* =========================
+   CENTRO – REALMENTE CENTRADO
+========================= */
+.header-center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* 🔥 centra horizontal */
+  justify-content: center; /* 🔥 centra vertical */
+  text-align: center;
+
+  color: #fff;
+
+  /* 🔥 CLAVE: ocupa TODA la columna central */
+  width: 100%;
+}
+
+/* Título */
+.header-center h1{
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* Subtítulo */
+.header-center .subtitle{
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* =========================
+   CONTACTO CENTRADO
+========================= */
+.header-center .contact-info{
+  margin-top: 10px;
+  font-size: 12px;
+
+  display: flex;
+  justify-content: center; /* 🔥 */
+  gap: 16px;
+  flex-wrap: wrap;
+
+  opacity: .95;
+}
+/* =========================
+   HEADER GRID
+========================= */
+.header-grid{
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* 🔥 CLAVE */
+  align-items: center;
+  gap: 18px;
+}
+
+/* =========================
+   CENTRO
+========================= */
+.header-center{
+  text-align: center;
+  color: #fff;
+}
+
+.header-center h1{
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.header-center .subtitle{
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* =========================
+   CONTACTO
+========================= */
+.contact-info{
+  margin-top: 10px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  opacity: .95;
+}
+
+/* =========================
+   LOGOS (CUADROS BLANCOS REALES)
+========================= */
+.header-logo{
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 🔥 CLAVE: que NO se estiren */
+  width: auto;
+  max-width: 180px;
+}
+
+.header-logo img{
+  max-height: 60px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* =========================
+   PRINT
+========================= */
+@media print{
+  .header-grid{
+    grid-template-columns: auto 1fr auto !important;
+    gap: 10px !important;
+  }
+
+  .header-logo{
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 6px 8px !important;
+  }
+
+  .header-logo img{
+    max-height: 46px !important;
+  }
+
+  .contact-info{
+    font-size: 9px !important;
+    margin-top: 6px !important;
+  }
+}
+/* =========================
+   HEADER GRID (CORREGIDO)
+========================= */
+.header-grid{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+/* =========================
+   CENTRO – REALMENTE CENTRADO
+========================= */
+.header-center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* 🔥 centra horizontal */
+  justify-content: center; /* 🔥 centra vertical */
+  text-align: center;
+
+  color: #fff;
+
+  /* 🔥 CLAVE: ocupa TODA la columna central */
+  width: 100%;
+}
+
+/* Título */
+.header-center h1{
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* Subtítulo */
+.header-center .subtitle{
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* =========================
+   CONTACTO CENTRADO
+========================= */
+.header-center .contact-info{
+  margin-top: 10px;
+  font-size: 12px;
+
+  display: flex;
+  justify-content: center; /* 🔥 */
+  gap: 16px;
+  flex-wrap: wrap;
+
+  opacity: .95;
+}
+
+
+@media print{
+
+  /* GRID: auto | 1fr | auto  (el centro SIEMPRE queda centrado) */
+  .header-grid{
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Logos pegados a extremos */
+  .header-logo.left{  justify-self: start !important; }
+  .header-logo.right{ justify-self: end !important; }
+
+  /* Logos compactos en print */
+  .header-logo{
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 6px 8px !important;
+    max-width: 180px !important;   /* ajusta 160–200 */
+    background: #fff !important;
+  }
+  .header-logo img{
+    max-height: 46px !important;
+    max-width: 100% !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* ✅ CENTRO REAL: ocupa el 1fr y centra contenido */
+  .header-center{
+    justify-self: stretch !important;   /* 🔥 ocupa todo el 1fr */
+    width: 100% !important;
+
+    display: grid !important;
+    place-items: center !important;     /* 🔥 centra */
+    text-align: center !important;
+  }
+
+  .header-center h1{
+    margin: 0 !important;
+    font-size: 18px !important;
+    line-height: 1.1 !important;
+  }
+  .header-center .subtitle{
+    margin: 2px 0 0 0 !important;
+    font-size: 10.5px !important;
+  }
+
+  /* Contacto (está fuera del centro en tu HTML) */
+  .header > .contact-info{
+    display: flex !important;
+    justify-content: center !important;
+    gap: 14px !important;
+    flex-wrap: wrap !important;
+    text-align: center !important;
+    font-size: 9px !important;
+    margin-top: 6px !important;
+  }
+}
+
+/* =========================
+   HEADER (FIX TOTAL con AREAS)
+========================= */
+.header-grid{
+  display: grid;
+  grid-template-areas: "logoL centro logoR";
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-logo.left  { grid-area: logoL; justify-self: start; }
+.header-center     { grid-area: centro; justify-self: center; text-align:center; }
+.header-logo.right { grid-area: logoR; justify-self: end; }
+
+/* NO dejes que los logos se estiren */
+.header-logo{
+  background:#fff;
+  padding:10px 14px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width: fit-content;
+  max-width: 180px;
+}
+
+.header-logo img{
+  display:block;
+  max-height:60px;
+  max-width:100%;
+  width:auto;
+  object-fit:contain;
+}
+
+/* =========================
+   PRINT (mismo FIX)
+========================= */
+@media print{
+  .header-grid{
+    grid-template-areas: "logoL centro logoR" !important;
+    grid-template-columns: auto 1fr auto !important;
+    gap: 10px !important;
+  }
+
+  .header-center{
+    justify-self: center !important;
+    width: 100% !important;
+  }
+
+  .header-logo{
+    box-shadow:none !important;
+    border:1px solid #cbd5e1 !important;
+    padding:6px 8px !important;
+    max-width:180px !important;
+  }
+
+  .header-logo img{ max-height:46px !important; }
+}
+
+
+
+/* =========================
+   FIX GRAFICA EN IMPRESION / PDF
+   - sin animaciones
+   - alturas finales por --bar-height
+========================= */
+
+/* En pantalla puedes seguir con animación si quieres */
+.bar-3d{
+  /* Asegúrate que exista la variable */
+  --bar-height: 0px;
+}
+
+/* PRINT */
+@media print{
+
+  /* 1) quitar animaciones/transforms para que “congele” ya final */
+  .bar-3d{
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    height: var(--bar-height) !important;  /* ✅ altura final */
+  }
+
+  .bar-front{
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 2) fijar el alto del plot para que el cálculo sea consistente */
+  .chart-axes{
+    height: 250px !important; /* usa el mismo que en pantalla */
+  }
+  .chart-bars{
+    height: 200px !important; /* tu plotHeight */
+  }
+
+  /* 3) etiqueta del valor (como pantalla, arriba de la barra) */
+  .investment-section .bar-value{
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 100% !important;
+    top: auto !important;
+
+    margin-bottom: 8px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* PDF (html2canvas/html2pdf) cuando activas body.pdf-export */
+body.pdf-export .bar-3d{
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+  height: var(--bar-height) !important;   /* ✅ altura final */
+}
+
+body.pdf-export .bar-front{
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+
+.fab-btn.fab-back{
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.fab-btn.fab-back:hover{
+  background: linear-gradient(135deg, #475569, #334155);
+}
+

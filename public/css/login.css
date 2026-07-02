@@ -1,0 +1,336 @@
+
+        /* Variables de colores para fácil ajuste */
+        :root {
+            --nothing-bg-dark: #121212; /* Fondo aún más oscuro */
+            --nothing-transparent-card: rgba(255, 255, 255, 0.06); /* Menos opaco */
+            --nothing-border-light: rgba(255, 255, 255, 0.1); /* Borde más sutil */
+            --nothing-text-light: #f0f0f0; /* Texto casi blanco */
+            --nothing-text-label: #b0b0b0;
+            --nothing-input-bg: rgba(255, 255, 255, 0.03); /* Fondo de input muy sutil */
+            --nothing-input-border: rgba(255, 255, 255, 0.08);
+            --nothing-placeholder: #777777; /* Placeholder más oscuro */
+            --nothing-accent-glow: #e0e0e0; /* Un blanco suave para el brillo */
+            --nothing-error-red: #ff7f7f; /* Rojo suave para errores */
+            --button-primary-bg: #1B0088; /* Tu azul oscuro original */
+            --button-primary-hover: #2a00d0;
+
+            /* Colores para las luces Glyph (ajustados para mayor visibilidad) */
+            --glyph-light-color: rgba(255, 255, 255, 0.2); /* Blanco ligeramente más visible */
+            --glyph-light-glow: rgba(255, 255, 255, 0.4); /* Blanco para un brillo más fuerte */
+        }
+
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--nothing-bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: var(--nothing-text-light);
+            overflow: hidden; /* Oculta cualquier desbordamiento de los efectos de luz */
+            position: relative; /* Para posicionar los efectos de luz */
+        }
+
+        /* Contenedor principal del formulario de login (estilo Nothing) */
+        .login-container {
+            background-color: var(--nothing-transparent-card);
+            backdrop-filter: blur(12px); /* Blur un poco más fuerte */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--nothing-border-light);
+            padding: 45px; /* Más padding */
+            border-radius: 18px; /* Esquinas más redondeadas */
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45); /* Sombra más profunda */
+            width: 100%;
+            max-width: 450px; /* Ancho ligeramente mayor */
+            text-align: center;
+            position: relative;
+            z-index: 10; /* Asegura que el formulario esté por encima de las luces */
+        }
+
+        /* Título */
+        .login-container h2 {
+            color: #ffffff; /* Blanco puro para el título */
+            margin-bottom: 35px; /* Más margen */
+            font-size: 2.8rem; /* Tamaño de fuente más grande */
+            font-weight: 700; /* Negrita pronunciada */
+            letter-spacing: -0.04em; /* Espaciado ajustado */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.15); /* Brillo sutil */
+        }
+
+        /* Etiquetas de los campos */
+        .login-container label {
+            display: block;
+            text-align: left;
+            margin-bottom: 10px; /* Más margen */
+            color: var(--nothing-text-label);
+            font-weight: 500;
+            font-size: 0.9rem; /* Tamaño de fuente ligeramente más pequeño */
+            text-shadow: none; /* Eliminar sombra retro */
+        }
+
+        /* Campos de entrada */
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 16px 20px; /* Mayor padding */
+            margin-bottom: 28px; /* Más margen */
+            background-color: var(--nothing-input-bg);
+            border: 1px solid var(--nothing-input-border); /* Borde más fino */
+            border-radius: 10px; /* Esquinas más redondeadas */
+            font-size: 1.05rem;
+            color: var(--nothing-text-light);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            text-shadow: none; /* Eliminar sombra retro */
+        }
+
+        .login-container input[type="text"]::placeholder,
+        .login-container input[type="password"]::placeholder {
+            color: var(--nothing-placeholder);
+            opacity: 0.8;
+        }
+
+        .login-container input[type="text"]:focus,
+        .login-container input[type="password"]:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3); /* Borde blanco sutil al enfocar */
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.1); /* Sombra de luz blanca */
+            background-color: rgba(255, 255, 255, 0.05); /* Fondo ligeramente más visible al enfocar */
+        }
+
+        /* Botón de enviar */
+        .login-container button {
+            width: 100%;
+            padding: 18px 25px; /* Mayor padding */
+            background-color: var(--button-primary-bg);
+            color: white;
+            border: none; /* Sin borde adicional */
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600; /* Seminegrita */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 15px rgba(27, 0, 136, 0.3);
+            letter-spacing: 0.02em;
+            text-transform: none; /* Eliminar mayúsculas */
+            text-shadow: none; /* Eliminar sombra retro */
+        }
+
+        .login-container button:hover {
+            background-color: var(--button-primary-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(27, 0, 136, 0.4), 0 0 15px rgba(255, 255, 255, 0.2); /* Brillo blanco sutil */
+        }
+
+.login-container button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(27, 0, 136, 0.3);
+            background-color: var(--button-primary-bg);
+        }
+
+        /* Mensaje de error */
+        .error-message {
+            color: var(--nothing-error-red);
+            font-size: 0.95rem;
+            margin-top: -18px; /* Ajuste de margen */
+            margin-bottom: 25px;
+            text-align: left;
+            display: none;
+            background-color: rgba(255, 127, 127, 0.1); /* Fondo sutil para el error */
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 127, 127, 0.2); /* Borde suave */
+            text-shadow: none; /* Eliminar sombra retro */
+        }
+
+        /* Detalle de luz superior (más sutil) */
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 25px; /* Ajuste de posición */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px; /* Ajuste de tamaño */
+            height: 5px; /* Ajuste de grosor */
+            background-color: rgba(255, 255, 255, 0.15); /* Menos visible */
+            border-radius: 2.5px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.1); /* Brillo más sutil */
+        }
+
+        /* Para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 35px 25px;
+                border-radius: 15px;
+            }
+            .login-container h2 {
+                font-size: 2.4rem;
+                margin-bottom: 30px;
+            }
+            .login-container input {
+                padding: 14px 18px;
+            }
+            .login-container button {
+                padding: 16px 20px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Estilos para el mensaje flotante (reemplazo de alert) */
+        .floating-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: fadeOut 3s forwards;
+            font-family: 'Inter', sans-serif; /* Fuente Inter para el mensaje */
+            text-shadow: none; /* Eliminar sombra retro */
+            border: 1px solid;
+        }
+
+        .floating-message.success {
+            background-color: rgba(76, 175, 80, 0.8); /* Verde con opacidad */
+            color: white;
+            border-color: rgba(76, 175, 80, 0.9);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .floating-message.error {
+            background-color: rgba(244, 67, 54, 0.8); /* Rojo con opacidad */
+            color: white;
+            border-color: rgba(244, 67, 54, 0.9);
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); } /* Se desvanece y sube un poco */
+        }
+
+        /* Estilos para los efectos de luz Glyph */
+        .glyph-light {
+            position: absolute;
+            background-color: var(--glyph-light-color); /* Color base de la luz */
+            border-radius: 50%; /* Para bordes suaves */
+            filter: blur(8px); /* Efecto de brillo difuso ligeramente más fuerte */
+            opacity: 0; /* Inicialmente oculto */
+            animation: pulse-light 4s infinite ease-in-out;
+            z-index: 1; /* Detrás del formulario */
+            transform: translateZ(0); /* Forzar aceleración de hardware */
+        }
+
+        .glyph-light::before,
+        .glyph-light::after {
+            content: '';
+            position: absolute;
+            background-color: inherit; /* Hereda el color del padre */
+            filter: blur(8px); /* También aplicar blur a los pseudo-elementos */
+            border-radius: 50%;
+        }
+
+        /* Estilo para la forma de cruz (+) */
+        .glyph-light.plus {
+            width: 100px; /* Ancho total de la cruz */
+            height: 30px; /* Altura de la barra horizontal */
+            animation-delay: 0s; /* Retraso de animación */
+        }
+
+        .glyph-light.plus::before {
+            width: 30px; /* Ancho de la barra vertical */
+            height: 100px; /* Altura total de la cruz */
+            top: -35px; /* Ajuste para centrar la vertical */
+            left: 35px; /* Ajuste para centrar la vertical */
+        }
+
+        /* Variaciones de posición y tamaño para las cruces */
+        .glyph-light.plus-1 {
+            width: 120px; /* Más grande */
+            height: 35px;
+            top: 10%; /* Más arriba */
+            left: 80%; /* Más a la derecha */
+            transform: rotate(60deg); /* Rotar para variar */
+            animation-delay: 1s;
+        }
+        .glyph-light.plus-1::before {
+            width: 35px;
+            height: 120px;
+            top: -42.5px;
+            left: 42.5px;
+        }
+
+        .glyph-light.plus-2 {
+            width: 80px; /* Más pequeño */
+            height: 25px;
+            top: 85%; /* Más abajo */
+            left: 15%; /* Más a la izquierda */
+            transform: rotate(-45deg);
+            animation-delay: 2s;
+        }
+        .glyph-light.plus-2::before {
+            width: 25px;
+            height: 80px;
+            top: -27.5px;
+            left: 27.5px;
+        }
+
+        .glyph-light.plus-3 {
+            width: 110px;
+            height: 32px;
+            top: 45%; /* Posición media */
+            left: 5%; /* Más a la izquierda */
+            transform: rotate(30deg);
+            animation-delay: 0.5s;
+        }
+        .glyph-light.plus-3::before {
+            width: 32px;
+            height: 110px;
+            top: -39px;
+            left: 39px;
+        }
+
+        .glyph-light.plus-4 {
+            width: 95px;
+            height: 28px;
+            top: 70%; /* Abajo a la derecha */
+            left: 90%;
+            transform: rotate(-70deg);
+            animation-delay: 2.5s;
+        }
+        .glyph-light.plus-4::before {
+            width: 28px;
+            height: 95px;
+            top: -33.5px;
+            left: 33.5px;
+        }
+
+        .glyph-light.plus-5 { /* Nueva luz */
+            width: 85px;
+            height: 25px;
+            top: 5%;
+            left: 45%;
+            transform: rotate(15deg);
+            animation-delay: 1.5s;
+        }
+        .glyph-light.plus-5::before {
+            width: 25px;
+            height: 85px;
+            top: -30px;
+            left: 30px;
+        }
+
+        /* Animación de pulsación de luz (opacidad ajustada) */
+        @keyframes pulse-light {
+            0% { opacity: 0; transform: scale(0.8) translateZ(0); }
+            50% { opacity: 0.7; transform: scale(1) translateZ(0); box-shadow: 0 0 30px var(--glyph-light-glow); } /* Más visible y con brillo */
+            100% { opacity: 0; transform: scale(0.8) translateZ(0); }
+        }

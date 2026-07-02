@@ -1,0 +1,196 @@
+
+@page {
+  size: Letter;
+  margin: 25mm;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #fff;
+  color: #222;
+}
+
+.page {
+  width: 100%;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+/* DATOS */
+.datos {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 10px;
+}
+
+.datos div {
+  font-size: 14px;
+}
+
+.line {
+  display: inline-block;
+  width: 250px;
+  border-bottom: 1px solid #000;
+  margin-left: 10px;
+}
+
+/* TÍTULO */
+h1 {
+  text-align: center;
+  margin: 35px 0 25px;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+/* GRID DE BLOQUES */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px 50px;
+}
+
+/* BLOQUE */
+.bloque h2 {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.bloque p {
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 35px;
+}
+
+.firma {
+  border-top: 1px solid #000;
+  text-align: center;
+  font-size: 12px;
+  padding-top: 5px;
+  margin-bottom: 10px;
+}
+
+.obs {
+  border: 1px solid #000;
+  height: 90px;
+  padding: 6px;
+  font-size: 12px;
+}
+
+/* Subrayado tipo formato oficial */
+#txtCliente,
+#txtAtendido,
+#txtFolio{
+  display: inline-block;
+  min-width: 260px;          /* largo de la línea */
+  padding: 0 6px 2px;
+  font-weight: 700;          /* negrita */
+  border-bottom: 1.5px solid #000;
+  vertical-align: bottom;
+}
+
+.btn-back{
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:700;
+  font-size:14px;
+  background:#374151;   /* gris elegante */
+  color:#fff;
+}
+
+.btn-back:hover{
+  background:#1f2937;
+}
+
+
+
+/* IMPRESIÓN */
+@media print {
+  body {
+    background: none;
+  }
+}
+
+
+
+
+.print-actions {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.btn-print {
+  background: #0b3c5d;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all .2s ease;
+}
+
+.btn-print:hover {
+  background: #092f4a;
+  transform: translateY(-1px);
+}
+
+/* ❌ NO IMPRIMIR BOTÓN */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+
+
+.btn-print,
+.btn-pdf{
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:700;
+  font-size:14px;
+  color:#fff;
+}
+
+.btn-print{
+  background:#0b3c5d;
+}
+
+.btn-pdf{
+  background:#b91c1c;
+}
+
+
+/* ====== SOLO PDF EXPORT ====== */
+body.pdf-export{
+  background:#fff !important;
+}
+
+/* La hoja para pantalla puede tener sombra, pero para PDF no */
+body.pdf-export .page{
+  box-shadow:none !important;
+  border:none !important;
+  margin:0 !important;
+}
+
+/* Evita que html2canvas “agarre” el fondo gris */
+body.pdf-export .no-print{
+  display:none !important;
+}

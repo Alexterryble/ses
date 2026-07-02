@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- CSP: OJO -> frame-ancestors NO funciona en <meta>, debe ser header del servidor -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 img-src 'self' data: https:;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 font-src https://fonts.gstatic.com;
+                 script-src 'self' 'nonce-r4nd0m123' https://cdn.tailwindcss.com;
+                 base-uri 'self';
+                 form-action 'self'">
+
+  <title>Login</title>
+
+  <!-- Favicon (evita 404 si no tienes favicon.ico) -->
+  <link rel="icon" type="image/svg+xml"
+        href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔐</text></svg>'>
+
+  <!-- Tailwind (para pruebas) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      font-family:'Inter',sans-serif;
+      background:linear-gradient(135deg,#e0e7ff,#c3dafe);
+      display:flex;justify-content:center;align-items:center;min-height:100vh;color:#1f2937;
+    }
+    .login-container{
+      width:100%;max-width:420px;padding:3rem;background-color:rgba(255,255,255,.80);
+      backdrop-filter:blur(12px);border-radius:1.5rem;box-shadow:0 10px 30px rgba(0,0,0,.12);
+      animation:fadeIn 0.8s ease-in-out;border:1px solid rgba(255,255,255,.6);
+    }
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+    .input-group{position:relative;margin-bottom:1.75rem}
+    .input-group input{
+      width:100%;padding:.80rem .6rem;border:none;border-bottom:2px solid #cbd5e1;background:transparent;color:#1f2937;
+      transition:all .25s cubic-bezier(.4,0,.2,1);
+    }
+    .input-group input:focus{outline:none;border-bottom-color:#3b82f6}
+    .input-group label{
+      position:absolute;top:.85rem;left:.6rem;pointer-events:none;transition:all .25s cubic-bezier(.4,0,.2,1);color:#6b7280;
+    }
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label{
+      top:-1.10rem;font-size:.75rem;color:#3b82f6;
+    }
+    .btn-login{
+      width:100%;padding:.95rem;background:linear-gradient(to right,#60a5fa,#3b82f6);color:#fff;border-radius:.85rem;
+      font-weight:600;letter-spacing:.02em;transition:transform .15s,box-shadow .15s;cursor:pointer;
+      box-shadow:0 8px 18px rgba(59,130,246,.25);
+    }
+    .btn-login:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(59,130,246,.35)}
+    .btn-login:disabled{opacity:.7;cursor:not-allowed;transform:none}
+
+    .message-box{
+      margin-top:1rem;
+      padding:.80rem 1rem;
+      border-radius:.85rem;
+      font-size:.92rem;
+      display:none;
+    }
+    .msg-error{display:block;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+    .msg-warn {display:block;background:#ffedd5;color:#9a3412;border:1px solid #fed7aa;}
+    .msg-ok   {display:block;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;}
+  </style>
+</head>
+
+<body>
+  <main class="login-container">
+    <h1 class="text-3xl font-light text-center mb-10 text-gray-800">Bienvenido</h1>
+
+    <!-- method=post por si falla JS -->
+    <form id="loginForm" method="post" action="." autocomplete="on" novalidate>
+      <div class="input-group">
+        <input type="text" id="username" name="username" placeholder=" " required autocomplete="username" />
+        <label for="username">Nombre de usuario</label>
+      </div>
+
+      <div class="input-group">
+        <input type="password" id="password" name="password" placeholder=" " required autocomplete="current-password" />
+        <label for="password">Contraseña</label>
+      </div>
+
+      <input type="hidden" id="csrf" name="csrf" value="">
+
+      <div class="flex items-center mb-6">
+        <input id="remember" type="checkbox" class="mr-2">
+        <label for="remember" class="select-none">Recordarme</label>
+      </div>
+
+      <button id="btnSubmit" type="submit" class="btn-login">Entrar</button>
+    </form>
+
+    <div id="message" class="message-box" role="alert" aria-live="polite"></div>
+  </main>
+
+  <!-- OVERLAY MANTENIMIENTO / BLOQUEO -->
+  <div id="maintenanceOverlay" class="fixed inset-0 hidden z-50">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/80 via-slate-900/70 to-violet-900/80"></div>
+
+    <div class="relative h-full w-full flex items-center justify-center p-6">
+      <div class="w-full max-w-lg rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8 text-white">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="h-12 w-12 rounded-2xl bg-white/15 grid place-items-center text-2xl">🛠️</div>
+          <div>
+            <div class="text-sm text-white/70">CIP · Acceso temporalmente restringido</div>
+            <div id="maintTitle" class="text-xl font-bold">Estamos en mantenimiento</div>
+          </div>
+        </div>
+
+        <p id="maintBody" class="text-white/80 leading-relaxed">
+          Lo sentimos, en este momento estamos realizando mejoras para brindarte un mejor servicio.
+        </p>
+
+        <div class="mt-5 rounded-2xl bg-white/10 border border-white/15 p-4">
+          <div class="text-sm font-semibold">¿Qué puedes hacer?</div>
+          <ul class="mt-2 text-sm text-white/80 space-y-1">
+            <li>• Intenta nuevamente en unos minutos.</li>
+            <li>• Si el problema continúa, contacta al administrador.</li>
+          </ul>
+        </div>
+
+        <div class="mt-6 flex flex-col sm:flex-row gap-2">
+          <button id="btnRetry" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-white text-slate-900 font-semibold hover:bg-slate-100">
+            Reintentar
+          </button>
+          <button id="btnBack" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-white/10 border border-white/20 hover:bg-white/15">
+            Volver al login
+          </button>
+        </div>
+
+        <div id="maintenanceReason" class="mt-4 text-xs text-white/60"></div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Script 1: rutas/config -->
+<script nonce="r4nd0m123">
+  (function () {
+    const hasPublic = location.pathname.split('?')[0].includes('/public/');
+    const PREFIX = hasPublic ? '/public' : '';
+    window.ENDPOINT_LOGIN = `${PREFIX}/app/controllers/auth/login.php`;
+    window.ENDPOINT_CSRF  = `${PREFIX}/app/controllers/auth/csrf.php`;
+    window.DEFAULT_AFTER  = `${PREFIX}/index.php`;
+    window.CHANGE_PW      = `${PREFIX}/cambiar_password.html`;
+    window.__PREFIX__     = PREFIX;
+  })();
+</script>
+
+<!-- Script 2: lógica -->
+<script nonce="r4nd0m123">
+  const form       = document.getElementById('loginForm');
+  const msgBox     = document.getElementById('message');
+  const csrfHidden = document.getElementById('csrf');
+  const btnSubmit  = document.getElementById('btnSubmit') || form.querySelector('button[type="submit"]');
+
+  // Overlay mantenimiento
+  const overlay    = document.getElementById('maintenanceOverlay');
+  const maintTitle = document.getElementById('maintTitle') || document.getElementById('maintTitleX');
+  const maintBody  = document.getElementById('maintBody')  || document.getElementById('maintBodyX');
+  const reasonBox  = document.getElementById('maintenanceReason');
+
+  // Botones overlay (si existen)
+  const btnRetry = document.getElementById('btnRetry');
+  const btnBack  = document.getElementById('btnBack');
+  if (btnRetry) btnRetry.addEventListener('click', () => location.reload());
+  if (btnBack)  btnBack.addEventListener('click', () => hideMaintenance());
+
+  function showMsg(text, type='error'){
+    msgBox.style.display = 'block';
+    msgBox.textContent = text || '';
+    msgBox.className = 'message-box ' + (
+      type === 'ok'   ? 'msg-ok' :
+      type === 'warn' ? 'msg-warn' : 'msg-error'
+    );
+  }
+
+  function clearMsg(){
+    msgBox.textContent = '';
+    msgBox.className = 'message-box';
+    msgBox.style.display = 'none';
+  }
+
+  function showMaintenance(title, body, reason=''){
+    const t = title || 'Estamos en mantenimiento';
+    const b = body  || 'Lo sentimos, estamos realizando mejoras. Intenta más tarde.';
+    // Si tus IDs son maintTitle/maintBody, perfecto. Si no, solo ignora.
+    if (maintTitle) maintTitle.textContent = t;
+    if (maintBody)  maintBody.textContent  = b;
+    if (reasonBox)  reasonBox.textContent  = reason ? `Detalle: ${reason}` : '';
+    overlay.classList.remove('hidden');
+  }
+
+  function hideMaintenance(){
+    overlay.classList.add('hidden');
+  }
+
+  function safeNext() {
+    const p = new URLSearchParams(location.search);
+    let next = p.get('next') || DEFAULT_AFTER;
+    try {
+      const url = new URL(next, location.origin);
+      if (url.origin !== location.origin) return DEFAULT_AFTER;
+      return url.pathname + url.search + url.hash;
+    } catch {
+      return DEFAULT_AFTER;
+    }
+  }
+
+  async function readJsonSafe(res){
+    const text = await res.text();
+    let json = null;
+    try { json = JSON.parse(text); } catch {}
+    return { text, json };
+  }
+
+  function detectMaintenanceOrBlock(res, text, json){
+    const msg = (json?.error || json?.message || text || '').toString().toLowerCase();
+
+    // 503 = mantenimiento
+    if (res.status === 503){
+      showMaintenance(
+        'Estamos en mantenimiento',
+        'Lo sentimos, en este momento estamos realizando mejoras. Intenta más tarde.',
+        '' // sin detalle
+      );
+      return true;
+    }
+
+    // Bloqueo / rate limit / locked
+    if (res.status === 403 || res.status === 423 || res.status === 429){
+      showMaintenance(
+        'Acceso temporalmente bloqueado',
+        'Por seguridad, el acceso está bloqueado temporalmente. Intenta más tarde o contacta al administrador.',
+        (json?.error || json?.message || '').toString().slice(0,140)
+      );
+      return true;
+    }
+
+    // Heurística si llega HTML “Service Unavailable”
+    if (msg.includes('service unavailable') || msg.includes('mantenimiento')){
+      showMaintenance(
+        'Estamos en mantenimiento',
+        'Lo sentimos, en este momento estamos realizando mejoras. Intenta más tarde.',
+        ''
+      );
+      return true;
+    }
+
+    if (msg.includes('bloquead') || msg.includes('demasiados') || msg.includes('intentos')){
+      showMaintenance(
+        'Acceso temporalmente bloqueado',
+        'Detectamos demasiados intentos o el acceso fue bloqueado temporalmente. Intenta más tarde.',
+        ''
+      );
+      return true;
+    }
+
+    return false;
+  }
+
+  // ===== CSRF (robusto) =====
+  async function loadCSRF(){
+    try{
+      const res = await fetch(ENDPOINT_CSRF, { credentials:'include' });
+      const { text, json } = await readJsonSafe(res);
+
+      // Si está en mantenimiento/bloqueado, muestra overlay
+      if (detectMaintenanceOrBlock(res, text, json)) return;
+
+      // Si no es OK, no rompemos
+      if (!res.ok) {
+        console.warn('CSRF HTTP', res.status, text.slice(0,120));
+        return;
+      }
+
+      const token = json?.csrf || '';
+      if (!token){
+        console.warn('CSRF vacío o no válido:', json || text.slice(0,120));
+        return;
+      }
+
+      csrfHidden.value = token;
+      window.__CSRF__  = token;
+
+    } catch(e){
+      console.warn('No se pudo obtener CSRF:', e);
+    }
+  }
+
+  // ===== SUBMIT LOGIN =====
+  let lastTry = 0;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const now = Date.now();
+    if (now - lastTry < 900) return;
+    lastTry = now;
+
+    clearMsg();
+
+    const user     = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember')?.checked || false;
+    const csrf     = window.__CSRF__ || csrfHidden.value || '';
+
+    if (!user || !password){
+      showMsg('Escribe tu usuario y contraseña.', 'warn');
+      return;
+    }
+
+    btnSubmit.disabled = true;
+    const oldText = btnSubmit.textContent;
+    btnSubmit.textContent = 'Cargando…';
+
+    try {
+      const res = await fetch(ENDPOINT_LOGIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrf
+        },
+        credentials: 'include',
+        body: JSON.stringify({ user, password, remember, csrf })
+      });
+
+      const { text, json } = await readJsonSafe(res);
+
+      // Overlay bonito si mantenimiento/bloqueado
+      if (detectMaintenanceOrBlock(res, text, json)) return;
+
+      // Credenciales inválidas
+      if (res.status === 401){
+        showMsg('Usuario o contraseña inválidos.', 'error');
+        return;
+      }
+
+      // Errores 400/500 etc.
+      if (!res.ok){
+        const errTxt = (json?.error || json?.message || text || '').toString().toLowerCase();
+
+        // ✅ Usuario inactivo -> mostrar MANTENIMIENTO (como pediste)
+        if (errTxt.includes('inactivo')) {
+          showMaintenance(
+            'Estamos en mantenimiento',
+            'Lo sentimos, en este momento estamos realizando mejoras. Intenta más tarde.',
+            '' // sin detalle
+          );
+          return;
+        }
+
+        // CSRF inválido
+        if (errTxt.includes('csrf')) {
+          showMsg('Sesión/CSRF inválido. Recarga la página e inténtalo de nuevo.', 'warn');
+        } else {
+          showMsg(json?.error || `No se pudo iniciar sesión (HTTP ${res.status}).`, 'error');
+        }
+        return;
+      }
+
+      // OK
+      if (!json || json.ok !== true){
+        showMsg('Usuario o contraseña inválidos.', 'error');
+        return;
+      }
+
+      showMsg('¡Inicio de sesión exitoso!', 'ok');
+
+      setTimeout(() => {
+        if (Number(json.must_change_pw) === 1) {
+          location.replace(CHANGE_PW);
+          return;
+        }
+        if (json.redirect) {
+          location.replace(json.redirect);
+          return;
+        }
+        location.replace(safeNext());
+      }, 250);
+
+    } catch (err) {
+      showMsg(err?.message || 'No se pudo iniciar sesión.', 'error');
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = oldText;
+    }
+  });
+
+  // Caps Lock aviso (opcional)
+  document.getElementById('password').addEventListener('keydown', (e) => {
+    if (e.getModifierState && e.getModifierState('CapsLock')) {
+      showMsg('Caps Lock activado', 'warn');
+    }
+  });
+
+  // INIT
+  (async function init(){
+    await loadCSRF();
+  })();
+</script>
+
+
+  <!-- Nota: headers recomendados (ponlos en PHP/.htaccess, no en meta)
+       X-Frame-Options: DENY
+       X-Content-Type-Options: nosniff
+       Referrer-Policy: strict-origin-when-cross-origin
+       Content-Security-Policy: ... (con frame-ancestors)
+  -->
+</body>
+</html>

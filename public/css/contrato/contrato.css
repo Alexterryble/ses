@@ -1,0 +1,786 @@
+@page {
+  size: letter;
+  margin: 0;
+}
+@media print {
+  .encabezado, h2, h3, .firmas, .firmas-2col, .firma { page-break-inside: avoid; }
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #ccc; /* gris solo en pantalla */
+  display: block;   /* 🔽 apila las páginas en columna */
+}
+
+/* Cada hoja */
+.page {
+  width: 21.59cm;
+  height: 27.94cm;
+  margin: 0 auto 1cm auto;   /* 🔽 separación visual entre hojas */
+  background: #fff;
+  padding: 1.3cm 1.5cm 1.5cm 1.5cm; 
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+  line-height: 1.4;
+  text-align: justify;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25); /* solo en pantalla */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  page-break-after: always;   /* 🔽 forzar salto de página */
+}
+.page:last-of-type { page-break-after: auto; }
+
+/* Marco dorado */
+.page::before {
+  content: "";
+  position: absolute;
+  top: 1cm;
+  left: 1cm;
+  right: 1cm;
+  bottom: 1cm;
+  border: 4px solid #030303;
+  pointer-events: none;
+}
+
+@media print {
+  body { background: none; }
+  .page { box-shadow: none; margin: 0 auto; }
+  .page::before { border: 4px solid #030303; }
+}
+
+/* ====== Encabezados (tu configuración actual, sin cambios de letra) ====== */
+.encabezado{
+  position: relative;
+  width: 100%;
+  margin: 0 0 6px 0 !important;
+  padding: 0 !important;
+  min-height: auto !important;   /* importante */
+}
+
+/* logos */
+.centro-head{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;   /* antes estaba center */
+  justify-content: center;
+  width: 100%;
+}
+
+/* logo a la izquierda */
+.logo-centro{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.logo-centro img{
+  display: block;
+  max-width: 220px;
+  max-height: 104px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin-top: -20px;
+  margin-bottom: -40px;
+  margin-left: 0;
+  margin-right: auto; /* lo empuja a la izquierda */
+}
+
+/* si quieres el titulo centrado pero el logo a la izquierda */
+.titulo{
+  width: 100%;
+  text-align: center;
+}
+
+.titulo h2{
+  margin: 0;
+  font-size: 10pt;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* contrato en esquina superior derecha */
+.contrato-box{
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+
+.contrato-num{
+  margin: 0;
+  font-size: 8pt;
+  font-weight: bold;
+  color: #002b6b;
+}
+
+/* Quita separación extra entre el header y el primer párrafo */
+.encabezado { margin-bottom: 0; }
+.encabezado + p { margin-top: 0; }
+
+/* Por si acaso, remata el título del centro */
+.titulo h2 {
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Y el texto rojo del número de contrato sin margen extra */
+.logo-der .contrato-num { margin: 0; }
+
+
+/* Firma manuscrita */
+/* ===== Firmas en DOS COLUMNAS (como tu imagen) ===== */
+.firmas-2col {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2cm;
+  margin-top: 10px;
+}
+.firmas-2col .firma {
+  width: 100%;
+  max-width: 9cm;
+  text-align: center;
+  font-size: 9pt;
+}
+
+/* Pad de firma compacto */
+.sig-pad {
+  border: 1px dashed #999;
+  border-radius: 6px;
+  padding: 6px;
+  margin: 8px auto 6px auto;
+  background: #fafafa;
+}
+.sig-pad canvas {
+  width: 100%;
+  height: 130px;
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+  touch-action: none;
+  cursor: crosshair;
+}
+.sig-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 6px;
+}
+.sig-actions button {
+  font-size: 9pt;
+  padding: 3px 10px;
+}
+.sig-output img {
+  margin-top: 6px;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Impresión: solo imagen de firma; oculta canvas y botones */
+@media print {
+  .sig-actions { display: none !important; }
+  .sig-pad { border: none; padding: 0; background: transparent; }
+  .sig-pad canvas { display: none; }
+}
+
+
+
+/* ===== General: marca de agua diagonal centrada en TODAS las páginas ===== */
+.page[data-watermark]::after {
+  content: attr(data-watermark);
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 90pt;
+  color: #bfbfbf;
+  opacity: 0.22;
+  letter-spacing: 10pt;
+  white-space: nowrap;
+  pointer-events: none;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  z-index: 0;
+}
+
+/* Asegura que el contenido quede por encima del watermark */
+.page { position: relative; }
+.page > * { position: relative; z-index: 1; }
+
+/* ===== Variante: ÚLTIMA HOJA (abajo) ===== */
+.page.watermark-bottom[data-watermark]::after{
+  content: attr(data-watermark) !important;
+  top: auto !important;
+  bottom: 140mm !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(-35deg) !important;
+  font-size: 64pt !important;
+  letter-spacing: 6pt !important;
+  opacity: .12 !important;
+  color: #000000 !important;
+}
+
+@media print{
+  .page.watermark-bottom[data-watermark]::after{
+    opacity: .10 !important;
+  }
+}
+
+/*imprimir o generar formato */
+@media print {
+  .print-hidden { display: none !important; }
+}
+
+
+/* =========================================
+   FORMULARIO DISEÑO
+   SOLO MODIFICA EL FORMULARIO
+========================================= */
+
+/* Contenedor del panel */
+#ui-prestatario.ui-card{
+  width: 100%;
+  max-width: 980px;
+  margin: 20px auto;
+  background: #fff;
+  border: 1px solid #e3e8ef;
+  border-radius: 14px;
+  padding: 0;
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+/* Encabezado */
+.ui-card__header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #eef2f6;
+  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+}
+
+.ui-card__header h3{
+  margin:0;
+  font-size: 22px;
+  font-weight: 800;
+  color:#0b3b7a;
+  line-height:1.2;
+}
+
+.ui-sub{
+  margin:4px 0 0 0;
+  color:#6b7280;
+  font-size:13px;
+  line-height:1.4;
+}
+
+/* Fila superior */
+.ui-row{
+  display:grid;
+  grid-template-columns: 2fr 1fr 1.2fr;
+  gap:16px;
+  padding: 18px 22px 10px;
+  align-items:end;
+}
+
+/* Grid general */
+.ui-grid{
+  display:grid;
+  gap:16px;
+  padding: 0 22px 18px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.ui-col-2{ grid-column: span 8; }
+.ui-col-3{ grid-column: span 12; }
+
+/* Campos */
+.ui-field{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.ui-field--sm{
+  max-width:none;
+}
+
+.ui-field label{
+  font-size:13px;
+  font-weight:700;
+  color:#374151;
+  margin-bottom:8px;
+  line-height:1.2;
+}
+
+.ui-hint{
+  margin-top:6px;
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.35;
+}
+
+/* Inputs */
+.ui-input{
+  width:100%;
+  min-height:46px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #cfd8e3;
+  outline:none;
+  background-color:#fafbfd;
+  font-size:15px;
+  color:#111827;
+  box-sizing:border-box;
+  transition:border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.ui-input:focus{
+  border-color:#2563eb;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+textarea.ui-input{
+  min-height:92px;
+  resize:vertical;
+}
+
+/* Distribución de campos principales */
+#m_prest_nombre{ width:100%; }
+#m_prest_rfc{ width:100%; }
+#m_prest_dir{ width:100%; }
+#m_prest_email{ width:100%; }
+#m_prest_tel{ width:100%; }
+#m_monto{ width:100%; }
+
+/* Acomodo del grid principal */
+.ui-grid > .ui-field:nth-child(1){ grid-column: span 8; }  /* nombre */
+.ui-grid > .ui-field:nth-child(2){ grid-column: span 4; }  /* rfc */
+.ui-grid > .ui-field:nth-child(3){ grid-column: span 12; } /* dirección */
+.ui-grid > .ui-field:nth-child(4){ grid-column: span 8; }  /* email */
+.ui-grid > .ui-field:nth-child(5){ grid-column: span 4; }  /* teléfono */
+.ui-grid > .ui-field:nth-child(6){ grid-column: span 12; } /* monto */
+.ui-grid > .ui-field:nth-child(7){ grid-column: span 12; } /* forma entrega */
+
+/* Subbloques internos */
+#transferencia_fields.ui-grid,
+#bene_extra_wrap.ui-grid{
+  grid-column: 1 / -1;
+  padding: 0;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap:16px;
+}
+
+/* Transferencia */
+#transferencia_fields .ui-field:first-child{
+  grid-column: span 6;
+}
+
+#transferencia_fields .ui-field:last-child{
+  grid-column: span 6;
+}
+
+/* Beneficiario */
+#beneficiario_field{
+  grid-column: 1 / -1;
+}
+
+#bene_extra_wrap > .ui-field:nth-child(1){
+  grid-column: span 12; /* nombre completo */
+}
+
+#bene_extra_wrap > .ui-field:nth-child(2){
+  grid-column: span 4; /* parentesco */
+}
+
+#bene_extra_wrap > .ui-field:nth-child(3){
+  grid-column: span 4; /* otro parentesco / celular según aparezca */
+}
+
+#bene_extra_wrap > .ui-field:nth-child(4){
+  grid-column: span 4; /* celular / correo */
+}
+
+#bene_extra_wrap > .ui-field:nth-child(5){
+  grid-column: span 12; /* correo si queda como quinto */
+}
+
+#bene_extra_parentesco_otro_wrap{
+  margin-top:0 !important;
+}
+
+/* Acciones */
+.ui-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 14px 22px;
+  border-top:1px solid #eef2f6;
+  background:#fafcff;
+  flex-wrap:wrap;
+}
+
+.ui-actions__right{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.ui-chip{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 10px;
+  font-size:12px;
+  color:#374151;
+  background:#eef2ff;
+  border:1px solid #dbe3f0;
+  border-radius:999px;
+}
+
+/* Botones */
+.btn,
+#btn_guardar{
+  min-height:42px;
+  padding:0 16px;
+  border-radius:10px;
+  border:1px solid #cbd5e1;
+  background:#fff;
+  color:#374151;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.btn:hover,
+#btn_guardar:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 14px rgba(0,0,0,.08);
+}
+
+.btn--primary{
+  background:#2563eb;
+  color:#fff;
+  border-color:#2563eb;
+}
+
+.btn--ghost{
+  background:#fff;
+  color:#374151;
+  border-color:#cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .ui-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .ui-row .ui-field:last-child{
+    grid-column:1 / -1;
+  }
+
+  .ui-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .ui-col-2,
+  .ui-col-3,
+  .ui-grid > .ui-field:nth-child(1),
+  .ui-grid > .ui-field:nth-child(2),
+  .ui-grid > .ui-field:nth-child(3),
+  .ui-grid > .ui-field:nth-child(4),
+  .ui-grid > .ui-field:nth-child(5),
+  .ui-grid > .ui-field:nth-child(6),
+  .ui-grid > .ui-field:nth-child(7){
+    grid-column:span 2;
+  }
+
+  #transferencia_fields.ui-grid,
+  #bene_extra_wrap.ui-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  #transferencia_fields .ui-field:first-child,
+  #transferencia_fields .ui-field:last-child,
+  #beneficiario_field,
+  #bene_extra_wrap > .ui-field:nth-child(1),
+  #bene_extra_wrap > .ui-field:nth-child(2),
+  #bene_extra_wrap > .ui-field:nth-child(3),
+  #bene_extra_wrap > .ui-field:nth-child(4),
+  #bene_extra_wrap > .ui-field:nth-child(5){
+    grid-column:span 2;
+  }
+}
+
+@media (max-width: 640px){
+  #ui-prestatario.ui-card{
+    margin:12px auto;
+    border-radius:12px;
+  }
+
+  .ui-card__header,
+  .ui-row,
+  .ui-grid,
+  .ui-actions{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .ui-row,
+  .ui-grid,
+  #transferencia_fields.ui-grid,
+  #bene_extra_wrap.ui-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .ui-col-2,
+  .ui-col-3,
+  .ui-grid > .ui-field:nth-child(1),
+  .ui-grid > .ui-field:nth-child(2),
+  .ui-grid > .ui-field:nth-child(3),
+  .ui-grid > .ui-field:nth-child(4),
+  .ui-grid > .ui-field:nth-child(5),
+  .ui-grid > .ui-field:nth-child(6),
+  .ui-grid > .ui-field:nth-child(7),
+  #transferencia_fields .ui-field:first-child,
+  #transferencia_fields .ui-field:last-child,
+  #beneficiario_field,
+  #bene_extra_wrap > .ui-field:nth-child(1),
+  #bene_extra_wrap > .ui-field:nth-child(2),
+  #bene_extra_wrap > .ui-field:nth-child(3),
+  #bene_extra_wrap > .ui-field:nth-child(4),
+  #bene_extra_wrap > .ui-field:nth-child(5){
+    grid-column:span 1;
+  }
+
+  .ui-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .ui-actions__right{
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .btn,
+  #btn_guardar{
+    width:100%;
+  }
+}
+
+/* Ocultar en impresión */
+@media print{
+  .print-hidden{
+    display:none !important;
+  }
+}
+
+/* Evita scroll/zoom al dibujar en móviles */
+.sig-pad canvas{ touch-action: none; }
+
+/* En pantalla oculta la imagen hasta que haya snapshot */
+.sig-pad .sig-output img{
+  display:block;
+  max-width:100%;
+  height:auto;
+}
+
+/* En impresión, usa la imagen y oculta canvas/controles */
+@media print{
+  .sig-pad canvas,
+  .sig-pad .sig-actions{ display:none !important; }
+  .sig-pad .sig-output img{ display:block !important; }
+  .sig-pad .sig-output{ display:block; }
+}
+
+
+/*pie de pagina */
+.page{
+  position: relative;
+  box-sizing: border-box;
+  --frame-inset: 12mm;
+}
+
+/* Espacio para que el footer no choque con el borde/información */
+.page.has-footer{ padding-bottom: 16mm; }
+
+/* Pie de página centrado: "1 - 6" */
+.page-footer{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10mm;
+  font-size: 11pt;
+  color: #333;
+  letter-spacing: .05em;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Si la última hoja tiene watermark abajo, deja el footer por encima */
+.page.watermark-bottom .page-footer{ bottom: 12mm; }
+
+.page-footer{ left:auto; right:12mm; transform:none; text-align:right; }
+
+/*seccion de cheque*/
+.hidden {
+  display: none;
+}
+
+/* Para ocultar el contrato después de ser generado */
+.page {
+  display: none;
+}
+
+/* Mostrar el contrato cuando sea generado */
+.page.show {
+  display: block;
+}
+@media print {
+  .page {
+    display: block !important;
+  }
+}
+
+/* El canvas no debe desplazar/zoom al tocarlo */
+.sig-pad canvas{
+  touch-action: none;
+  display: block;
+  width: 100%;
+  height: 170px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.hidden { display: none !important; }
+
+/* Numeración de páginas (subido respecto al marco) */
+.page .page-num{
+  position: absolute;
+  right: 12mm;
+  bottom: 16mm !important;
+  font: 8pt Arial, "Helvetica Neue", Helvetica, sans-serif;
+  color: #555;
+  opacity: .9;
+  z-index: 2;
+}
+
+@media print{
+  .page .page-num{
+    bottom: 14mm !important;
+    color: #444 !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Solo afecta el texto “Transferencia …” dentro del contrato */
+#out_metodo_entrega .bank,
+#out_metodo_entrega .acct-label,
+#out_metodo_entrega .acct-number {
+  font-family: Arial, sans-serif;
+  font-size: 8.5pt;
+  line-height: 1.1;
+}
+
+#out_metodo_entrega .acct-number {
+  letter-spacing: 0;
+  word-spacing: 0.2ch;
+}
+
+/*firmas cuadro*/
+/* === FIRMAS: solo CANVAS en pantalla; miniatura solo en impresión === */
+
+/* Pantalla: muestra un solo cuadro (canvas) */
+@media screen {
+  .sig-pad{
+    position: relative;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px;
+    background: #fafafa;
+    height: 170px;
+  }
+  .sig-pad canvas{
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 4px;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  /* Oculta la miniatura para que NO haya un cuadro encima */
+  .sig-pad .sig-output{ display: none !important; }
+}
+
+/* Impresión: usa la imagen (snapshot) y oculta canvas/controles */
+@media print{
+  .sig-pad canvas,
+  .sig-pad .sig-actions{ display: none !important; }
+  .sig-pad .sig-output{ display: block !important; }
+  .sig-pad .sig-output img{
+    display: block !important;
+    max-width: 100%;
+    height: auto;
+    border: 0 !important;
+  }
+}
+
+/* En impresión usamos SOLO la imagen; ocultamos canvas/controles */
+@media print{
+  .sig-pad canvas,
+  .sig-pad .sig-actions{ display: none !important; }
+  .sig-pad .sig-output{ display: block !important; }
+}
+
+/* === FIRMA: centrar y ajustar también en IMPRESIÓN === */
+@media print{
+  .sig-pad{
+    height: 170px;
+    padding: 6px;
+    border: none;
+    background: transparent;
+  }
+
+  .sig-pad .sig-output{
+    display: flex !important;
+    position: static !important;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sig-pad .sig-output img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block !important;
+    border: 0 !important;
+    border-radius: 0;
+  }
+
+  .sig-pad canvas,
+  .sig-pad .sig-actions{ display:none !important; }
+}
