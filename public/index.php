@@ -1334,8 +1334,47 @@ async function safeJSON(res){
   }
 }
 
+const DOCS_BY_KEY = (() => {
+  const map = Object.create(null);
+  let i = 0;
+
+  while (i < DOCS.length) {
+    map[DOCS[i].key] = DOCS[i];
+    i++;
+  }
+
+  return map;
+})();
+
+const TIPO_TO_KEY = (() => {
+  const map = Object.create(null);
+  const keys = Object.keys(TIPO_MAP);
+  let i = 0;
+
+  while (i < keys.length) {
+    const key = keys[i];
+    map[TIPO_MAP[key]] = key;
+    i++;
+  }
+
+  return map;
+})();
+
+const TOOL_BY_KEY = Object.create(null);
+const PLANTILLA_BY_KEY = Object.create(null);
+
 function byKey(key){
-  return DOCS.find(d => d.key === key);
+  return DOCS_BY_KEY[key] || null;
+}
+
+function nombreCompleto(row){
+  let nombre = '';
+
+  if (row?.nombres) nombre += row.nombres;
+  if (row?.apellido_paterno) nombre += (nombre ? ' ' : '') + row.apellido_paterno;
+  if (row?.apellido_materno) nombre += (nombre ? ' ' : '') + row.apellido_materno;
+
+  return nombre;
 }
 
 /* 
@@ -1345,24 +1384,31 @@ function byKey(key){
   - ok false y completo false => Falta
 */
 function buildStatusMapFromDocs(docs, completados = {}){
-  const ultimoPorTipo = {};
+  const ultimoPorTipo = Object.create(null);
+  let i = 0;
 
-  docs.forEach(d => {
-    const key = Object.keys(TIPO_MAP).find(k => TIPO_MAP[k] === d.tipo_documento) || d.tipo_documento;
-    if (!key) return;
+  while (i < docs.length) {
+    const d = docs[i];
+    const tipo = d?.tipo_documento || '';
+    const key = TIPO_TO_KEY[tipo] || tipo;
 
-    const prev = ultimoPorTipo[key];
+    if (key) {
+      const prev = ultimoPorTipo[key];
 
-    if (!prev || new Date(d.fecha_subida || 0) >= new Date(prev.fecha_subida || 0)) {
-      ultimoPorTipo[key] = d;
+      if (!prev || new Date(d.fecha_subida || 0) >= new Date(prev.fecha_subida || 0)) {
+        ultimoPorTipo[key] = d;
+      }
     }
-  });
 
-  const status = {};
+    i++;
+  }
 
-  DOCS.forEach(doc => {
+  const status = Object.create(null);
+  i = 0;
+
+  while (i < DOCS.length) {
+    const doc = DOCS[i];
     const reg = ultimoPorTipo[doc.key];
-
     const tienePDF = !!reg;
     const estaCompleto = !!completados[doc.key] || tienePDF;
 
@@ -1372,7 +1418,9 @@ function buildStatusMapFromDocs(docs, completados = {}){
       url: reg?.download_url || null,
       storage_key: reg?.storage_key || null
     };
-  });
+
+    i++;
+  }
 
   return status;
 }
@@ -1496,62 +1544,85 @@ function actualizarDashboard(rows){
 
   let cuenta30 = 0;
   const conFecha = [];
+  let i = 0;
 
-  rows.forEach(r => {
+  while (i < rows.length) {
+    const r = rows[i];
     const d = getRowDate(r);
-    if (!d) return;
 
-    conFecha.push({ row:r, date:d });
+    if (d) {
+      conFecha.push({ row:r, date:d });
+      if (d >= start && d <= end) cuenta30++;
+    }
 
-    if (d >= start && d <= end) cuenta30++;
-  });
+    i++;
+  }
 
   const el30 = document.getElementById('kpi-30d');
   if (el30) el30.textContent = cuenta30;
 
   construirGraficaMensual(rows);
-  construirRecientes(conFecha.length ? conFecha : rows.map(r => ({row:r, date:null})));
+
+  if (conFecha.length) {
+    construirRecientes(conFecha);
+    return;
+  }
+
+  const sinFecha = [];
+  i = 0;
+  while (i < rows.length) {
+    sinFecha.push({ row:rows[i], date:null });
+    i++;
+  }
+
+  construirRecientes(sinFecha);
 }
 
 function construirRecientes(lista){
   const ul = document.getElementById('recentList');
   if (!ul) return;
 
-  ul.innerHTML = '';
-
   if (!lista.length){
     ul.innerHTML = '<li class="recent-empty">Sin registros todavía.</li>';
     return;
   }
 
-  const ordenados = [...lista].sort((a,b)=>{
+  const ordenados = lista.slice();
+  ordenados.sort((a,b)=>{
     if (a.date && b.date) return b.date - a.date;
     if (a.date && !b.date) return -1;
     if (!a.date && b.date) return 1;
     return 0;
-  }).slice(0,5);
+  });
 
-  ordenados.forEach(({row,date}) => {
+  let html = '';
+  let i = 0;
+  const limite = Math.min(5, ordenados.length);
+
+  while (i < limite) {
+    const item = ordenados[i];
+    const row = item.row;
+    const date = item.date;
     const folio  = row.folio ?? row.solicitud_id ?? row.id;
-    const nombre = [row.nombres, row.apellido_paterno, row.apellido_materno].filter(Boolean).join(' ');
-
-    const li = document.createElement('li');
-    li.className = 'recent-item';
-
+    const nombre = nombreCompleto(row) || 'Sin nombre';
     const fechaStr = date
       ? date.toLocaleDateString('es-MX',{day:'2-digit',month:'short'})
       : '';
 
-    li.innerHTML = `
-      <div class="recent-main">
-        <span class="recent-folio">#${folio}</span>
-        <span class="recent-name">${nombre || 'Sin nombre'}</span>
-      </div>
-      <div class="recent-meta">${fechaStr}</div>
+    html += `
+      <li class="recent-item">
+        <div class="recent-main">
+          <span class="recent-folio">#${folio}</span>
+          <span class="recent-name">${nombre}</span>
+        </div>
+        <div class="recent-meta">${fechaStr}</div>
+      </li>
     `;
 
-    ul.appendChild(li);
-  });
+    i++;
+  }
+
+  ul.innerHTML = html;
 }
 
 /* ================== ALERTAS ================== */
@@ -1633,18 +1704,17 @@ fetch(`${BASE_URL}get_solicitudes.php`, {
   const rows = Array.isArray(j) ? j : (Array.isArray(j?.data) ? j.data : []);
 
   SOLICITUDES_CACHE = rows;
-  SOLICITUDES_MAP = new Map(
-    rows.map(s => [
-      String(s.folio ?? s.solicitud_id ?? s.id),
-      s
-    ])
-  );
+  SOLICITUDES_MAP = new Map();
+
+  let i = 0;
+  while (i < rows.length) {
+    const s = rows[i];
+    SOLICITUDES_MAP.set(String(s.folio ?? s.solicitud_id ?? s.id), s);
+    i++;
+  }
 
   const tbody = document.getElementById('tabla-solicitudes');
-
   if (!tbody) return;
-
-  tbody.innerHTML = '';
 
   if (!rows.length) {
     tbody.innerHTML = `
@@ -1660,42 +1730,47 @@ fetch(`${BASE_URL}get_solicitudes.php`, {
     return;
   }
 
-  rows.forEach(s => {
+  let html = '';
+  i = 0;
+
+  while (i < rows.length) {
+    const s = rows[i];
     const folio  = s.folio ?? s.solicitud_id ?? s.id;
-    const nombre = [s.nombres, s.apellido_paterno, s.apellido_materno].filter(Boolean).join(' ');
+    const nombre = nombreCompleto(s);
     const rawEstado = (s.estado_validacion ?? s.validacion ?? s.estado ?? '').toString().trim().toLowerCase();
-    const esCancelado = ['cancelado', 'cancelada'].includes(rawEstado);
+    const esCancelado = rawEstado === 'cancelado' || rawEstado === 'cancelada';
 
-    const tr = document.createElement('tr');
-
-    tr.innerHTML = `
-      <td>${folio}</td>
-      <td>
-        ${nombre}
-        ${esCancelado ? '<div class="estado-cancelado">Estado: Cancelado</div>' : ''}
-      </td>
-      <td class="acciones">
-        ${
-          esCancelado
-            ? `
-              <button class="btn-sm btn-blue is-disabled" type="button" data-cancelado="1">Continuar</button>
-              <button class="btn-sm btn-blue is-disabled" type="button" data-cancelado="1">Formato</button>
-              <button class="btn-sm btn-doc is-disabled" type="button" data-cancelado="1">📄 Documentos</button>
-              <button class="btn-sm btn-red is-disabled" type="button" data-cancelado="1">Cancelado</button>
-            `
-            : `
-              <button class="btn-sm btn-blue" onclick="continuarSolicitud(${folio})">Continuar</button>
-              <button class="btn-sm btn-blue" onclick="generarFormato(${folio})">Formato</button>
-              <button class="btn-sm btn-doc" onclick="openDocs(${folio})">📄 Documentos</button>
-              <button class="btn-sm btn-red" onclick="cancelarSolicitud(${folio})">Cancelado</button>
-            `
-        }
-      </td>
+    html += `
+      <tr>
+        <td>${folio}</td>
+        <td>
+          ${nombre}
+          ${esCancelado ? '<div class="estado-cancelado">Estado: Cancelado</div>' : ''}
+        </td>
+        <td class="acciones">
+          ${
+            esCancelado
+              ? `
+                <button class="btn-sm btn-blue is-disabled" type="button" data-cancelado="1">Continuar</button>
+                <button class="btn-sm btn-blue is-disabled" type="button" data-cancelado="1">Formato</button>
+                <button class="btn-sm btn-doc is-disabled" type="button" data-cancelado="1">📄 Documentos</button>
+                <button class="btn-sm btn-red is-disabled" type="button" data-cancelado="1">Cancelado</button>
+              `
+              : `
+                <button class="btn-sm btn-blue" onclick="continuarSolicitud(${folio})">Continuar</button>
+                <button class="btn-sm btn-blue" onclick="generarFormato(${folio})">Formato</button>
+                <button class="btn-sm btn-doc" onclick="openDocs(${folio})">📄 Documentos</button>
+                <button class="btn-sm btn-red" onclick="cancelarSolicitud(${folio})">Cancelado</button>
+              `
+          }
+        </td>
+      </tr>
     `;
 
-    tbody.appendChild(tr);
-  });
+    i++;
+  }
 
+  tbody.innerHTML = html;
   actualizarDashboard(rows);
 })
 .catch(err => {
@@ -2089,134 +2164,137 @@ function renderDocsGrid(statusMap){
   const grid = document.getElementById('docsGrid');
   if (!grid) return;
 
-  grid.innerHTML = '';
-
   const keysToShow = allowedDocKeys();
+  let html = '';
+  let i = 0;
 
-  keysToShow.forEach(key => {
+  while (i < keysToShow.length) {
+    const key = keysToShow[i];
     const doc = byKey(key);
-    if (!doc) return;
 
-    const st = statusMap[key] || {};
+    if (doc) {
+      const st = statusMap[key] || {};
+      const tienePDF = !!st.ok;
+      const estaCompleto = !!st.completo;
 
-    const tienePDF = !!st.ok;
-    const estaCompleto = !!st.completo;
+      let badgeClass = 'missing';
+      let badgeText  = 'Falta';
+      let notaEstado = '';
 
-    let badgeClass = 'missing';
-    let badgeText  = 'Falta';
-    let notaEstado = '';
+      if (tienePDF) {
+        badgeClass = 'signed';
+        badgeText = 'PDF firmado';
+        notaEstado = `<div class="doc-note ok">Documento firmado cargado.</div>`;
+      } else if (estaCompleto) {
+        badgeClass = 'completed';
+        badgeText = 'Completo';
+        notaEstado = `<div class="doc-note warning">Falta subir solo el PDF firmado.</div>`;
+      }
 
-    if (tienePDF) {
-      badgeClass = 'signed';
-      badgeText = 'PDF firmado';
-      notaEstado = `<div class="doc-note ok">Documento firmado cargado.</div>`;
-    } else if (estaCompleto) {
-      badgeClass = 'completed';
-      badgeText = 'Completo';
-      notaEstado = `<div class="doc-note warning">Falta subir solo el PDF firmado.</div>`;
+      let extraBtn = '';
+
+      if (key === 'contrato') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirContrato(currentSolicitud)">
+            📄 ${estaCompleto ? 'Ver contrato' : 'Generar contrato'}
+          </button>
+        `;
+      } else if (key === 'retroactivo_40') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="window.location.href='${BASE_URL}retroactivo.html?solicitud_id='+encodeURIComponent(currentSolicitud)">
+            ⚙️ ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'caratula') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirCaratula(currentSolicitud)">
+            📘 ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'tabla_amortizacion') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirAmortizacion(currentSolicitud)">
+            📊 ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'pagare') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirPagare(currentSolicitud)">
+            📝 ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'verif_domicilio') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirVisitaDomicilio(currentSolicitud)">
+            🏠 ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'verif_referencias') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirVerifReferencias(currentSolicitud)">
+            👥 ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'autorizacion_credito') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirAutorizacionCredito(currentSolicitud)">
+            ✅ ${estaCompleto ? 'Ver' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'poliza_seguro') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirPolizaSeguro(currentSolicitud)">
+            🛡️ ${estaCompleto ? 'Ver / Generar' : 'Generar'}
+          </button>
+        `;
+      } else if (key === 'aviso_privacidad') {
+        extraBtn = `
+          <button class="btn-ghost" type="button" onclick="abrirAvisoPrivacidad(currentSolicitud)">
+            🔐 ${estaCompleto ? 'Ver / Generar' : 'Generar'}
+          </button>
+        `;
+      }
+
+      const safeLabel = doc.label.replace(/'/g,"\\'");
+      const verBtns = tienePDF && st.url ? `
+        <a class="btn-ghost" href="${st.url}" target="_blank" rel="noopener">🔗 Ver PDF</a>
+        <button class="btn-ghost" type="button" onclick="openPreview('${st.url}','${safeLabel}')">
+          👁️ Previsualizar
+        </button>
+      ` : '';
+
+      html += `
+        <div class="doc-card">
+          <div class="doc-icon" title="${doc.label}">${doc.icon}</div>
+
+          <div class="doc-body">
+            <h4 class="doc-title">${doc.label}</h4>
+
+            <div class="doc-meta">
+              <span class="badge ${badgeClass}">
+                <span class="dot"></span>${badgeText}
+              </span>
+              ${notaEstado}
+            </div>
+
+            <div class="doc-actions">
+              <label class="btn-ghost">
+                📤 Subir PDF
+                <input class="hidden-input" type="file" accept="application/pdf" onchange="handleUpload(this, '${doc.key}')">
+              </label>
+
+              ${verBtns}
+              ${extraBtn}
+            </div>
+          </div>
+        </div>
+      `;
     }
 
-    let extraBtn = '';
+    i++;
+  }
 
-    if (key === 'contrato') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirContrato(currentSolicitud)">
-          📄 ${estaCompleto ? 'Ver contrato' : 'Generar contrato'}
-        </button>
-      `;
-    } else if (key === 'retroactivo_40') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="window.location.href='${BASE_URL}retroactivo.html?solicitud_id='+encodeURIComponent(currentSolicitud)">
-          ⚙️ ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'caratula') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirCaratula(currentSolicitud)">
-          📘 ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'tabla_amortizacion') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirAmortizacion(currentSolicitud)">
-          📊 ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'pagare') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirPagare(currentSolicitud)">
-          📝 ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'verif_domicilio') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirVisitaDomicilio(currentSolicitud)">
-          🏠 ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'verif_referencias') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirVerifReferencias(currentSolicitud)">
-          👥 ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'autorizacion_credito') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirAutorizacionCredito(currentSolicitud)">
-          ✅ ${estaCompleto ? 'Ver' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'poliza_seguro') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirPolizaSeguro(currentSolicitud)">
-          🛡️ ${estaCompleto ? 'Ver / Generar' : 'Generar'}
-        </button>
-      `;
-    } else if (key === 'aviso_privacidad') {
-      extraBtn = `
-        <button class="btn-ghost" type="button" onclick="abrirAvisoPrivacidad(currentSolicitud)">
-          🔐 ${estaCompleto ? 'Ver / Generar' : 'Generar'}
-        </button>
-      `;
-    }
-
-    const verBtns = tienePDF && st.url ? `
-      <a class="btn-ghost" href="${st.url}" target="_blank" rel="noopener">🔗 Ver PDF</a>
-      <button class="btn-ghost" type="button" onclick="openPreview('${st.url}','${doc.label.replace(/'/g,"\\'")}')">
-        👁️ Previsualizar
-      </button>
-    ` : '';
-
-    const card = document.createElement('div');
-    card.className = 'doc-card';
-
-    card.innerHTML = `
-      <div class="doc-icon" title="${doc.label}">${doc.icon}</div>
-
-      <div class="doc-body">
-        <h4 class="doc-title">${doc.label}</h4>
-
-        <div class="doc-meta">
-          <span class="badge ${badgeClass}">
-            <span class="dot"></span>${badgeText}
-          </span>
-          ${notaEstado}
-        </div>
-
-        <div class="doc-actions">
-          <label class="btn-ghost">
-            📤 Subir PDF
-            <input class="hidden-input" type="file" accept="application/pdf" onchange="handleUpload(this, '${doc.key}')">
-          </label>
-
-          ${verBtns}
-          ${extraBtn}
-        </div>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
+  grid.innerHTML = html;
 }
 
 async function handleUpload(input, doc_key){
@@ -2350,6 +2428,12 @@ const TOOLS = [
   { key: 'calcular_pension', label: 'Calcular pensión', icon: '🧓', href: () => HERRAMIENTAS_LINKS.calcular_pension },
 ];
 
+let __toolIndex = 0;
+while (__toolIndex < TOOLS.length) {
+  TOOL_BY_KEY[TOOLS[__toolIndex].key] = TOOLS[__toolIndex];
+  __toolIndex++;
+}
+
 function openTools(){
   renderToolsGrid();
   document.getElementById('modalTools').classList.add('show');
@@ -2363,31 +2447,35 @@ function renderToolsGrid(){
   const grid = document.getElementById('toolsGrid');
   if (!grid) return;
 
-  grid.innerHTML = '';
+  let html = '';
+  let i = 0;
 
-  TOOLS.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'doc-card';
+  while (i < TOOLS.length) {
+    const t = TOOLS[i];
 
-    card.innerHTML = `
-      <div class="doc-icon" title="${t.label}">${t.icon}</div>
-      <div class="doc-body">
-        <h4 class="doc-title">${t.label}</h4>
-        <div class="doc-meta">
-          <span class="badge"><span class="dot"></span>Simulador</span>
-        </div>
-        <div class="doc-actions">
-          <button class="btn-ghost" type="button" onclick="openToolHere('${t.key}')">Abrir</button>
+    html += `
+      <div class="doc-card">
+        <div class="doc-icon" title="${t.label}">${t.icon}</div>
+        <div class="doc-body">
+          <h4 class="doc-title">${t.label}</h4>
+          <div class="doc-meta">
+            <span class="badge"><span class="dot"></span>Simulador</span>
+          </div>
+          <div class="doc-actions">
+            <button class="btn-ghost" type="button" onclick="openToolHere('${t.key}')">Abrir</button>
+          </div>
         </div>
       </div>
     `;
 
-    grid.appendChild(card);
-  });
+    i++;
+  }
+
+  grid.innerHTML = html;
 }
 
 function openToolHere(key){
-  const item = TOOLS.find(x => x.key === key);
+  const item = TOOL_BY_KEY[key];
   if (!item) return;
 
   const url = item.href();
@@ -2412,30 +2500,47 @@ function construirGraficaMensual(rows) {
 
   const ahora = new Date();
   const meses = [];
+  const mesesMap = Object.create(null);
+  let i = 5;
 
-  for (let i = 5; i >= 0; i--) {
+  while (i >= 0) {
     const d = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
     const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    const label = d.toLocaleDateString('es-MX', { month: 'short' });
-
-    meses.push({
+    const item = {
       key,
-      label,
+      label: d.toLocaleDateString('es-MX', { month: 'short' }),
       count: 0
-    });
+    };
+
+    meses.push(item);
+    mesesMap[key] = item;
+    i--;
   }
 
-  rows.forEach(s => {
-    const f = getRowDate(s);
-    if (!f) return;
+  i = 0;
+  while (i < rows.length) {
+    const f = getRowDate(rows[i]);
 
-    const key = f.getFullYear() + '-' + String(f.getMonth() + 1).padStart(2, '0');
-    const mes = meses.find(m => m.key === key);
+    if (f) {
+      const key = f.getFullYear() + '-' + String(f.getMonth() + 1).padStart(2, '0');
+      const mes = mesesMap[key];
+      if (mes) mes.count++;
+    }
 
-    if (mes) mes.count++;
-  });
+    i++;
+  }
 
-  const tieneDatos = meses.some(m => m.count > 0);
+  let tieneDatos = false;
+  const labels = [];
+  const data = [];
+  i = 0;
+
+  while (i < meses.length) {
+    labels.push(meses[i].label.toUpperCase());
+    data.push(meses[i].count);
+    if (meses[i].count > 0) tieneDatos = true;
+    i++;
+  }
 
   if (!tieneDatos) {
     if (emptyMsg) emptyMsg.style.display = 'block';
@@ -2463,10 +2568,10 @@ function construirGraficaMensual(rows) {
   chartSolicitudesInstance = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: meses.map(m => m.label.toUpperCase()),
+      labels,
       datasets: [{
         label: 'Solicitudes',
-        data: meses.map(m => m.count),
+        data,
         tension: 0.35,
         borderWidth: 2,
         pointRadius: 4,
@@ -2583,6 +2688,12 @@ const PLANTILLAS = [
   { key:'requisitos',       label:'Requisitos para financimiento',          icon:'📄' },
 ];
 
+let __plantillaIndex = 0;
+while (__plantillaIndex < PLANTILLAS.length) {
+  PLANTILLA_BY_KEY[PLANTILLAS[__plantillaIndex].key] = PLANTILLAS[__plantillaIndex];
+  __plantillaIndex++;
+}
+
 function openPlantillas(){
   renderPlantillasGrid();
   document.getElementById('modalPlantillas')?.classList.add('show');
@@ -2597,31 +2708,35 @@ function renderPlantillasGrid(){
 
   if (!grid) return;
 
-  grid.innerHTML = '';
+  let html = '';
+  let i = 0;
 
-  PLANTILLAS.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'doc-card';
+  while (i < PLANTILLAS.length) {
+    const p = PLANTILLAS[i];
 
-    card.innerHTML = `
-      <div class="doc-icon" title="${p.label}">${p.icon}</div>
+    html += `
+      <div class="doc-card">
+        <div class="doc-icon" title="${p.label}">${p.icon}</div>
 
-      <div class="doc-body">
-        <h4 class="doc-title">${p.label}</h4>
+        <div class="doc-body">
+          <h4 class="doc-title">${p.label}</h4>
 
-        <div class="doc-meta">
-          <span class="badge"><span class="dot"></span>Plantilla</span>
-        </div>
+          <div class="doc-meta">
+            <span class="badge"><span class="dot"></span>Plantilla</span>
+          </div>
 
-        <div class="doc-actions">
-          <button class="btn-ghost" type="button" onclick="abrirPlantilla('${p.key}')">👁️ Abrir</button>
-          <button class="btn-ghost" type="button" onclick="descargarPlantillaKey('${p.key}')">⬇️ Descargar</button>
+          <div class="doc-actions">
+            <button class="btn-ghost" type="button" onclick="abrirPlantilla('${p.key}')">👁️ Abrir</button>
+            <button class="btn-ghost" type="button" onclick="descargarPlantillaKey('${p.key}')">⬇️ Descargar</button>
+          </div>
         </div>
       </div>
     `;
 
-    grid.appendChild(card);
-  });
+    i++;
+  }
+
+  grid.innerHTML = html;
 }
 
 function buildPlantillaUrl(tipo, modo){
